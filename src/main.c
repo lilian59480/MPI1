@@ -4,7 +4,6 @@ int main (int argc, char** argv)
 {
     /* Initialisation des variables */
     SDL_Window* pWindow = NULL;
-    SDL_Surface* imageicone = NULL;
     TTF_Font* eraserFont = NULL;
     SDL_Event event;
     SDL_Surface* surface = NULL;
@@ -37,7 +36,8 @@ int main (int argc, char** argv)
     int QuitterTTFW = 0;
     int QuitterTTFH = 0;
     short continuer = 1;
-    /* Lecture des parametres envoye par le Shell (Inutile pour le moment) */
+    T_MScore scores;
+    /* Lecture des parametres envoye par le Shell */
     lireParamShell (argc, argv);
 
     /* Initialisation de la SDL2 et SDL_TTF */
@@ -55,73 +55,45 @@ int main (int argc, char** argv)
 
     /* SDL2 Fonctionel Recuperation d'informations utiles (?) */
     printf ("OS: %s \nRam disponible: %d \n", SDL_GetPlatform(), SDL_GetSystemRAM() );
-    /* Chargement image */
-    imageicone = IMG_Load (IMGICONE);
-    /* Creation fenetre */
-    pWindow = SDL_CreateWindow ("MPI1 Puzzle", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, LARGEUR_FENETRE, HAUTEUR_FENETRE, SDL_WINDOW_SHOWN);
 
-    /* Initialisation de la fenetre principale */
-    if ( !pWindow )
+    /* Recuperation des scores */
+    if (!lireMeilleurScore (&scores) )
     {
-        fprintf (stderr, "Erreur de creation de la fenetre: %s\n", SDL_GetError() );
-        return EXIT_FAILURE;
+        /* Pour le moment, on reinitialise, mais dans la suite, il faudra afficher un message d'erreur en cas d'erreur*/
+        resetScores (&scores);
     }
 
-    /* Fenetre Fonctionelle */
-
-    if (!imageicone)
-    {
-        fprintf (stderr, "Erreur sur l'image %s: %s\n", IMGICONE, IMG_GetError() );
-    }
-    else
-    {
-        printf ("Image %s charge\n", IMGICONE);
-        SDL_SetWindowIcon (pWindow, imageicone);
-    }
-
-    eraserFont = TTF_OpenFont (ERASERFONT, 30);
-
-    if (!eraserFont)
-    {
-        fprintf (stderr, "Erreur sur la police %s: %s\n", ERASERFONT, TTF_GetError() );
-        return EXIT_FAILURE;
-    }
-    else
-    {
-        printf ("Police %s charge\n", ERASERFONT);
-    }
-
-    /* L'image n'est plus utilise, on peut la supprimer de la memoire */
-    SDL_FreeSurface (imageicone);
-    /* On met une couleur de font */
-    surface = SDL_GetWindowSurface (pWindow);
-    SDL_FillRect (surface, NULL, SDL_MapRGB (surface->format, 63, 72, 204) );
-
-    /* Le titre */
-    if (! (titreTTF = TTF_RenderText_Blended (eraserFont, "Puzzle MPI1", TitreColor) ) )
-    {
-        fprintf (stderr, "Erreur lors de l'ecriture: %s\n", TTF_GetError() );
-    }
-    else
-    {
-        titreRect.x = (LARGEUR_FENETRE / 2) - (titreTTF->w / 2);
-        titreRect.y = HAUTEUR_FENETRE / 8;
-        SDL_BlitSurface (titreTTF, NULL, surface, &titreRect);
-        SDL_FreeSurface (titreTTF);
-    }
+    pWindow = creerFenetre (pWindow, "MPI1 Puzzle");
+    eraserFont = chargerPolice (eraserFont, ERASERFONT, 30);
 
     while (continuer)
     {
-        SDL_WaitEvent (&event);
-
         switch (event.type)
         {
             case SDL_MOUSEBUTTONDOWN:
-                printf("%d ",clickMenu (eraserFont, "Jouer", JouerTTFW, JouerTTFH, event, JouerRect));
-                printf("%d ",clickMenu (eraserFont, "Meilleur Score", BestTTFW, BestTTFH, event, BestRect));
-                printf("%d ",clickMenu (eraserFont, "Mot de Passe", PasswordTTFW, PasswordTTFH, event, PasswordRect));
-                printf("%d ",clickMenu (eraserFont, "Options", OptionTTFW, OptionTTFH, event, OptionRect));
-                printf("%d\n",clickMenu (eraserFont, "Quitter", QuitterTTFW, QuitterTTFH, event, QuitterRect));
+                if (clickMenu (eraserFont, "Jouer", JouerTTFW, JouerTTFH, event, JouerRect) )
+                {
+                    fenetreChoixNiveau (pWindow, &scores);
+                    event.type = SDL_KEYDOWN;
+                    event.key.keysym.sym = SDLK_1;
+                    SDL_PushEvent (&event);
+                }
+
+                if (clickMenu (eraserFont, "Meilleur Score", BestTTFW, BestTTFH, event, BestRect) )
+                {
+                    fenetreMScore (pWindow, &scores);
+                    event.type = SDL_KEYDOWN;
+                    event.key.keysym.sym = SDLK_1;
+                    SDL_PushEvent (&event);
+                }
+
+                printf ("%d ", clickMenu (eraserFont, "Mot de Passe", PasswordTTFW, PasswordTTFH, event, PasswordRect) );
+                printf ("%d ", clickMenu (eraserFont, "Options", OptionTTFW, OptionTTFH, event, OptionRect) );
+                if (clickMenu (eraserFont, "Quitter", QuitterTTFW, QuitterTTFH, event, QuitterRect))
+                {
+                   printf ("Good Bye\n");
+                continuer = 0;
+                }
                 break;
 
             case SDL_QUIT:
@@ -135,77 +107,52 @@ int main (int argc, char** argv)
                 PasswordColor.r = hoverMenu (eraserFont, "Mot de Passe", PasswordTTFW, PasswordTTFH, event, PasswordRect);
                 OptionColor.r = hoverMenu (eraserFont, "Options", OptionTTFW, OptionTTFH, event, OptionRect);
                 QuitterColor.r = hoverMenu (eraserFont, "Quitter", QuitterTTFW, QuitterTTFH, event, QuitterRect);
+                break;
+
+            case SDL_KEYDOWN:
+                printf ("%s\n", SDL_GetKeyName (event.key.keysym.sym) );
+                break;
+
             default:
                 break;
         }
 
-        /* On Affiche tout ce qui est a afficher dynamiquement comme le texte */
-
+        /* On met une couleur de font */
+        surface = SDL_GetWindowSurface (pWindow);
+        SDL_FillRect (surface, NULL, SDL_MapRGB (surface->format, 63, 72, 204) );
+        titreTTF = creerTexte (titreTTF, METHODE_BELLE, eraserFont, "Puzzle MPI1", TitreColor);
+        titreRect.x = (LARGEUR_FENETRE / 2) - (titreTTF->w / 2);
+        titreRect.y = HAUTEUR_FENETRE / 8;
+        SDL_BlitSurface (titreTTF, NULL, surface, &titreRect);
+        SDL_FreeSurface (titreTTF);
+        SDL_WaitEvent (&event);
         /* Jouer */
-        if (! (JouerTTF = TTF_RenderText_Solid (eraserFont, "Jouer", JouerColor) ) )
-        {
-            fprintf (stderr, "Erreur lors de l'ecriture: %s\n", TTF_GetError() );
-        }
-        else
-        {
-            JouerRect.x = (LARGEUR_FENETRE / 2) - (JouerTTF->w / 2);
-            JouerRect.y = (3 * HAUTEUR_FENETRE) / 8;
-            SDL_BlitSurface (JouerTTF, NULL, surface, &JouerRect);
-            SDL_FreeSurface (JouerTTF);
-        }
-
-        if (! (BestTTF = TTF_RenderText_Solid (eraserFont, "Meilleur Score", BestColor) ) )
-        {
-            fprintf (stderr, "Erreur lors de l'ecriture: %s\n", TTF_GetError() );
-        }
-        else
-        {
-            BestRect.x = (LARGEUR_FENETRE / 2) - (BestTTF->w / 2);
-            BestRect.y = (4 * HAUTEUR_FENETRE) / 8;
-            SDL_BlitSurface (BestTTF, NULL, surface, &BestRect);
-            SDL_FreeSurface (BestTTF);
-        }
-
-        if (! (PasswordTTF = TTF_RenderText_Solid (eraserFont, "Mot de passe", PasswordColor) ) )
-        {
-            fprintf (stderr, "Erreur lors de l'ecriture: %s\n", TTF_GetError() );
-        }
-        else
-        {
-            PasswordRect.x = (LARGEUR_FENETRE / 2) - (PasswordTTF->w / 2);
-            PasswordRect.y = (5 * HAUTEUR_FENETRE) / 8;
-            SDL_BlitSurface (PasswordTTF, NULL, surface, &PasswordRect);
-            SDL_FreeSurface (PasswordTTF);
-        }
-
-        if (! (OptionTTF = TTF_RenderText_Solid (eraserFont, "Options", OptionColor) ) )
-        {
-            fprintf (stderr, "Erreur lors de l'ecriture: %s\n", TTF_GetError() );
-        }
-        else
-        {
-            OptionRect.x = (LARGEUR_FENETRE / 2) - (OptionTTF->w / 2);
-            OptionRect.y = (6 * HAUTEUR_FENETRE) / 8;
-            SDL_BlitSurface (OptionTTF, NULL, surface, &OptionRect);
-            SDL_FreeSurface (OptionTTF);
-        }
-
-        if (! (QuitterTTF = TTF_RenderText_Solid (eraserFont, "Quitter", QuitterColor) ) )
-        {
-            fprintf (stderr, "Erreur lors de l'ecriture: %s\n", TTF_GetError() );
-        }
-        else
-        {
-            QuitterRect.x = (LARGEUR_FENETRE / 2) - (QuitterTTF->w / 2);
-            QuitterRect.y = (7 * HAUTEUR_FENETRE) / 8;
-            SDL_BlitSurface (QuitterTTF, NULL, surface, &QuitterRect);
-            SDL_FreeSurface (QuitterTTF);
-        }
-
+        JouerTTF = creerTexte (JouerTTF, METHODE_RAPIDE, eraserFont, "Jouer", JouerColor);
+        JouerRect = rangMenu (JouerTTF, 3);
+        SDL_BlitSurface (JouerTTF, NULL, surface, &JouerRect);
+        SDL_FreeSurface (JouerTTF);
+        BestTTF = creerTexte (BestTTF, METHODE_RAPIDE, eraserFont, "Meilleur Score", BestColor);
+        BestRect = rangMenu (BestTTF, 4);
+        SDL_BlitSurface (BestTTF, NULL, surface, &BestRect);
+        SDL_FreeSurface (BestTTF);
+        PasswordTTF = creerTexte (PasswordTTF, METHODE_RAPIDE, eraserFont, "Mot de Passe", PasswordColor);
+        PasswordRect = rangMenu (PasswordTTF, 5);
+        SDL_BlitSurface (PasswordTTF, NULL, surface, &PasswordRect);
+        SDL_FreeSurface (PasswordTTF);
+        OptionTTF = creerTexte (OptionTTF, METHODE_RAPIDE, eraserFont, "Options", OptionColor);
+        OptionRect = rangMenu (OptionTTF, 6);
+        SDL_BlitSurface (OptionTTF, NULL, surface, &OptionRect);
+        SDL_FreeSurface (OptionTTF);
+        QuitterTTF = creerTexte (QuitterTTF, METHODE_RAPIDE, eraserFont, "Quitter", QuitterColor);
+        QuitterRect = rangMenu (QuitterTTF, 7);
+        SDL_BlitSurface (QuitterTTF, NULL, surface, &QuitterRect);
+        SDL_FreeSurface (QuitterTTF);
         SDL_UpdateWindowSurface (pWindow);
     }
 
     SDL_DestroyWindow (pWindow);
+    pWindow = NULL;
+    libererPolice (eraserFont);
     TTF_Quit();
     SDL_Quit();
     return EXIT_SUCCESS;
@@ -214,11 +161,25 @@ int main (int argc, char** argv)
 void lireParamShell (int argc, char** argv)
 {
     int i = 0;
+    T_MScore scores;
     printf ("Nombre de parametre envoye par le Shell: %d \n", argc);
 
     for (i = 0; i < argc; i++)
     {
         printf ("Parametre %d envoye: %s \n", i, argv[i]);
+
+        if (strcmp (argv[i], "--help") == 0)
+        {
+            printf ("Liste des commandes disponibles:\n");
+            printf ("--help  \t: Affiche cette aide\n");
+            printf ("--delete\t: Reset les scores\n");
+            exit (EXIT_SUCCESS);
+        }
+        else if (strcmp (argv[i], "--delete") == 0)
+        {
+            resetScores (&scores);
+            exit (EXIT_SUCCESS);
+        }
     }
 }
 
@@ -262,4 +223,12 @@ short clickMenu (TTF_Font* Font, char* String, int TTFW, int TTFH, SDL_Event eve
     }
 
     return 0;
+}
+
+SDL_Rect rangMenu (SDL_Surface* Surface, short rang)
+{
+    SDL_Rect Rect = {0, 0, 0, 0};
+    Rect.x = (LARGEUR_FENETRE / 2) - (Surface->w / 2);
+    Rect.y = (rang * HAUTEUR_FENETRE) / 8;
+    return Rect;
 }

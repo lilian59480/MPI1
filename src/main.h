@@ -2,12 +2,12 @@
 #define H_MAIN
 
 #include "common.h"
-
-#define LARGEUR_FENETRE 640
-#define HAUTEUR_FENETRE 480
+#include "best.h"
+#include "menu.h"
 
 void lireParamShell (int argc, char** argv);
-short hoverMenu(TTF_Font* Font,char* String,int TTFW, int TTFH,SDL_Event event,SDL_Rect Rect) ;
-short clickMenu(TTF_Font* Font,char* String,int TTFW, int TTFH,SDL_Event event,SDL_Rect Rect) ;
+short hoverMenu (TTF_Font* Font, char* String, int TTFW, int TTFH, SDL_Event event, SDL_Rect Rect) ;
+short clickMenu (TTF_Font* Font, char* String, int TTFW, int TTFH, SDL_Event event, SDL_Rect Rect) ;
+SDL_Rect rangMenu (SDL_Surface* Surface, short rang);
 
 #endif
