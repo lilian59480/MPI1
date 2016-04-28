@@ -9,6 +9,7 @@
 #define PASSMAX 10
 
 int password();
+short hoverPass (TTF_Font* Font, char* String, int TTFW, int TTFH, SDL_Event event, SDL_Rect Rect) ;
 short clickPass (TTF_Font* Font, char* String, int TTFW, int TTFH, SDL_Event event, SDL_Rect Rect) ;
 
 #endif

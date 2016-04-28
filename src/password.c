@@ -14,6 +14,12 @@ int password() {
     int ValiderTTFW = 0;
     int ValiderTTFH = 0;
     
+    SDL_Surface* AnnulerTTF = NULL;
+    SDL_Rect AnnulerRect;
+    SDL_Color AnnulerColor = {0, 0, 0, 0};
+    int AnnulerTTFW = 0;
+    int AnnulerTTFH = 0;
+    
     TTF_Font* eraserFont = NULL;
     SDL_Surface* surface = NULL;
     eraserFont = chargerPolice (eraserFont, ERASERFONT, 25);
@@ -30,11 +36,16 @@ int password() {
     rect.y = HAUTEUR_FENETREPASS / 8;
     SDL_BlitSurface (surfaceTexte, NULL, surface, &rect);
     SDL_FreeSurface (surfaceTexte); 
-    ValiderTTF = creerTexte (ValiderTTF, METHODE_RAPIDE, eraserFont, "Valider", ValiderColor);
-    ValiderRect.x = 10;
+    ValiderTTF = creerTexte (ValiderTTF, METHODE_RAPIDE, eraserFont, "Valider", ValiderColor);  
+    ValiderRect.x = (LARGEUR_FENETREPASS / 4) - (surfaceTexte->w / 2);
     ValiderRect.y = (3*HAUTEUR_FENETREPASS) / 4;
     SDL_BlitSurface (ValiderTTF, NULL, surface, &ValiderRect);
     SDL_FreeSurface (ValiderTTF);
+    AnnulerTTF = creerTexte (AnnulerTTF, METHODE_RAPIDE, eraserFont, "Annuler", AnnulerColor);
+    AnnulerRect.x = (3*LARGEUR_FENETREPASS / 4) - (surfaceTexte->w / 2);
+    AnnulerRect.y = (3*HAUTEUR_FENETREPASS) / 4;
+    SDL_BlitSurface (AnnulerTTF, NULL, surface, &AnnulerRect);
+    SDL_FreeSurface (AnnulerTTF);
               
     SDL_UpdateWindowSurface (fenetrepass);  
     
@@ -73,6 +84,25 @@ int password() {
                 }
                 puts(texte); 
                 break;
+            case SDL_MOUSEBUTTONDOWN:
+                if (clickPass (eraserFont, "Valider", ValiderTTFW, ValiderTTFH, ev, ValiderRect) )
+                {
+                    printf("testvalider\n");
+                    ev.type = SDL_KEYDOWN;
+                    ev.key.keysym.sym = SDLK_1;
+                    SDL_PushEvent (&ev);
+                }
+                if (clickPass (eraserFont, "Annuler", AnnulerTTFW, AnnulerTTFH, ev, AnnulerRect) )
+                {
+				    done = SDL_TRUE;
+                }
+                
+                break;
+                
+            case SDL_MOUSEMOTION:
+                ValiderColor.r = hoverPass (eraserFont, "Valider", ValiderTTFW, ValiderTTFH, ev, ValiderRect);
+                AnnulerColor.r = hoverPass (eraserFont, "Annuler", AnnulerTTFW, AnnulerTTFH, ev, AnnulerRect);
+                break;
         }  
     SDL_FillRect (surface, NULL, SDL_MapRGB (surface->format, 204, 72, 63) );
     surfaceTexte = creerTexte (surfaceTexte, METHODE_BELLE, eraserFont, "Mot de passe", color);
@@ -81,10 +111,15 @@ int password() {
     SDL_BlitSurface (surfaceTexte, NULL, surface, &rect);
     SDL_FreeSurface (surfaceTexte);        
     ValiderTTF = creerTexte (ValiderTTF, METHODE_RAPIDE, eraserFont, "Valider", ValiderColor);
-    ValiderRect.x = 10;
+    ValiderRect.x = (LARGEUR_FENETREPASS / 4) - (surfaceTexte->w / 2);
     ValiderRect.y = (3*HAUTEUR_FENETREPASS) / 4;
     SDL_BlitSurface (ValiderTTF, NULL, surface, &ValiderRect);
     SDL_FreeSurface (ValiderTTF); 
+    AnnulerTTF = creerTexte (AnnulerTTF, METHODE_RAPIDE, eraserFont, "Annuler", AnnulerColor);
+    AnnulerRect.x = (3*LARGEUR_FENETREPASS / 4) - (surfaceTexte->w / 2);
+    AnnulerRect.y = (3*HAUTEUR_FENETREPASS) / 4;
+    SDL_BlitSurface (AnnulerTTF, NULL, surface, &AnnulerRect);
+    SDL_FreeSurface (AnnulerTTF);
     SDL_UpdateWindowSurface (fenetrepass);
     if (passlen>0)
     {
@@ -103,6 +138,26 @@ int password() {
     return 0;
 }
 
+short hoverPass (TTF_Font* Font, char* String, int TTFW, int TTFH, SDL_Event event, SDL_Rect Rect)
+{
+    TTF_SizeText (Font, String, &TTFW, &TTFH);
+
+    if (event.motion.x > Rect.x)
+    {
+        if (event.motion.y > Rect.y)
+        {
+            if (event.motion.x < (Rect.x + TTFW) )
+            {
+                if (event.motion.y < (Rect.y + TTFH) )
+                {
+                    return 255;
+                }
+            }
+        }
+    }
+
+    return 0;
+}
 
 short clickPass (TTF_Font* Font, char* String, int TTFW, int TTFH, SDL_Event event, SDL_Rect Rect)
 {
