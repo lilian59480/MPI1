@@ -86,8 +86,15 @@ int main (int argc, char** argv)
                     event.key.keysym.sym = SDLK_1;
                     SDL_PushEvent (&event);
                 }
+                
+                if (clickMenu (eraserFont, "Mot de Passe", PasswordTTFW, PasswordTTFH, event, PasswordRect))
+                {
+                    password();
+                    event.type = SDL_KEYDOWN;
+                    event.key.keysym.sym = SDLK_1;
+                    SDL_PushEvent (&event);
+                }
 
-                printf ("%d ", clickMenu (eraserFont, "Mot de Passe", PasswordTTFW, PasswordTTFH, event, PasswordRect) );
                 printf ("%d ", clickMenu (eraserFont, "Options", OptionTTFW, OptionTTFH, event, OptionRect) );
                 if (clickMenu (eraserFont, "Quitter", QuitterTTFW, QuitterTTFH, event, QuitterRect))
                 {

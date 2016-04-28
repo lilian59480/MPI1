@@ -4,6 +4,7 @@
 #include "common.h"
 #include "best.h"
 #include "menu.h"
+#include "password.h"
 
 void lireParamShell (int argc, char** argv);
 short hoverMenu (TTF_Font* Font, char* String, int TTFW, int TTFH, SDL_Event event, SDL_Rect Rect) ;
