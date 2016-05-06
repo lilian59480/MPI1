@@ -35,11 +35,13 @@ void fenetreMScore (SDL_Window* fenetre, T_MScore* score)
         SDL_FreeSurface (surfaceTexte);
         surfaceTexte = NULL;
     }
+
     surfaceTexte = creerTexte (surfaceTexte, METHODE_BELLE, eraserFont, "Appuyer pour quitter", color);
     rect.x = (LARGEUR_FENETRE / 2) - (surfaceTexte->w / 2);
-    rect.y = (7*HAUTEUR_FENETRE) / 8;
+    rect.y = (7 * HAUTEUR_FENETRE) / 8;
     SDL_BlitSurface (surfaceTexte, NULL, surface, &rect);
     SDL_FreeSurface (surfaceTexte);
+
     while (continuer)
     {
         SDL_WaitEvent (&event);

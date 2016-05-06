@@ -86,8 +86,8 @@ int main (int argc, char** argv)
                     event.key.keysym.sym = SDLK_1;
                     SDL_PushEvent (&event);
                 }
-                
-                if (clickMenu (eraserFont, "Mot de Passe", PasswordTTFW, PasswordTTFH, event, PasswordRect))
+
+                if (clickMenu (eraserFont, "Mot de Passe", PasswordTTFW, PasswordTTFH, event, PasswordRect) )
                 {
                     password();
                     event.type = SDL_KEYDOWN;
@@ -96,11 +96,13 @@ int main (int argc, char** argv)
                 }
 
                 printf ("%d ", clickMenu (eraserFont, "Options", OptionTTFW, OptionTTFH, event, OptionRect) );
-                if (clickMenu (eraserFont, "Quitter", QuitterTTFW, QuitterTTFH, event, QuitterRect))
+
+                if (clickMenu (eraserFont, "Quitter", QuitterTTFW, QuitterTTFH, event, QuitterRect) )
                 {
-                   printf ("Good Bye\n");
-                continuer = 0;
+                    printf ("Good Bye\n");
+                    continuer = 0;
                 }
+
                 break;
 
             case SDL_QUIT:
@@ -114,10 +116,6 @@ int main (int argc, char** argv)
                 PasswordColor.r = hoverMenu (eraserFont, "Mot de Passe", PasswordTTFW, PasswordTTFH, event, PasswordRect);
                 OptionColor.r = hoverMenu (eraserFont, "Options", OptionTTFW, OptionTTFH, event, OptionRect);
                 QuitterColor.r = hoverMenu (eraserFont, "Quitter", QuitterTTFW, QuitterTTFH, event, QuitterRect);
-                break;
-
-            case SDL_KEYDOWN:
-                printf ("%s\n", SDL_GetKeyName (event.key.keysym.sym) );
                 break;
 
             default:
@@ -188,54 +186,4 @@ void lireParamShell (int argc, char** argv)
             exit (EXIT_SUCCESS);
         }
     }
-}
-
-short hoverMenu (TTF_Font* Font, char* String, int TTFW, int TTFH, SDL_Event event, SDL_Rect Rect)
-{
-    TTF_SizeText (Font, String, &TTFW, &TTFH);
-
-    if (event.motion.x > Rect.x)
-    {
-        if (event.motion.y > Rect.y)
-        {
-            if (event.motion.x < (Rect.x + TTFW) )
-            {
-                if (event.motion.y < (Rect.y + TTFH) )
-                {
-                    return 255;
-                }
-            }
-        }
-    }
-
-    return 0;
-}
-
-short clickMenu (TTF_Font* Font, char* String, int TTFW, int TTFH, SDL_Event event, SDL_Rect Rect)
-{
-    TTF_SizeText (Font, String, &TTFW, &TTFH);
-
-    if (event.button.x > Rect.x)
-    {
-        if (event.button.y > Rect.y)
-        {
-            if (event.button.x < (Rect.x + TTFW) )
-            {
-                if (event.button.y < (Rect.y + TTFH) )
-                {
-                    return 1;
-                }
-            }
-        }
-    }
-
-    return 0;
-}
-
-SDL_Rect rangMenu (SDL_Surface* Surface, short rang)
-{
-    SDL_Rect Rect = {0, 0, 0, 0};
-    Rect.x = (LARGEUR_FENETRE / 2) - (Surface->w / 2);
-    Rect.y = (rang * HAUTEUR_FENETRE) / 8;
-    return Rect;
 }

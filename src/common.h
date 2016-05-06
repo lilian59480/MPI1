@@ -42,5 +42,9 @@ SDL_Surface* chargerImage (SDL_Surface* image, char* chemin);
 TTF_Font* chargerPolice (TTF_Font* font, char* chemin, int taille);
 void libererPolice (TTF_Font* font);
 SDL_Surface* creerTexte (SDL_Surface* surface, short methode, TTF_Font* font, char* texte, SDL_Color couleur);
+short hoverMenu (TTF_Font* Font, char* String, int TTFW, int TTFH, SDL_Event event, SDL_Rect Rect) ;
+short clickMenu (TTF_Font* Font, char* String, int TTFW, int TTFH, SDL_Event event, SDL_Rect Rect) ;
+SDL_Rect rangMenu (SDL_Surface* Surface, short rang);
+
 
 #endif
