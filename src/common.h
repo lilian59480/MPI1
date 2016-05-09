@@ -4,6 +4,7 @@
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_image.h>
 #include <SDL2/SDL_ttf.h>
+#include <SDL2/SDL_mixer.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -37,7 +38,7 @@ typedef struct
     T_Tableau Scores;
 } T_MScore;
 
-SDL_Window* creerFenetre (SDL_Window* fenetre, char* titre, unsigned int posX, unsigned int posY);
+SDL_Window* creerFenetre (SDL_Window* fenetre, char* titre, unsigned int tailleX, unsigned int tailleY);
 SDL_Surface* chargerImage (SDL_Surface* image, char* chemin);
 TTF_Font* chargerPolice (TTF_Font* font, char* chemin, int taille);
 void libererPolice (TTF_Font* font);
@@ -45,6 +46,6 @@ SDL_Surface* creerTexte (SDL_Surface* surface, short methode, TTF_Font* font, ch
 short hoverMenu (TTF_Font* Font, char* String, int TTFW, int TTFH, SDL_Event event, SDL_Rect Rect) ;
 short clickMenu (TTF_Font* Font, char* String, int TTFW, int TTFH, SDL_Event event, SDL_Rect Rect) ;
 SDL_Rect rangMenu (SDL_Surface* Surface, short rang);
-
+void playmusic(short musique, Mix_Music *gMusic);
 
 #endif

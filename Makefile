@@ -14,14 +14,17 @@ copy:
 	mkdir Output
 	cp -R ./dll/* ./Output/
 
-puzzle: common.o best.o password.o jeu.o menu.o
-	$(GCC) common.o best.o password.o jeu.o menu.o src/main.c -o $(OUTPUT) $(PARAM)
+puzzle: common.o best.o option.o password.o jeu.o menu.o
+	$(GCC) common.o best.o option.o password.o jeu.o menu.o src/main.c -o $(OUTPUT) $(PARAM)
 
 common.o:
 	$(GCC) -c src/common.c $(PARAM)
 
 best.o:
 	$(GCC) -c src/best.c $(PARAM)
+
+option.o:
+	$(GCC) -c src/option.c $(PARAM)
 
 password.o:
 	$(GCC) -c src/password.c $(PARAM)

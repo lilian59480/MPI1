@@ -1,9 +1,9 @@
 #include "common.h"
 
-SDL_Window* creerFenetre (SDL_Window* fenetre, char* titre, unsigned int posX, unsigned int posY)
+SDL_Window* creerFenetre (SDL_Window* fenetre, char* titre, unsigned int tailleX, unsigned int tailleY)
 {
     SDL_Surface* imageicone = NULL;
-    fenetre = SDL_CreateWindow (titre, SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, posX, posY, SDL_WINDOW_SHOWN);
+    fenetre = SDL_CreateWindow (titre, SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, tailleX, tailleY, SDL_WINDOW_SHOWN);
 
     if ( !fenetre )
     {
@@ -123,3 +123,27 @@ SDL_Rect rangMenu (SDL_Surface* Surface, short rang)
     return Rect;
 }
 
+void playmusic(short musique, Mix_Music *gMusic)
+{
+    //Load music
+    switch (musique)
+    {
+        case 1 : gMusic = Mix_LoadMUS( "sound/tes.mp3" );
+        break;
+        case 2 : gMusic = Mix_LoadMUS( "sound/cubanmusic2.wav" );
+        break;
+        case 3 : gMusic = Mix_LoadMUS( "sound/galaxy2.mp3" );
+        break;
+        case 4 : gMusic = Mix_LoadMUS( "sound/chiant.wav" );
+        break;
+    }
+    
+    if( gMusic == NULL )
+    {
+        fprintf (stderr, "Echec de l'initialisation de la SDL_mixer :\n %s \n", Mix_GetError() );
+        return EXIT_FAILURE;
+    } 
+    
+    Mix_PlayMusic( gMusic, -1 );
+    return;
+}

@@ -37,6 +37,11 @@ int main (int argc, char** argv)
     int QuitterTTFH = 0;
     short continuer = 1;
     T_MScore scores;
+    
+    //Pour musique
+    short onoff = 0, musique = 3;
+    Mix_Music *gMusic = NULL;
+    
     /* Lecture des parametres envoye par le Shell */
     lireParamShell (argc, argv);
 
@@ -52,6 +57,13 @@ int main (int argc, char** argv)
         fprintf (stderr, "Erreur de l'initialisation de la SDL_TTF :\n %s \n", TTF_GetError() );
         return EXIT_FAILURE;
     }
+    
+    /* Initialisation du sdl_mixer*/
+    if( Mix_OpenAudio( 44100, MIX_DEFAULT_FORMAT, 2, 2048 ) < 0 )
+    {
+     fprintf (stderr, "Echec de l'initialisation de la SDL_mixer :\n %s \n", Mix_GetError() );
+     return EXIT_FAILURE;
+    }
 
     /* SDL2 Fonctionel Recuperation d'informations utiles (?) */
     printf ("OS: %s \nRam disponible: %d \n", SDL_GetPlatform(), SDL_GetSystemRAM() );
@@ -65,6 +77,8 @@ int main (int argc, char** argv)
 
     pWindow = creerFenetre (pWindow, "MPI1 Puzzle", LARGEUR_FENETRE, HAUTEUR_FENETRE);
     eraserFont = chargerPolice (eraserFont, ERASERFONT, 30);
+    
+    playmusic(musique,gMusic);
 
     while (continuer)
     {
@@ -95,7 +109,13 @@ int main (int argc, char** argv)
                     SDL_PushEvent (&event);
                 }
 
-                printf ("%d ", clickMenu (eraserFont, "Options", OptionTTFW, OptionTTFH, event, OptionRect) );
+                if ( clickMenu (eraserFont, "Options", OptionTTFW, OptionTTFH, event, OptionRect))
+                {
+                    option(&musique, &onoff);
+                    event.type = SDL_KEYDOWN;
+                    event.key.keysym.sym = SDLK_1;
+                    SDL_PushEvent (&event);
+                }
 
                 if (clickMenu (eraserFont, "Quitter", QuitterTTFW, QuitterTTFH, event, QuitterRect) )
                 {
@@ -158,6 +178,9 @@ int main (int argc, char** argv)
     SDL_DestroyWindow (pWindow);
     pWindow = NULL;
     libererPolice (eraserFont);
+    //Liberer musique
+    Mix_FreeMusic( gMusic );
+    gMusic = NULL;
     TTF_Quit();
     SDL_Quit();
     return EXIT_SUCCESS;
