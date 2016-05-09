@@ -63,7 +63,7 @@ int main (int argc, char** argv)
         resetScores (&scores);
     }
 
-    pWindow = creerFenetre (pWindow, "MPI1 Puzzle");
+    pWindow = creerFenetre (pWindow, "MPI1 Puzzle", LARGEUR_FENETRE, HAUTEUR_FENETRE);
     eraserFont = chargerPolice (eraserFont, ERASERFONT, 30);
 
     while (continuer)

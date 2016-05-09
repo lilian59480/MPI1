@@ -37,7 +37,7 @@ typedef struct
     T_Tableau Scores;
 } T_MScore;
 
-SDL_Window* creerFenetre (SDL_Window* fenetre, char* titre);
+SDL_Window* creerFenetre (SDL_Window* fenetre, char* titre, unsigned int posX, unsigned int posY);
 SDL_Surface* chargerImage (SDL_Surface* image, char* chemin);
 TTF_Font* chargerPolice (TTF_Font* font, char* chemin, int taille);
 void libererPolice (TTF_Font* font);

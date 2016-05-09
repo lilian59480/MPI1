@@ -1,9 +1,9 @@
 #include "common.h"
 
-SDL_Window* creerFenetre (SDL_Window* fenetre, char* titre)
+SDL_Window* creerFenetre (SDL_Window* fenetre, char* titre, unsigned int posX, unsigned int posY)
 {
     SDL_Surface* imageicone = NULL;
-    fenetre = SDL_CreateWindow (titre, SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, LARGEUR_FENETRE, HAUTEUR_FENETRE, SDL_WINDOW_SHOWN);
+    fenetre = SDL_CreateWindow (titre, SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, posX, posY, SDL_WINDOW_SHOWN);
 
     if ( !fenetre )
     {

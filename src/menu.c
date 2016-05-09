@@ -45,7 +45,7 @@ void fenetreChoixNiveau (SDL_Window* fenetre, T_MScore* score)
             case SDL_MOUSEBUTTONDOWN:
                 if (clickMenu (eraserFont, "Chat", ChatTTFW, ChatTTFH, event, ChatRect) )
                 {
-                    fenetreJeu(score,"Chat");
+                    fenetreJeu(score,"Chat/",0);
                     event.type = SDL_KEYDOWN;
                     event.key.keysym.sym = SDLK_1;
                     SDL_PushEvent (&event);
@@ -53,7 +53,7 @@ void fenetreChoixNiveau (SDL_Window* fenetre, T_MScore* score)
 
                 if (clickMenu (eraserFont, "Chien", ChienTTFW, ChienTTFH, event, ChienRect) )
                 {
-                    fenetreJeu(score,"Chien");
+                    fenetreJeu(score,"Chien/",0);
                     event.type = SDL_KEYDOWN;
                     event.key.keysym.sym = SDLK_1;
                     SDL_PushEvent (&event);
@@ -61,7 +61,7 @@ void fenetreChoixNiveau (SDL_Window* fenetre, T_MScore* score)
 
                 if (clickMenu (eraserFont, "Paysage", PaysageTTFW, PaysageTTFH, event, PaysageRect) )
                 {
-                    fenetreJeu(score,"Paysage");
+                    fenetreJeu(score,"Paysage/",0);
                     event.type = SDL_KEYDOWN;
                     event.key.keysym.sym = SDLK_1;
                     SDL_PushEvent (&event);
@@ -69,7 +69,7 @@ void fenetreChoixNiveau (SDL_Window* fenetre, T_MScore* score)
 
                 if (clickMenu (eraserFont, "IG2I", IG2ITTFW, IG2ITTFH, event, IG2IRect) )
                 {
-                    fenetreJeu(score,"IG2I");
+                    fenetreJeu(score,"IG2I/",0);
                     event.type = SDL_KEYDOWN;
                     event.key.keysym.sym = SDLK_1;
                     SDL_PushEvent (&event);
@@ -83,7 +83,7 @@ void fenetreChoixNiveau (SDL_Window* fenetre, T_MScore* score)
                 break;
 
             case SDL_QUIT:
-                return;
+                exit (EXIT_SUCCESS);
                 break;
 
             case SDL_MOUSEMOTION:
