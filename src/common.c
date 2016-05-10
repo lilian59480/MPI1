@@ -147,3 +147,24 @@ void playmusic(short musique, Mix_Music *gMusic)
     Mix_PlayMusic( gMusic, -1 );
     return;
 }
+
+void playsound(short sound, Mix_Chunk *gSound)
+{
+    //Load music
+    switch (sound)
+    {
+        case 1 : gSound = Mix_LoadWAV( "sound/yep.wav" );
+        break;
+        case 2 : gSound = Mix_LoadWAV( "sound/nop.wav" );
+        break;
+    }
+    
+    if( gSound == NULL )
+    {
+        fprintf (stderr, "Echec de l'initialisation de la SDL_mixer :\n %s \n", Mix_GetError() );
+        return EXIT_FAILURE;
+    } 
+    
+    Mix_PlayChannel( -1, gSound, 0 );
+    return;
+}

@@ -47,5 +47,6 @@ short hoverMenu (TTF_Font* Font, char* String, int TTFW, int TTFH, SDL_Event eve
 short clickMenu (TTF_Font* Font, char* String, int TTFW, int TTFH, SDL_Event event, SDL_Rect Rect) ;
 SDL_Rect rangMenu (SDL_Surface* Surface, short rang);
 void playmusic(short musique, Mix_Music *gMusic);
+void playsound(short sound, Mix_Chunk *gSound);
 
 #endif

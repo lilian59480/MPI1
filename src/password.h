@@ -8,8 +8,7 @@
 #define HAUTEUR_FENETREPASS 300
 #define PASSMAX 10
 
-int password();
-short hoverPass (TTF_Font* Font, char* String, int TTFW, int TTFH, SDL_Event event, SDL_Rect Rect) ;
-short clickPass (TTF_Font* Font, char* String, int TTFW, int TTFH, SDL_Event event, SDL_Rect Rect) ;
+int password(Mix_Chunk *gSound);
+void valider(char* texte, Mix_Chunk *gSound);
 
 #endif

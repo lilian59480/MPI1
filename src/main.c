@@ -41,6 +41,7 @@ int main (int argc, char** argv)
     //Pour musique
     short onoff = 0, musique = 3;
     Mix_Music *gMusic = NULL;
+    Mix_Chunk *gSound = NULL;
     
     /* Lecture des parametres envoye par le Shell */
     lireParamShell (argc, argv);
@@ -103,7 +104,7 @@ int main (int argc, char** argv)
 
                 if (clickMenu (eraserFont, "Mot de Passe", PasswordTTFW, PasswordTTFH, event, PasswordRect) )
                 {
-                    password();
+                    password(gSound);
                     event.type = SDL_KEYDOWN;
                     event.key.keysym.sym = SDLK_1;
                     SDL_PushEvent (&event);
@@ -181,6 +182,8 @@ int main (int argc, char** argv)
     //Liberer musique
     Mix_FreeMusic( gMusic );
     gMusic = NULL;
+    Mix_FreeChunk( gSound );
+    gSound = NULL;
     TTF_Quit();
     SDL_Quit();
     return EXIT_SUCCESS;

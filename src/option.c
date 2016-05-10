@@ -1,6 +1,6 @@
 #include "option.h"
 
-int option(short* musique, short* onoff ) {
+int option(short* musique, short* onoff, Mix_Music *gMusic ) {
     SDL_Window* fenetreoption = NULL;
     SDL_bool done = SDL_FALSE;
     SDL_Rect rect; 
@@ -14,9 +14,13 @@ int option(short* musique, short* onoff ) {
     
     SDL_Surface* onTTF = NULL;
     SDL_Rect onRect;
+    int onTTFW = 0;
+    int onTTFH = 0;
     
     SDL_Surface* offTTF = NULL;
     SDL_Rect offRect;
+    int offTTFW = 0;
+    int offTTFH = 0;
     
     SDL_Surface* RetourTTF = NULL;
     SDL_Rect RetourRect;
@@ -26,15 +30,23 @@ int option(short* musique, short* onoff ) {
     
     SDL_Surface* Mus1TTF = NULL;
     SDL_Rect Mus1Rect;
+    int Mus1TTFW = 0;
+    int Mus1TTFH = 0;
     
     SDL_Surface* Mus2TTF = NULL;
     SDL_Rect Mus2Rect;
+    int Mus2TTFW = 0;
+    int Mus2TTFH = 0;
     
     SDL_Surface* Mus3TTF = NULL;
     SDL_Rect Mus3Rect;
+    int Mus3TTFW = 0;
+    int Mus3TTFH = 0;
     
     SDL_Surface* Mus4TTF = NULL;
     SDL_Rect Mus4Rect;
+    int Mus4TTFW = 0;
+    int Mus4TTFH = 0;
     
     SDL_Surface* delTTF = NULL;
     SDL_Rect delRect;
@@ -81,12 +93,51 @@ int option(short* musique, short* onoff ) {
                 {
 				    done = SDL_TRUE;
                 }
+                else if (clickMenu (eraserFont, "Credits", CreditsTTFW, CreditsTTFH, ev, CreditsRect))
+                {
+				    printf ("Credits\n");
+                }
+                else if (clickMenu (eraserFont, "Suprimer les highscores", delTTFW, delTTFH, ev, delRect))
+                {
+				    printf ("Delete highscores\n");
+                }
+                else if (clickMenu (eraserFont, "Epic", Mus1TTFW, Mus1TTFH, ev, Mus1Rect) && (*musique != 1))
+                {
+				    *musique = 1;
+                    playmusic(*musique,gMusic);
+                }
+                else if (clickMenu (eraserFont, "Jazz", Mus2TTFW, Mus2TTFH, ev, Mus2Rect) && (*musique != 2))
+                {
+				    *musique = 2;
+                    playmusic(*musique,gMusic);
+                }
+                else if (clickMenu (eraserFont, "Casu", Mus3TTFW, Mus3TTFH, ev, Mus3Rect) && (*musique != 3))
+                {
+				    *musique = 3;
+                    playmusic(*musique,gMusic);
+                }
+                else if (clickMenu (eraserFont, "Enervant", Mus4TTFW, Mus4TTFH, ev, Mus4Rect) && (*musique != 4))
+                {
+				    *musique = 4;
+                    playmusic(*musique,gMusic);
+                }
+                else if (clickMenu (eraserFont, "Oui", onTTFW, onTTFH, ev, onRect) && (*onoff != 1))
+                {
+				    *onoff = 1;
+                    Mix_HaltMusic();
+                }
+                else if (clickMenu (eraserFont, "Non", offTTFW, offTTFH, ev, offRect) && (*onoff != 0))
+                {
+				    *onoff = 0;
+                    playmusic(*musique,gMusic);
+                }
                 
                 break;
                 
             case SDL_MOUSEMOTION:
                 delColor.r = hoverMenu (eraserFont, "Suprimer les highscores", delTTFW, delTTFH, ev, delRect);
                 RetourColor.r = hoverMenu (eraserFont, "Retour", RetourTTFW, RetourTTFH, ev, RetourRect);
+                CreditsColor.r = hoverMenu (eraserFont, "Credits", CreditsTTFW, CreditsTTFH, ev, CreditsRect);
                 break;
         }  
         

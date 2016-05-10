@@ -1,6 +1,6 @@
 #include "password.h"
 
-int password() {
+int password(Mix_Chunk *gSound) {
     SDL_Window* fenetrepass = NULL;
     char texte[PASSMAX] = {0};
     size_t passlen = 0, l;
@@ -24,7 +24,7 @@ int password() {
     SDL_Surface* surface = NULL;
     eraserFont = chargerPolice (eraserFont, ERASERFONT, 25);
     SDL_Surface* surfaceTexte = NULL;
-     SDL_Color color = {0, 0, 0, 0};
+    SDL_Color color = {0, 0, 0, 0};
    
     
     fenetrepass = SDL_CreateWindow ("MPI1 Puzzle Password", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, LARGEUR_FENETREPASS, HAUTEUR_FENETREPASS, SDL_WINDOW_SHOWN);
@@ -55,7 +55,8 @@ int password() {
                 }
                 else if (ev.key.keysym.sym == SDLK_RETURN)
                 {
-				    printf("testvalider\n");                    
+				    printf("testvalider\n");   
+                    valider(texte, gSound);                 
                 }
                 break;
             case SDL_TEXTINPUT : 
@@ -72,6 +73,7 @@ int password() {
                 if (clickMenu (eraserFont, "Valider", ValiderTTFW, ValiderTTFH, ev, ValiderRect) )
                 {
                     printf("testvalider\n");
+                    valider(texte, gSound);
                     ev.type = SDL_KEYDOWN;
                     ev.key.keysym.sym = SDLK_1;
                     SDL_PushEvent (&ev);
@@ -123,44 +125,18 @@ int password() {
     return 0;
 }
 
-/*short hoverPass (TTF_Font* Font, char* String, int TTFW, int TTFH, SDL_Event event, SDL_Rect Rect)
+void valider(char *texte, Mix_Chunk *gSound)
 {
-    TTF_SizeText (Font, String, &TTFW, &TTFH);
-
-    if (event.motion.x > Rect.x)
+    if(strcmp(texte, "yolo") == 0)
     {
-        if (event.motion.y > Rect.y)
-        {
-            if (event.motion.x < (Rect.x + TTFW) )
-            {
-                if (event.motion.y < (Rect.y + TTFH) )
-                {
-                    return 255;
-                }
-            }
-        }
+        printf("c est bien\n");
+        playsound(1,gSound);
     }
-
-    return 0;
+    else
+    {
+        printf("c est nul\n");
+        playsound(2,gSound);
+    }
+     
+    return;
 }
-
-short clickPass (TTF_Font* Font, char* String, int TTFW, int TTFH, SDL_Event event, SDL_Rect Rect)
-{
-    TTF_SizeText (Font, String, &TTFW, &TTFH);
-
-    if (event.button.x > Rect.x)
-    {
-        if (event.button.y > Rect.y)
-        {
-            if (event.button.x < (Rect.x + TTFW) )
-            {
-                if (event.button.y < (Rect.y + TTFH) )
-                {
-                    return 1;
-                }
-            }
-        }
-    }
-
-    return 0;
-}*/
