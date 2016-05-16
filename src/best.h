@@ -6,7 +6,7 @@
 #define PLACEGAUCHE 0
 #define PLACEDROITE 1
 
-void fenetreMScore (SDL_Window* fenetre, T_MScore* score);
+void fenetreMScore (SDL_Window* fenetre, T_MScore* score, Mix_Chunk *gSound);
 short ecrireMeilleurScore (T_MScore* scores);
 short lireMeilleurScore (T_MScore* scores);
 void resetScores (T_MScore* score);

@@ -6,6 +6,6 @@
 #include "common.h"
 #include "jeu.h"
 
-void fenetreChoixNiveau (SDL_Window* fenetre, T_MScore* score);
+void fenetreChoixNiveau (SDL_Window* fenetre, T_MScore* score, Mix_Chunk *gSound);
 
 #endif

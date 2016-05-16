@@ -136,6 +136,8 @@ void playmusic(short musique, Mix_Music *gMusic)
         break;
         case 4 : gMusic = Mix_LoadMUS( "sound/chiant.wav" );
         break;
+        case 5 : gMusic = Mix_LoadMUS( "sound/rick.mp3" );
+        break;
     }
     
     if( gMusic == NULL )
@@ -156,6 +158,8 @@ void playsound(short sound, Mix_Chunk *gSound)
         case 1 : gSound = Mix_LoadWAV( "sound/yep.wav" );
         break;
         case 2 : gSound = Mix_LoadWAV( "sound/nop.wav" );
+        break;
+        case 3 : gSound = Mix_LoadWAV( "sound/buttonclick.wav" );
         break;
     }
     

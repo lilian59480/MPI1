@@ -5,7 +5,7 @@
 
 
 
-int option(short* musique, short* onoff, Mix_Music *gMusic);
+int option(short* musique, short* onoff, Mix_Music *gMusic, Mix_Chunk *gSound);
 
 
 #endif

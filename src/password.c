@@ -1,6 +1,6 @@
 #include "password.h"
 
-int password(Mix_Chunk *gSound) {
+int password(Mix_Chunk *gSound, short* musique, Mix_Music *gMusic) {
     SDL_Window* fenetrepass = NULL;
     char texte[PASSMAX] = {0};
     size_t passlen = 0, l;
@@ -21,9 +21,14 @@ int password(Mix_Chunk *gSound) {
     int AnnulerTTFH = 0;
     
     TTF_Font* eraserFont = NULL;
+    TTF_Font* contfuFont = NULL;
+    TTF_Font* helvFont = NULL;
     SDL_Surface* surface = NULL;
     eraserFont = chargerPolice (eraserFont, ERASERFONT, 25);
+    helvFont = chargerPolice (helvFont, "font/helv.ttf", 35);
+    contfuFont = chargerPolice (contfuFont, "font/CONTFU.ttf", 50);
     SDL_Surface* surfaceTexte = NULL;
+    SDL_Color color2 = {255, 255, 255, 0};
     SDL_Color color = {0, 0, 0, 0};
    
     
@@ -56,7 +61,7 @@ int password(Mix_Chunk *gSound) {
                 else if (ev.key.keysym.sym == SDLK_RETURN)
                 {
 				    printf("testvalider\n");   
-                    valider(texte, gSound);                 
+                    valider(texte, gSound, musique, gMusic);                 
                 }
                 break;
             case SDL_TEXTINPUT : 
@@ -70,15 +75,16 @@ int password(Mix_Chunk *gSound) {
                 puts(texte); 
                 break;
             case SDL_MOUSEBUTTONDOWN:
-                if (clickMenu (eraserFont, "Valider", ValiderTTFW, ValiderTTFH, ev, ValiderRect) )
+                playsound(3,gSound);
+                if (clickMenu (helvFont, "Valider", ValiderTTFW, ValiderTTFH, ev, ValiderRect) )
                 {
                     printf("testvalider\n");
-                    valider(texte, gSound);
+                    valider(texte, gSound, musique, gMusic);
                     ev.type = SDL_KEYDOWN;
                     ev.key.keysym.sym = SDLK_1;
                     SDL_PushEvent (&ev);
                 }
-                if (clickMenu (eraserFont, "Annuler", AnnulerTTFW, AnnulerTTFH, ev, AnnulerRect) )
+                if (clickMenu (helvFont, "Annuler", AnnulerTTFW, AnnulerTTFH, ev, AnnulerRect) )
                 {
 				    done = SDL_TRUE;
                 }
@@ -86,23 +92,23 @@ int password(Mix_Chunk *gSound) {
                 break;
                 
             case SDL_MOUSEMOTION:
-                ValiderColor.r = hoverMenu (eraserFont, "Valider", ValiderTTFW, ValiderTTFH, ev, ValiderRect);
-                AnnulerColor.r = hoverMenu (eraserFont, "Annuler", AnnulerTTFW, AnnulerTTFH, ev, AnnulerRect);
+                ValiderColor.r = hoverMenu (helvFont, "Valider", ValiderTTFW, ValiderTTFH, ev, ValiderRect);
+                AnnulerColor.r = hoverMenu (helvFont, "Annuler", AnnulerTTFW, AnnulerTTFH, ev, AnnulerRect);
                 break;
         }  
     surface = SDL_GetWindowSurface (fenetrepass);
     SDL_FillRect (surface, NULL, SDL_MapRGB (surface->format, 204, 72, 63) );
-    surfaceTexte = creerTexte (surfaceTexte, METHODE_BELLE, eraserFont, "Mot de passe", color);
+    surfaceTexte = creerTexte (surfaceTexte, METHODE_BELLE, contfuFont, "Mot de passe", color2);
     rect.x = (LARGEUR_FENETREPASS / 2) - (surfaceTexte->w / 2);
     rect.y = HAUTEUR_FENETREPASS / 8;
     SDL_BlitSurface (surfaceTexte, NULL, surface, &rect);
     SDL_FreeSurface (surfaceTexte);        
-    ValiderTTF = creerTexte (ValiderTTF, METHODE_RAPIDE, eraserFont, "Valider", ValiderColor);
+    ValiderTTF = creerTexte (ValiderTTF, METHODE_RAPIDE, helvFont, "Valider", ValiderColor);
     ValiderRect.x = (LARGEUR_FENETREPASS / 4) - (ValiderTTF->w / 2);
     ValiderRect.y = (3*HAUTEUR_FENETREPASS) / 4;
     SDL_BlitSurface (ValiderTTF, NULL, surface, &ValiderRect);
     SDL_FreeSurface (ValiderTTF); 
-    AnnulerTTF = creerTexte (AnnulerTTF, METHODE_RAPIDE, eraserFont, "Annuler", AnnulerColor);
+    AnnulerTTF = creerTexte (AnnulerTTF, METHODE_RAPIDE, helvFont, "Annuler", AnnulerColor);
     AnnulerRect.x = (3*LARGEUR_FENETREPASS / 4) - (AnnulerTTF->w / 2);
     AnnulerRect.y = (3*HAUTEUR_FENETREPASS) / 4;
     SDL_BlitSurface (AnnulerTTF, NULL, surface, &AnnulerRect);
@@ -110,7 +116,7 @@ int password(Mix_Chunk *gSound) {
     SDL_UpdateWindowSurface (fenetrepass);
     if (passlen>0)
     {
-    surfaceTexte = creerTexte (surfaceTexte, METHODE_BELLE, eraserFont, texte, color);
+    surfaceTexte = creerTexte (surfaceTexte, METHODE_BELLE, helvFont, texte, color);
     rect.x = (LARGEUR_FENETREPASS / 2) - (surfaceTexte->w / 2);
     rect.y = HAUTEUR_FENETREPASS / 2;
     SDL_BlitSurface (surfaceTexte, NULL, surface, &rect);
@@ -120,17 +126,27 @@ int password(Mix_Chunk *gSound) {
     }
     SDL_StopTextInput();
    
-    
+    libererPolice (helvFont);
+    libererPolice (helvFont);
+    libererPolice (contfuFont);
     SDL_DestroyWindow(fenetrepass);
     return 0;
 }
 
-void valider(char *texte, Mix_Chunk *gSound)
+void valider(char *texte, Mix_Chunk *gSound, short* musique, Mix_Music *gMusic)
 {
     if(strcmp(texte, "yolo") == 0)
     {
         printf("c est bien\n");
         playsound(1,gSound);
+    }
+    else if(strcmp(texte, "rick") == 0)
+    {
+        printf("c est bien\n");
+        playsound(1,gSound);
+        SDL_Delay(1500);
+        *musique = 5;
+        playmusic(*musique,gMusic);
     }
     else
     {
