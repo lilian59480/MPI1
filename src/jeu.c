@@ -1,7 +1,7 @@
 #include "jeu.h"
 
 void fenetreJeu (T_MScore* score, char* cheminniveau, short difficulte){
-    SDL_Window *fenetre
+    SDL_Window *fenetre = NULL ;
     T_Cases plateau;
     switch (difficulte) {
         case 0:
