@@ -128,22 +128,22 @@ void playmusic(short musique, Mix_Music *gMusic)
     //Load music
     switch (musique)
     {
-        case 1 : gMusic = Mix_LoadMUS( "sound/tes.mp3" );
+        case 1 : gMusic = Mix_LoadMUS( MUSIQUETES );
         break;
-        case 2 : gMusic = Mix_LoadMUS( "sound/cubanmusic2.wav" );
+        case 2 : gMusic = Mix_LoadMUS( MUSIQUECUBAN );
         break;
-        case 3 : gMusic = Mix_LoadMUS( "sound/galaxy2.mp3" );
+        case 3 : gMusic = Mix_LoadMUS( MUSIQUEGALAXY );
         break;
-        case 4 : gMusic = Mix_LoadMUS( "sound/chiant.wav" );
+        case 4 : gMusic = Mix_LoadMUS( MUSIQUECHIANTE );
         break;
-        case 5 : gMusic = Mix_LoadMUS( "sound/rick.mp3" );
+        case 5 : gMusic = Mix_LoadMUS( MUSIQUERICK );
         break;
     }
     
     if( gMusic == NULL )
     {
         fprintf (stderr, "Echec de l'initialisation de la SDL_mixer :\n %s \n", Mix_GetError() );
-        return EXIT_FAILURE;
+        exit (EXIT_FAILURE);
     } 
     
     Mix_PlayMusic( gMusic, -1 );
@@ -155,18 +155,18 @@ void playsound(short sound, Mix_Chunk *gSound)
     //Load music
     switch (sound)
     {
-        case 1 : gSound = Mix_LoadWAV( "sound/yep.wav" );
+        case 1 : gSound = Mix_LoadWAV( SONYEP );
         break;
-        case 2 : gSound = Mix_LoadWAV( "sound/nop.wav" );
+        case 2 : gSound = Mix_LoadWAV( SONNOP );
         break;
-        case 3 : gSound = Mix_LoadWAV( "sound/buttonclick.wav" );
+        case 3 : gSound = Mix_LoadWAV( SONCLICBOUTON );
         break;
     }
     
     if( gSound == NULL )
     {
         fprintf (stderr, "Echec de l'initialisation de la SDL_mixer :\n %s \n", Mix_GetError() );
-        return EXIT_FAILURE;
+        exit (EXIT_FAILURE);
     } 
     
     Mix_PlayChannel( -1, gSound, 0 );

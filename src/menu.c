@@ -3,15 +3,13 @@
 void fenetreChoixNiveau (SDL_Window* fenetre, T_MScore* score, Mix_Chunk *gSound)
 {
     /* On n'ouvre pas de nouvelle fenetre, on remplace la fenetre affiché (Pour une belle IHM) */
-    TTF_Font* eraserFont = NULL;
     short continuer = 1;
     SDL_Surface* surface = NULL;
     SDL_Event event;
     TTF_Font* contfuFont = NULL;
     TTF_Font* helvFont = NULL;
-    eraserFont = chargerPolice (eraserFont, ERASERFONT, 25);
-    helvFont = chargerPolice (helvFont, "font/helv.ttf", 35);
-    contfuFont = chargerPolice (contfuFont, "font/CONTFU.ttf", 60);
+    helvFont = chargerPolice (helvFont, HELVFONT, 35);
+    contfuFont = chargerPolice (contfuFont, CONTFUFONT, 60);
     surface = SDL_GetWindowSurface (fenetre);
     SDL_Surface* titreTTF = NULL;
     SDL_Rect titreRect;
@@ -42,8 +40,14 @@ void fenetreChoixNiveau (SDL_Window* fenetre, T_MScore* score, Mix_Chunk *gSound
     int RetourTTFW = 0;
     int RetourTTFH = 0;
 
+    event.type = SDL_KEYDOWN;
+    event.key.keysym.sym = SDLK_1;
+    SDL_PushEvent (&event);
+                    
     while (continuer)
     {
+        SDL_WaitEvent (&event);
+        
         switch (event.type)
         {
             case SDL_MOUSEBUTTONDOWN:
@@ -133,4 +137,6 @@ void fenetreChoixNiveau (SDL_Window* fenetre, T_MScore* score, Mix_Chunk *gSound
         SDL_FreeSurface (RetourTTF);
         SDL_UpdateWindowSurface (fenetre);
     }
+    libererPolice(helvFont);
+    libererPolice(contfuFont);
 }

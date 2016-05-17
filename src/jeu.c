@@ -1,6 +1,7 @@
 #include "jeu.h"
 
 void fenetreJeu (T_MScore* score, char* cheminniveau, short difficulte){
+    SDL_Window *fenetre
     T_Cases plateau;
     switch (difficulte) {
         case 0:
@@ -22,6 +23,11 @@ void fenetreJeu (T_MScore* score, char* cheminniveau, short difficulte){
     }
     printf("%s%s%d/\n",IMAGEJEUDIRECTORY,cheminniveau,difficulte);
     melangercase(&plateau);
+    fenetre = creerFenetre(fenetre, TITREJEU, LARGEUR_FENETRE, HAUTEUR_FENETRE);
+    SDL_Delay(2500);
+    
+    SDL_DestroyWindow(fenetre);
+    fenetre = NULL;
     return;
 }
 

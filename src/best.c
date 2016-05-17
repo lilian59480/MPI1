@@ -3,7 +3,6 @@
 void fenetreMScore (SDL_Window* fenetre, T_MScore* score, Mix_Chunk *gSound)
 {
     /* On n'ouvre pas de nouvelle fenetre, on remplace la fenetre affiché (Pour une belle IHM) */
-    TTF_Font* eraserFont = NULL;
     SDL_Color color = {0, 0, 0, 0};
     SDL_Color color2 = {255, 255, 255, 0};
     short continuer = 1;
@@ -15,9 +14,8 @@ void fenetreMScore (SDL_Window* fenetre, T_MScore* score, Mix_Chunk *gSound)
     short i = 0;
     TTF_Font* contfuFont = NULL;
     TTF_Font* helvFont = NULL;
-    eraserFont = chargerPolice (eraserFont, ERASERFONT, 25);
-    helvFont = chargerPolice (helvFont, "font/helv.ttf", 35);
-    contfuFont = chargerPolice (contfuFont, "font/CONTFU.ttf", 60);
+    helvFont = chargerPolice (helvFont, HELVFONT, 35);
+    contfuFont = chargerPolice (contfuFont, CONTFUFONT, 60);
     surface = SDL_GetWindowSurface (fenetre);
     SDL_FillRect (surface, NULL, SDL_MapRGB (surface->format, 204, 72, 63) );
     surfaceTexte = creerTexte (surfaceTexte, METHODE_BELLE, contfuFont, "Meilleurs scores", color2);

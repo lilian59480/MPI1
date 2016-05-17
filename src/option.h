@@ -1,11 +1,8 @@
-#ifndef H_PASS
-#define H_PASS
+#ifndef H_OPTION
+#define H_OPTION
 
 #include "common.h"
 
-
-
-int option(short* musique, short* onoff, Mix_Music *gMusic, Mix_Chunk *gSound);
-
+int option(SDL_Window* fenetre,short* musique, short* onoff, Mix_Music *gMusic, Mix_Chunk *gSound);
 
 #endif

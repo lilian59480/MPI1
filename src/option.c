@@ -1,7 +1,6 @@
 #include "option.h"
 
-int option(short* musique, short* onoff, Mix_Music *gMusic, Mix_Chunk *gSound ) {
-    SDL_Window* fenetreoption = NULL;
+int option(SDL_Window* fenetreoption,short* musique, short* onoff, Mix_Music *gMusic, Mix_Chunk *gSound ) {
     SDL_bool done = SDL_FALSE;
     SDL_Rect rect; 
     SDL_Event ev; 
@@ -61,18 +60,13 @@ int option(short* musique, short* onoff, Mix_Music *gMusic, Mix_Chunk *gSound ) 
     int CreditsTTFW = 0;
     int CreditsTTFH = 0;
     
-    TTF_Font* eraserFont = NULL;
     TTF_Font* contfuFont = NULL;
     TTF_Font* helvFont = NULL;
     SDL_Surface* surface = NULL;
-    eraserFont = chargerPolice (eraserFont, ERASERFONT, 25);
-    helvFont = chargerPolice (helvFont, "font/helv.ttf", 35);
-    contfuFont = chargerPolice (contfuFont, "font/CONTFU.ttf", 60);
+    helvFont = chargerPolice (helvFont, HELVFONT, 35);
+    contfuFont = chargerPolice (contfuFont, CONTFUFONT, 60);
     SDL_Surface* surfaceTexte = NULL;
-    
-    fenetreoption = creerFenetre (fenetreoption, "MPI1 Option", LARGEUR_FENETRE, HAUTEUR_FENETRE);
 
-    
     while(!done) 
     {
         SDL_WaitEvent(&ev);
@@ -88,7 +82,7 @@ int option(short* musique, short* onoff, Mix_Music *gMusic, Mix_Chunk *gSound ) 
             case SDL_KEYDOWN :
                 if (ev.key.keysym.sym == SDLK_ESCAPE)
                 {
-				    done = SDL_TRUE;                    
+                    done = SDL_TRUE;                    
                 }
                 break;
 
@@ -96,44 +90,44 @@ int option(short* musique, short* onoff, Mix_Music *gMusic, Mix_Chunk *gSound ) 
                 playsound(3,gSound);
                 if (clickMenu (helvFont, "Retour", RetourTTFW, RetourTTFH, ev, RetourRect))
                 {
-				    done = SDL_TRUE;
+                    done = SDL_TRUE;
                 }
                 else if (clickMenu (helvFont, "Credits", CreditsTTFW, CreditsTTFH, ev, CreditsRect))
                 {
-				    printf ("Credits\n");
+                    printf ("Credits\n");
                 }
                 else if (clickMenu (helvFont, "Suprimer les highscores", delTTFW, delTTFH, ev, delRect))
                 {
-				    printf ("Delete highscores\n");
+                    printf ("Score supprime\n");
                 }
                 else if (clickMenu (helvFont, "Epic", Mus1TTFW, Mus1TTFH, ev, Mus1Rect) && (*musique != 1))
                 {
-				    *musique = 1;
+                    *musique = 1;
                     if(*onoff==0) playmusic(*musique,gMusic);
                 }
                 else if (clickMenu (helvFont, "Jazz", Mus2TTFW, Mus2TTFH, ev, Mus2Rect) && (*musique != 2))
                 {
-				    *musique = 2;
+                    *musique = 2;
                     if(*onoff==0) playmusic(*musique,gMusic);
                 }
                 else if (clickMenu (helvFont, "Casu", Mus3TTFW, Mus3TTFH, ev, Mus3Rect) && (*musique != 3))
                 {
-				    *musique = 3;
+                    *musique = 3;
                     if(*onoff==0) playmusic(*musique,gMusic);
                 }
                 else if (clickMenu (helvFont, "Enervant", Mus4TTFW, Mus4TTFH, ev, Mus4Rect) && (*musique != 4))
                 {
-				    *musique = 4;
+                    *musique = 4;
                     if(*onoff==0) playmusic(*musique,gMusic);
                 }
                 else if (clickMenu (helvFont, "Oui", onTTFW, onTTFH, ev, onRect) && (*onoff != 1))
                 {
-				    *onoff = 1;
+                    *onoff = 1;
                     Mix_HaltMusic();
                 }
                 else if (clickMenu (helvFont, "Non", offTTFW, offTTFH, ev, offRect) && (*onoff != 0))
                 {
-				    *onoff = 0;
+                    *onoff = 0;
                     playmusic(*musique,gMusic);
                 }
                 
@@ -178,7 +172,7 @@ int option(short* musique, short* onoff, Mix_Music *gMusic, Mix_Chunk *gSound ) 
     Mus4Rect.y = (3*HAUTEUR_FENETRE) /8;
     SDL_BlitSurface (Mus4TTF, NULL, surface, &Mus4Rect);
     SDL_FreeSurface (Mus4TTF);
-    delTTF = creerTexte (delTTF, METHODE_RAPIDE, helvFont, "Suprimer les highscores", delColor);  
+    delTTF = creerTexte (delTTF, METHODE_RAPIDE, helvFont, "Supprimer les highscores", delColor);  
     delRect.x = (LARGEUR_FENETRE / 2) - (delTTF->w / 2);
     delRect.y = (HAUTEUR_FENETRE) /4;
     SDL_BlitSurface (delTTF, NULL, surface, &delRect);
@@ -207,17 +201,7 @@ int option(short* musique, short* onoff, Mix_Music *gMusic, Mix_Chunk *gSound ) 
     SDL_UpdateWindowSurface (fenetreoption);
     }
     
-    
-    
-    
-    
-    
-    
-    
-    libererPolice (eraserFont);
     libererPolice (helvFont);
     libererPolice (contfuFont);
-    
-    SDL_DestroyWindow(fenetreoption);
     return 0;
 }

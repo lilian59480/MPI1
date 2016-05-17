@@ -10,11 +10,31 @@
 #include <string.h>
 #include <dirent.h>
 
+#define TITREJEU "Arcade 2i"
+
 #define IMGICONE "./img/icone.png"
+
 #define ERASERFONT "./font/Eraser.ttf"
+#define HELVFONT "./font/helv.ttf"
+#define CONTFUFONT "./font/contfu.ttf"
+#define PIXFONT "./font/04B.ttf"
+
 #define SCOREFILEBINARY "./score"
+
 #define IMAGEJEUDIRECTORY "./img/puzzle/"
 #define IMAGEJEUSECRETDIRECTORY "./img/puzzle/.secret/"
+
+#define SONYEP "./sound/yep.wav"
+#define SONNOP "./sound/nop.wav"
+#define SONCLICBOUTON "./sound/buttonclick.wav"
+
+#define MUSIQUETES "./sound/tes.mp3"
+/* TODO : CONVERTIR EN MP3!!! */
+#define MUSIQUECUBAN "./sound/cubanmusic2.wav"
+#define MUSIQUEGALAXY "./sound/galaxy2.mp3"
+/* TODO : CONVERTIR EN MP3!!! */
+#define MUSIQUECHIANTE "./sound/chiant.wav"
+#define MUSIQUERICK "./sound/rick.mp3"
 
 #define LARGEUR_FENETRE 640
 #define HAUTEUR_FENETRE 480

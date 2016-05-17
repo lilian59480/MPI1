@@ -1,10 +1,9 @@
-﻿#include "main.h"
+#include "main.h"
 
 int main (int argc, char** argv)
 {
     /* Initialisation des variables */
     SDL_Window* pWindow = NULL;
-    TTF_Font* eraserFont = NULL;
     TTF_Font* pixFont = NULL;
     TTF_Font* helvFont = NULL;
     TTF_Font* contfuFont = NULL;
@@ -82,16 +81,17 @@ int main (int argc, char** argv)
         resetScores (&scores);
     }
 
-    pWindow = creerFenetre (pWindow, "MPI1 Puzzle", LARGEUR_FENETRE, HAUTEUR_FENETRE);
-    eraserFont = chargerPolice (eraserFont, ERASERFONT, 30);
-    helvFont = chargerPolice (helvFont, "font/helv.ttf", 40);
-    pixFont = chargerPolice (pixFont, "font/04B.TTF", 70);
-    contfuFont = chargerPolice (contfuFont, "font/CONTFU.ttf", 60);
+    pWindow = creerFenetre (pWindow, TITREJEU, LARGEUR_FENETRE, HAUTEUR_FENETRE);
+    helvFont = chargerPolice (helvFont, HELVFONT, 40);
+    pixFont = chargerPolice (pixFont, PIXFONT, 70);
+    contfuFont = chargerPolice (contfuFont, CONTFUFONT, 60);
     
     playmusic(musique,gMusic);
 
     while (continuer)
     {
+        SDL_WaitEvent (&event);
+        
         switch (event.type)
         {
             case SDL_MOUSEBUTTONDOWN:
@@ -122,7 +122,7 @@ int main (int argc, char** argv)
 
                 if ( clickMenu (helvFont, "Options", OptionTTFW, OptionTTFH, event, OptionRect))
                 {
-                    option(&musique, &onoff, gMusic,gSound);
+                    option(pWindow, &musique, &onoff, gMusic,gSound);
                     event.type = SDL_KEYDOWN;
                     event.key.keysym.sym = SDLK_1;
                     SDL_PushEvent (&event);
@@ -156,7 +156,7 @@ int main (int argc, char** argv)
         /* On met une couleur de font */
         surface = SDL_GetWindowSurface (pWindow);
         SDL_FillRect (surface, NULL, SDL_MapRGB (surface->format, 63, 72, 204) );
-        titreTTF = creerTexte (titreTTF, METHODE_BELLE, pixFont, "Arcade 2i", TitreColor);
+        titreTTF = creerTexte (titreTTF, METHODE_BELLE, pixFont, TITREJEU, TitreColor);
         titreRect.x = ((LARGEUR_FENETRE / 2) - (titreTTF->w / 2)) +3;
         titreRect.y = (HAUTEUR_FENETRE / 10)+3;
         SDL_BlitSurface (titreTTF, NULL, surface, &titreRect);
@@ -198,7 +198,6 @@ int main (int argc, char** argv)
 
     SDL_DestroyWindow (pWindow);
     pWindow = NULL;
-    libererPolice (eraserFont);
     libererPolice (helvFont);
     libererPolice (pixFont);
     libererPolice (contfuFont);

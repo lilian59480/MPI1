@@ -19,26 +19,22 @@ int password(Mix_Chunk *gSound, short* musique, Mix_Music *gMusic) {
     SDL_Color AnnulerColor = {0, 0, 0, 0};
     int AnnulerTTFW = 0;
     int AnnulerTTFH = 0;
-    
-    TTF_Font* eraserFont = NULL;
+
     TTF_Font* contfuFont = NULL;
     TTF_Font* helvFont = NULL;
     SDL_Surface* surface = NULL;
-    eraserFont = chargerPolice (eraserFont, ERASERFONT, 25);
-    helvFont = chargerPolice (helvFont, "font/helv.ttf", 35);
-    contfuFont = chargerPolice (contfuFont, "font/CONTFU.ttf", 50);
+    helvFont = chargerPolice (helvFont, HELVFONT, 35);
+    contfuFont = chargerPolice (contfuFont, CONTFUFONT, 50);
     SDL_Surface* surfaceTexte = NULL;
     SDL_Color color2 = {255, 255, 255, 0};
     SDL_Color color = {0, 0, 0, 0};
    
-    
-    fenetrepass = SDL_CreateWindow ("MPI1 Puzzle Password", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, LARGEUR_FENETREPASS, HAUTEUR_FENETREPASS, SDL_WINDOW_SHOWN);
+    fenetrepass = creerFenetre (fenetrepass, TITREJEU, LARGEUR_FENETREPASS, HAUTEUR_FENETREPASS);
     
     SDL_StartTextInput();
     while(!done) 
     {
         SDL_WaitEvent(&ev);
-        
         
         switch(ev.type)
         {
@@ -56,11 +52,11 @@ int password(Mix_Chunk *gSound, short* musique, Mix_Music *gMusic) {
                 }
                 else if (ev.key.keysym.sym == SDLK_ESCAPE)
                 {
-				    done = SDL_TRUE;                    
+                    done = SDL_TRUE;                    
                 }
                 else if (ev.key.keysym.sym == SDLK_RETURN)
                 {
-				    printf("testvalider\n");   
+                    printf("testvalider\n");   
                     valider(texte, gSound, musique, gMusic);                 
                 }
                 break;
@@ -86,7 +82,7 @@ int password(Mix_Chunk *gSound, short* musique, Mix_Music *gMusic) {
                 }
                 if (clickMenu (helvFont, "Annuler", AnnulerTTFW, AnnulerTTFH, ev, AnnulerRect) )
                 {
-				    done = SDL_TRUE;
+                    done = SDL_TRUE;
                 }
                 
                 break;
@@ -125,8 +121,7 @@ int password(Mix_Chunk *gSound, short* musique, Mix_Music *gMusic) {
     }
     }
     SDL_StopTextInput();
-   
-    libererPolice (helvFont);
+
     libererPolice (helvFont);
     libererPolice (contfuFont);
     SDL_DestroyWindow(fenetrepass);
@@ -147,6 +142,7 @@ void valider(char *texte, Mix_Chunk *gSound, short* musique, Mix_Music *gMusic)
         SDL_Delay(1500);
         *musique = 5;
         playmusic(*musique,gMusic);
+        /* REMARQUE : Fermer la fenetre quand le mot de passe est bon? */
     }
     else
     {
