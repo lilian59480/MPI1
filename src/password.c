@@ -1,6 +1,6 @@
 #include "password.h"
 
-int password(Mix_Chunk *gSound, short* musique, Mix_Music *gMusic) {
+int password(Mix_Chunk *gSound, short* musique, Mix_Music *gMusic, short* onoff) {
     SDL_Window* fenetrepass = NULL;
     char texte[PASSMAX] = {0};
     size_t passlen = 0, l;
@@ -57,7 +57,7 @@ int password(Mix_Chunk *gSound, short* musique, Mix_Music *gMusic) {
                 else if (ev.key.keysym.sym == SDLK_RETURN)
                 {
                     printf("testvalider\n");   
-                    valider(texte, gSound, musique, gMusic);                 
+                    valider(texte, gSound, musique, gMusic, onoff, &done);                 
                 }
                 break;
             case SDL_TEXTINPUT : 
@@ -75,7 +75,7 @@ int password(Mix_Chunk *gSound, short* musique, Mix_Music *gMusic) {
                 if (clickMenu (helvFont, "Valider", ValiderTTFW, ValiderTTFH, ev, ValiderRect) )
                 {
                     printf("testvalider\n");
-                    valider(texte, gSound, musique, gMusic);
+                    valider(texte, gSound, musique, gMusic, onoff, &done);
                     ev.type = SDL_KEYDOWN;
                     ev.key.keysym.sym = SDLK_1;
                     SDL_PushEvent (&ev);
@@ -128,7 +128,7 @@ int password(Mix_Chunk *gSound, short* musique, Mix_Music *gMusic) {
     return 0;
 }
 
-void valider(char *texte, Mix_Chunk *gSound, short* musique, Mix_Music *gMusic)
+void valider(char *texte, Mix_Chunk *gSound, short* musique, Mix_Music *gMusic, short* onoff, SDL_bool* done)
 {
     if(strcmp(texte, "yolo") == 0)
     {
@@ -139,10 +139,11 @@ void valider(char *texte, Mix_Chunk *gSound, short* musique, Mix_Music *gMusic)
     {
         printf("c est bien\n");
         playsound(1,gSound);
-        SDL_Delay(1500);
+        SDL_Delay(1000);
         *musique = 5;
+        *onoff = 0;
         playmusic(*musique,gMusic);
-        /* REMARQUE : Fermer la fenetre quand le mot de passe est bon? */
+        *done = SDL_TRUE;
     }
     else
     {

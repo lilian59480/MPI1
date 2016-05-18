@@ -1,6 +1,6 @@
 #include "menu.h"
 
-void fenetreChoixNiveau (SDL_Window* fenetre, T_MScore* score, Mix_Chunk *gSound)
+void fenetreChoixNiveau (SDL_Window* fenetre, T_MScore* score, Mix_Chunk* gSound)
 {
     /* On n'ouvre pas de nouvelle fenetre, on remplace la fenetre affiché (Pour une belle IHM) */
     short continuer = 1;
@@ -39,22 +39,22 @@ void fenetreChoixNiveau (SDL_Window* fenetre, T_MScore* score, Mix_Chunk *gSound
     SDL_Color RetourColor = {0, 0, 0, 0};
     int RetourTTFW = 0;
     int RetourTTFH = 0;
-
     event.type = SDL_KEYDOWN;
     event.key.keysym.sym = SDLK_1;
     SDL_PushEvent (&event);
-                    
+
     while (continuer)
     {
         SDL_WaitEvent (&event);
-        
+
         switch (event.type)
         {
             case SDL_MOUSEBUTTONDOWN:
-                playsound(3,gSound);
+                playsound (3, gSound);
+
                 if (clickMenu (helvFont, "Chat", ChatTTFW, ChatTTFH, event, ChatRect) )
                 {
-                    fenetreJeu(score,"Chat/",0);
+                    fenetreJeu (score, "Chat/", 0, 255, 0, 255);
                     event.type = SDL_KEYDOWN;
                     event.key.keysym.sym = SDLK_1;
                     SDL_PushEvent (&event);
@@ -62,7 +62,7 @@ void fenetreChoixNiveau (SDL_Window* fenetre, T_MScore* score, Mix_Chunk *gSound
 
                 if (clickMenu (helvFont, "Chien", ChienTTFW, ChienTTFH, event, ChienRect) )
                 {
-                    fenetreJeu(score,"Chien/",0);
+                    fenetreJeu (score, "Chien/", 0, 255, 0, 255);
                     event.type = SDL_KEYDOWN;
                     event.key.keysym.sym = SDLK_1;
                     SDL_PushEvent (&event);
@@ -70,7 +70,7 @@ void fenetreChoixNiveau (SDL_Window* fenetre, T_MScore* score, Mix_Chunk *gSound
 
                 if (clickMenu (helvFont, "Paysage", PaysageTTFW, PaysageTTFH, event, PaysageRect) )
                 {
-                    fenetreJeu(score,"Paysage/",0);
+                    fenetreJeu (score, "Paysage/", 0, 255, 0, 255);
                     event.type = SDL_KEYDOWN;
                     event.key.keysym.sym = SDLK_1;
                     SDL_PushEvent (&event);
@@ -78,7 +78,7 @@ void fenetreChoixNiveau (SDL_Window* fenetre, T_MScore* score, Mix_Chunk *gSound
 
                 if (clickMenu (helvFont, "IG2I", IG2ITTFW, IG2ITTFH, event, IG2IRect) )
                 {
-                    fenetreJeu(score,"IG2I/",0);
+                    fenetreJeu (score, "IG2I/", 0, 255, 0, 255);
                     event.type = SDL_KEYDOWN;
                     event.key.keysym.sym = SDLK_1;
                     SDL_PushEvent (&event);
@@ -114,7 +114,6 @@ void fenetreChoixNiveau (SDL_Window* fenetre, T_MScore* score, Mix_Chunk *gSound
         titreRect.y = HAUTEUR_FENETRE / 12;
         SDL_BlitSurface (titreTTF, NULL, surface, &titreRect);
         SDL_FreeSurface (titreTTF);
-        SDL_WaitEvent (&event);
         ChatTTF = creerTexte (ChatTTF, METHODE_RAPIDE, helvFont, "Chat", ChatColor);
         ChatRect = rangMenu (ChatTTF, 2);
         SDL_BlitSurface (ChatTTF, NULL, surface, &ChatRect);
@@ -137,6 +136,7 @@ void fenetreChoixNiveau (SDL_Window* fenetre, T_MScore* score, Mix_Chunk *gSound
         SDL_FreeSurface (RetourTTF);
         SDL_UpdateWindowSurface (fenetre);
     }
-    libererPolice(helvFont);
-    libererPolice(contfuFont);
+
+    libererPolice (helvFont);
+    libererPolice (contfuFont);
 }

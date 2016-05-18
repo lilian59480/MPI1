@@ -114,7 +114,7 @@ int main (int argc, char** argv)
 
                 if (clickMenu (helvFont, "Mot de Passe", PasswordTTFW, PasswordTTFH, event, PasswordRect) )
                 {
-                    password(gSound, &musique, gMusic);
+                    password(gSound, &musique, gMusic, &onoff);
                     event.type = SDL_KEYDOWN;
                     event.key.keysym.sym = SDLK_1;
                     SDL_PushEvent (&event);
@@ -171,8 +171,6 @@ int main (int argc, char** argv)
         stitreRect.y = (2*HAUTEUR_FENETRE / 10) +5;
         SDL_BlitSurface (stitreTTF, NULL, surface, &stitreRect);
         SDL_FreeSurface (stitreTTF);
-        SDL_WaitEvent (&event);
-        /* Jouer */
         JouerTTF = creerTexte (JouerTTF, METHODE_RAPIDE, helvFont, "Jouer", JouerColor);
         JouerRect = rangMenu (JouerTTF, 3);
         SDL_BlitSurface (JouerTTF, NULL, surface, &JouerRect);

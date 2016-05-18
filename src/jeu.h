@@ -8,13 +8,18 @@
 
 typedef int T_Case;
 
-typedef struct {
+typedef struct
+{
     T_Case plateau[TAILLEPLATEAUMAX][TAILLEPLATEAUMAX];
     int taillexy;
+    T_Case selectionne;
 } T_Cases;
 
-void fenetreJeu (T_MScore* score, char* cheminniveau, short difficulte);
+void fenetreJeu (T_MScore* score, char* cheminniveau, short difficulte, short r, short v, short b );
 void melangercase (T_Cases* plateau);
-void _debugT_Cases(T_Cases* plateau);
+void _debugT_Cases (T_Cases* plateau);
+void verifierCouleur (short* r, short* v, short* b);
+void drawEmptyRect(SDL_Surface * surf,int posX, int posY, int width);
+void drawGrille(SDL_Surface * surface, int posX, int posY, int taillecase, int nbcase);
 
 #endif

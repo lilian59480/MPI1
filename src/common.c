@@ -123,52 +123,66 @@ SDL_Rect rangMenu (SDL_Surface* Surface, short rang)
     return Rect;
 }
 
-void playmusic(short musique, Mix_Music *gMusic)
+void playmusic (short musique, Mix_Music* gMusic)
 {
     //Load music
     switch (musique)
     {
-        case 1 : gMusic = Mix_LoadMUS( MUSIQUETES );
-        break;
-        case 2 : gMusic = Mix_LoadMUS( MUSIQUECUBAN );
-        break;
-        case 3 : gMusic = Mix_LoadMUS( MUSIQUEGALAXY );
-        break;
-        case 4 : gMusic = Mix_LoadMUS( MUSIQUECHIANTE );
-        break;
-        case 5 : gMusic = Mix_LoadMUS( MUSIQUERICK );
-        break;
+        case 1 :
+            gMusic = Mix_LoadMUS ( MUSIQUETES );
+            break;
+
+        case 2 :
+            gMusic = Mix_LoadMUS ( MUSIQUECUBAN );
+            break;
+
+        case 3 :
+            gMusic = Mix_LoadMUS ( MUSIQUEGALAXY );
+            break;
+
+        case 4 :
+            gMusic = Mix_LoadMUS ( MUSIQUECHIANTE );
+            break;
+
+        case 5 :
+            gMusic = Mix_LoadMUS ( MUSIQUERICK );
+            break;
     }
-    
-    if( gMusic == NULL )
+
+    if ( gMusic == NULL )
     {
         fprintf (stderr, "Echec de l'initialisation de la SDL_mixer :\n %s \n", Mix_GetError() );
         exit (EXIT_FAILURE);
-    } 
-    
-    Mix_PlayMusic( gMusic, -1 );
+    }
+
+    Mix_PlayMusic ( gMusic, -1 );
     return;
 }
 
-void playsound(short sound, Mix_Chunk *gSound)
+void playsound (short sound, Mix_Chunk* gSound)
 {
     //Load music
     switch (sound)
     {
-        case 1 : gSound = Mix_LoadWAV( SONYEP );
-        break;
-        case 2 : gSound = Mix_LoadWAV( SONNOP );
-        break;
-        case 3 : gSound = Mix_LoadWAV( SONCLICBOUTON );
-        break;
+        case 1 :
+            gSound = Mix_LoadWAV ( SONYEP );
+            break;
+
+        case 2 :
+            gSound = Mix_LoadWAV ( SONNOP );
+            break;
+
+        case 3 :
+            gSound = Mix_LoadWAV ( SONCLICBOUTON );
+            break;
     }
-    
-    if( gSound == NULL )
+
+    if ( gSound == NULL )
     {
         fprintf (stderr, "Echec de l'initialisation de la SDL_mixer :\n %s \n", Mix_GetError() );
         exit (EXIT_FAILURE);
-    } 
-    
-    Mix_PlayChannel( -1, gSound, 0 );
+    }
+
+    Mix_PlayChannel ( -1, gSound, 0 );
     return;
 }

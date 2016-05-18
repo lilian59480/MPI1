@@ -1,6 +1,6 @@
 #include "best.h"
 
-void fenetreMScore (SDL_Window* fenetre, T_MScore* score, Mix_Chunk *gSound)
+void fenetreMScore (SDL_Window* fenetre, T_MScore* score, Mix_Chunk* gSound)
 {
     /* On n'ouvre pas de nouvelle fenetre, on remplace la fenetre affiché (Pour une belle IHM) */
     SDL_Color color = {0, 0, 0, 0};
@@ -52,7 +52,8 @@ void fenetreMScore (SDL_Window* fenetre, T_MScore* score, Mix_Chunk *gSound)
         switch (event.type)
         {
             case SDL_MOUSEBUTTONDOWN:
-            playsound(3,gSound);
+                playsound (3, gSound);
+
             case SDL_KEYDOWN:
                 continuer = 0;
                 break;
