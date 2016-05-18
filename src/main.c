@@ -43,11 +43,10 @@ int main (int argc, char** argv)
     int QuitterTTFH = 0;
     short continuer = 1;
     T_MScore scores;
-    
     //Pour musique
     short onoff = 0, musique = 3;
-    Mix_Music *gMusic = NULL;
-    Mix_Chunk *gSound = NULL;
+    Mix_Music* gMusic = NULL;
+    Mix_Chunk* gSound = NULL;
     /* Lecture des parametres envoye par le Shell */
     lireParamShell (argc, argv);
 
@@ -63,12 +62,12 @@ int main (int argc, char** argv)
         fprintf (stderr, "Erreur de l'initialisation de la SDL_TTF :\n %s \n", TTF_GetError() );
         return EXIT_FAILURE;
     }
-    
+
     /* Initialisation du sdl_mixer*/
-    if( Mix_OpenAudio( 44100, MIX_DEFAULT_FORMAT, 2, 2048 ) < 0 )
+    if ( Mix_OpenAudio ( 44100, MIX_DEFAULT_FORMAT, 2, 2048 ) < 0 )
     {
-     fprintf (stderr, "Echec de l'initialisation de la SDL_mixer :\n %s \n", Mix_GetError() );
-     return EXIT_FAILURE;
+        fprintf (stderr, "Echec de l'initialisation de la SDL_mixer :\n %s \n", Mix_GetError() );
+        return EXIT_FAILURE;
     }
 
     /* SDL2 Fonctionel Recuperation d'informations utiles (?) */
@@ -85,17 +84,17 @@ int main (int argc, char** argv)
     helvFont = chargerPolice (helvFont, HELVFONT, 40);
     pixFont = chargerPolice (pixFont, PIXFONT, 70);
     contfuFont = chargerPolice (contfuFont, CONTFUFONT, 60);
-    
-    playmusic(musique,gMusic);
+    playmusic (musique, gMusic);
 
     while (continuer)
     {
         SDL_WaitEvent (&event);
-        
+
         switch (event.type)
         {
             case SDL_MOUSEBUTTONDOWN:
-                playsound(3,gSound);
+                playsound (3, gSound);
+
                 if (clickMenu (helvFont, "Jouer", JouerTTFW, JouerTTFH, event, JouerRect) )
                 {
                     fenetreChoixNiveau (pWindow, &scores, gSound);
@@ -106,7 +105,7 @@ int main (int argc, char** argv)
 
                 if (clickMenu (helvFont, "Meilleur Score", BestTTFW, BestTTFH, event, BestRect) )
                 {
-                    fenetreMScore (pWindow, &scores,gSound );
+                    fenetreMScore (pWindow, &scores, gSound );
                     event.type = SDL_KEYDOWN;
                     event.key.keysym.sym = SDLK_1;
                     SDL_PushEvent (&event);
@@ -114,15 +113,15 @@ int main (int argc, char** argv)
 
                 if (clickMenu (helvFont, "Mot de Passe", PasswordTTFW, PasswordTTFH, event, PasswordRect) )
                 {
-                    password(gSound, &musique, gMusic, &onoff);
+                    password (gSound, &musique, gMusic, &onoff);
                     event.type = SDL_KEYDOWN;
                     event.key.keysym.sym = SDLK_1;
                     SDL_PushEvent (&event);
                 }
 
-                if ( clickMenu (helvFont, "Options", OptionTTFW, OptionTTFH, event, OptionRect))
+                if ( clickMenu (helvFont, "Options", OptionTTFW, OptionTTFH, event, OptionRect) )
                 {
-                    option(pWindow, &musique, &onoff, gMusic,gSound);
+                    option (pWindow, &musique, &onoff, gMusic, gSound);
                     event.type = SDL_KEYDOWN;
                     event.key.keysym.sym = SDLK_1;
                     SDL_PushEvent (&event);
@@ -157,8 +156,8 @@ int main (int argc, char** argv)
         surface = SDL_GetWindowSurface (pWindow);
         SDL_FillRect (surface, NULL, SDL_MapRGB (surface->format, 63, 72, 204) );
         titreTTF = creerTexte (titreTTF, METHODE_BELLE, pixFont, TITREJEU, TitreColor);
-        titreRect.x = ((LARGEUR_FENETRE / 2) - (titreTTF->w / 2)) +3;
-        titreRect.y = (HAUTEUR_FENETRE / 10)+3;
+        titreRect.x = ( (LARGEUR_FENETRE / 2) - (titreTTF->w / 2) ) + 3;
+        titreRect.y = (HAUTEUR_FENETRE / 10) + 3;
         SDL_BlitSurface (titreTTF, NULL, surface, &titreRect);
         SDL_FreeSurface (titreTTF);
         titreTTF = creerTexte (titreTTF, METHODE_BELLE, pixFont, "Arcade 2i", TitreColor2);
@@ -168,7 +167,7 @@ int main (int argc, char** argv)
         SDL_FreeSurface (titreTTF);
         stitreTTF = creerTexte (stitreTTF, METHODE_BELLE, contfuFont, "PUZZLE", TitreColors);
         stitreRect.x = (LARGEUR_FENETRE / 2) - (stitreTTF->w / 2);
-        stitreRect.y = (2*HAUTEUR_FENETRE / 10) +5;
+        stitreRect.y = (2 * HAUTEUR_FENETRE / 10) + 5;
         SDL_BlitSurface (stitreTTF, NULL, surface, &stitreRect);
         SDL_FreeSurface (stitreTTF);
         JouerTTF = creerTexte (JouerTTF, METHODE_RAPIDE, helvFont, "Jouer", JouerColor);
@@ -200,9 +199,9 @@ int main (int argc, char** argv)
     libererPolice (pixFont);
     libererPolice (contfuFont);
     //Liberer musique
-    Mix_FreeMusic( gMusic );
+    Mix_FreeMusic ( gMusic );
     gMusic = NULL;
-    Mix_FreeChunk( gSound );
+    Mix_FreeChunk ( gSound );
     gSound = NULL;
     TTF_Quit();
     SDL_Quit();

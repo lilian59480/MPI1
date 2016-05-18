@@ -7,7 +7,7 @@ void fenetreJeu (T_MScore* score, char* cheminniveau, short difficulte, short r,
     SDL_Surface* image = NULL;
     SDL_bool continuer = SDL_FALSE;
     T_Cases plateau;
-    int i, j;
+    int i=0, j=0,iselect=0,jselect=0;
     char chemin[100];
     SDL_Event event;
     SDL_Rect rectImage;
@@ -17,6 +17,8 @@ void fenetreJeu (T_MScore* score, char* cheminniveau, short difficulte, short r,
     int value;
     int positionsourisx = 0;
     int positionsourisy = 0;
+    int caseclicx = 0;
+    int caseclicy = 0;
 
     switch (difficulte)
     {
@@ -42,6 +44,7 @@ void fenetreJeu (T_MScore* score, char* cheminniveau, short difficulte, short r,
     fenetre = creerFenetre (fenetre, TITREJEU, LARGEUR_FENETRE * 2, HAUTEUR_FENETRE * 2);
     surface = SDL_GetWindowSurface (fenetre);
     verifierCouleur (&r, &v, &b);
+
     if (snprintf (chemin, 95, "%s%s0.png", IMAGEJEUDIRECTORY, cheminniveau) < 0)
     {
         fprintf (stderr, "Erreur Inconnu!" );
@@ -53,13 +56,11 @@ void fenetreJeu (T_MScore* score, char* cheminniveau, short difficulte, short r,
     while (!continuer)
     {
         SDL_WaitEvent (&event);
-        // L'image modele
-         SDL_FillRect (surface, NULL, SDL_MapRGB (surface->format, r, v, b) );
+        SDL_FillRect (surface, NULL, SDL_MapRGB (surface->format, r, v, b) );
         rectImage.x = 2 * LARGEUR_FENETRE - image->w - 100;
         hauteur = (HAUTEUR_FENETRE / 2) - (image->h / 2);
         rectImage.y = hauteur;
         SDL_BlitSurface (image, NULL, surface, &rectImage);
-        // Le jeu en lui meme
         rect2.w = 100;
         rect2.h = 100;
 
@@ -68,6 +69,7 @@ void fenetreJeu (T_MScore* score, char* cheminniveau, short difficulte, short r,
             for (j = 0; j < plateau.taillexy; j++)
             {
                 value = plateau.plateau[i][j];
+
                 if (value == plateau.selectionne)
                 {
                     rect.x = positionsourisx;
@@ -75,9 +77,10 @@ void fenetreJeu (T_MScore* score, char* cheminniveau, short difficulte, short r,
                 }
                 else
                 {
-                    rect.x = 100 + (100 * (j) );
-                    rect.y = hauteur + (100 * (i) );
+                    rect.x = 100 + (100 * (i) );
+                    rect.y = hauteur + (100 * (j) );
                 }
+
                 rect2.x = 0 + (100 * (value / plateau.taillexy) );
                 rect2.y = 0 + (100 * (value % plateau.taillexy) );
                 SDL_BlitSurface (image, &rect2, surface, &rect);
@@ -87,6 +90,72 @@ void fenetreJeu (T_MScore* score, char* cheminniveau, short difficulte, short r,
         switch (event.type)
         {
             case SDL_MOUSEBUTTONDOWN:
+                if (event.button.x > 100 && event.button.x < (100 + (image->w) ) )
+                {
+                    if (event.button.y > hauteur && event.button.y < (hauteur + (image->h) ) )
+                    {
+                        caseclicx = (event.button.x - 100) / 100;
+                        caseclicy = (event.button.y - hauteur) / 100;
+
+                        if (plateau.selectionne == -1)
+                        {
+                            for (i = 0; i < plateau.taillexy; i++)
+                            {
+                                for (j = 0; j < plateau.taillexy; j++)
+                                {
+                                    value = plateau.plateau[i][j];
+                                    if (i == caseclicx && j == caseclicy)
+                                    {
+                                        plateau.selectionne = value;
+                                    }
+                                }
+                            }
+
+                            printf ("Selection d'une case: %d,%d\n", caseclicx, caseclicy);
+                        }
+                        else
+                        {
+                            for (i = 0; i < plateau.taillexy; i++)
+                            {
+                                for (j = 0; j < plateau.taillexy; j++)
+                                {
+                                    if (plateau.plateau[i][j] == plateau.selectionne)
+                                    {
+                                        iselect = i;
+                                        jselect = j;
+                                    }
+                                }
+                            }
+                            
+                            
+                            for (i = 0; i < plateau.taillexy; i++)
+                            {
+                                for (j = 0; j < plateau.taillexy; j++)
+                                {
+                                    value = plateau.plateau[i][j];
+                                    if (i == caseclicx && j == caseclicy)
+                                    {
+                                        if (plateau.selectionne == value)
+                                        {
+                                            plateau.selectionne = -1;
+                                        }
+                                        else {
+                                            plateau.plateau[iselect][jselect] = plateau.plateau[i][j];
+                                            plateau.plateau[i][j] = plateau.selectionne;
+                                            plateau.selectionne = value;
+                                        }
+                                    }
+                                }
+                            }
+                            printf ("Depos d'une case: %d,%d\n", caseclicx, caseclicy);
+                            _debugT_Cases (&plateau);
+                            if(validerCase(&plateau) && plateau.selectionne == -1)
+                            {
+                                printf("C'est gagne\n");
+                            }
+                        }
+                    }
+                }
                 break;
 
             case SDL_KEYDOWN :
@@ -106,14 +175,15 @@ void fenetreJeu (T_MScore* score, char* cheminniveau, short difficulte, short r,
                 break;
 
             case SDL_MOUSEMOTION:
-            positionsourisx = event.motion.x;
-            positionsourisy = event.motion.y;
+                positionsourisx = event.motion.x;
+                positionsourisy = event.motion.y;
                 break;
 
             default:
                 break;
         }
-        drawGrille(surface, 100, hauteur, 100,plateau.taillexy );
+
+        drawGrille (surface, 100, hauteur, 100, plateau.taillexy );
         SDL_UpdateWindowSurface (fenetre);
     }
 
@@ -165,7 +235,8 @@ void melangercase (T_Cases* plateau )
 
         plateau->plateau[j][k] = a[i];
     }
-    plateau->selectionne = 5;
+
+    plateau->selectionne = -1;
     _debugT_Cases (plateau);
 }
 
@@ -183,18 +254,27 @@ void _debugT_Cases (T_Cases* plateau)
     }
 }
 
-void validerCase (T_Cases* plateau)
+short validerCase (T_Cases* plateau)
 {
     int i;
     int j;
+    int k = 0;
 
     for (i = 0; i < plateau->taillexy; i++)
     {
         for (j = 0; j < plateau->taillexy; j++)
         {
-            // A faire!
+            if (k == plateau->plateau[i][j] )
+            {
+                k++;
+            }
+            else
+            {
+                return 0;
+            }
         }
     }
+    return 1;
 }
 
 void verifierCouleur (short* r, short* v, short* b)
@@ -215,46 +295,42 @@ void verifierCouleur (short* r, short* v, short* b)
     }
 }
 
-void drawEmptyRect(SDL_Surface * surf,int posX, int posY, int width)
+void drawEmptyRect (SDL_Surface* surf, int posX, int posY, int width)
 {
-	SDL_Rect ligneHaut;
-	ligneHaut.x = posX-1;
-	ligneHaut.y = posY-1;
-	ligneHaut.w = width;
-	ligneHaut.h = 1;
- 
-	SDL_FillRect(surf, &ligneHaut, SDL_MapRGB(surf->format, 255, 255, 255));
- 
-	SDL_Rect ligneDroite;
-	ligneDroite.x = posX+width-1;
-	ligneDroite.y = posY-1;
-	ligneDroite.w = 1;
-	ligneDroite.h = width;
- 
-	SDL_FillRect(surf, &ligneDroite, SDL_MapRGB(surf->format, 255, 255, 255));
- 
-	SDL_Rect ligneGauche;
-	ligneGauche.x = posX-1;
-	ligneGauche.y = posY-1;
-	ligneGauche.w = 1;
-	ligneGauche.h = width;
- 
-	SDL_FillRect(surf, &ligneGauche, SDL_MapRGB(surf->format, 255, 255, 255));
- 
-	SDL_Rect ligneBas;
-	ligneBas.x = posX-1;
-	ligneBas.y = posY+width-1;
-	ligneBas.w = width;
-	ligneBas.h = 1;
- 
-	SDL_FillRect(surf, &ligneBas, SDL_MapRGB(surf->format, 255, 255, 255));
+    SDL_Rect ligneHaut;
+    ligneHaut.x = posX - 1;
+    ligneHaut.y = posY - 1;
+    ligneHaut.w = width;
+    ligneHaut.h = 1;
+    SDL_FillRect (surf, &ligneHaut, SDL_MapRGB (surf->format, 255, 255, 255) );
+    SDL_Rect ligneDroite;
+    ligneDroite.x = posX + width - 1;
+    ligneDroite.y = posY - 1;
+    ligneDroite.w = 1;
+    ligneDroite.h = width;
+    SDL_FillRect (surf, &ligneDroite, SDL_MapRGB (surf->format, 255, 255, 255) );
+    SDL_Rect ligneGauche;
+    ligneGauche.x = posX - 1;
+    ligneGauche.y = posY - 1;
+    ligneGauche.w = 1;
+    ligneGauche.h = width;
+    SDL_FillRect (surf, &ligneGauche, SDL_MapRGB (surf->format, 255, 255, 255) );
+    SDL_Rect ligneBas;
+    ligneBas.x = posX - 1;
+    ligneBas.y = posY + width - 1;
+    ligneBas.w = width;
+    ligneBas.h = 1;
+    SDL_FillRect (surf, &ligneBas, SDL_MapRGB (surf->format, 255, 255, 255) );
 }
 
 
-void drawGrille(SDL_Surface * surface, int posX, int posY, int taillecase, int nbcase)
+void drawGrille (SDL_Surface* surface, int posX, int posY, int taillecase, int nbcase)
 {
-    short i,j;
-    for (i=0; i<nbcase; i++)
-    for (j=0; j<nbcase; j++)
-    drawEmptyRect(surface,i*taillecase+posX, j*taillecase+posY, taillecase);
+    short i, j;
+
+    for (i = 0; i < nbcase; i++)
+        for (j = 0; j < nbcase; j++)
+        {
+            drawEmptyRect (surface, i * taillecase + posX, j * taillecase + posY, taillecase);
+        }
 }
