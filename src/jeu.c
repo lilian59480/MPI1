@@ -14,6 +14,7 @@ void fenetreJeu (T_MScore* score, char* cheminniveau, short difficulte, short r,
     SDL_Rect rect;
     SDL_Rect rect2;
     int hauteur;
+    int taillecaseplateau = 0;
     int value;
     int positionsourisx = 0;
     int positionsourisy = 0;
@@ -24,14 +25,17 @@ void fenetreJeu (T_MScore* score, char* cheminniveau, short difficulte, short r,
     {
         case 0:
             plateau.taillexy = 4;
+            taillecaseplateau = 100;
             break;
 
         case 1:
-            plateau.taillexy = 6;
+            plateau.taillexy = 8;
+            taillecaseplateau = 50;
             break;
 
         case 3:
             plateau.taillexy = 10;
+            taillecaseplateau = 40;
             break;
 
         default:
@@ -61,8 +65,8 @@ void fenetreJeu (T_MScore* score, char* cheminniveau, short difficulte, short r,
         hauteur = (HAUTEUR_FENETRE / 2) - (image->h / 2);
         rectImage.y = hauteur;
         SDL_BlitSurface (image, NULL, surface, &rectImage);
-        rect2.w = 100;
-        rect2.h = 100;
+        rect2.w = taillecaseplateau;
+        rect2.h = taillecaseplateau;
 
         for (i = 0; i < plateau.taillexy; i++)
         {
@@ -77,12 +81,12 @@ void fenetreJeu (T_MScore* score, char* cheminniveau, short difficulte, short r,
                 }
                 else
                 {
-                    rect.x = 100 + (100 * (i) );
-                    rect.y = hauteur + (100 * (j) );
+                    rect.x = 100 + (taillecaseplateau * (i) );
+                    rect.y = hauteur + (taillecaseplateau * (j) );
                 }
 
-                rect2.x = 0 + (100 * (value / plateau.taillexy) );
-                rect2.y = 0 + (100 * (value % plateau.taillexy) );
+                rect2.x = 0 + (taillecaseplateau * (value / plateau.taillexy) );
+                rect2.y = 0 + (taillecaseplateau * (value % plateau.taillexy) );
                 SDL_BlitSurface (image, &rect2, surface, &rect);
             }
         }
@@ -94,8 +98,8 @@ void fenetreJeu (T_MScore* score, char* cheminniveau, short difficulte, short r,
                 {
                     if (event.button.y > hauteur && event.button.y < (hauteur + (image->h) ) )
                     {
-                        caseclicx = (event.button.x - 100) / 100;
-                        caseclicy = (event.button.y - hauteur) / 100;
+                        caseclicx = (event.button.x - 100) / taillecaseplateau;
+                        caseclicy = (event.button.y - hauteur) / taillecaseplateau;
 
                         if (plateau.selectionne == -1)
                         {
@@ -183,7 +187,7 @@ void fenetreJeu (T_MScore* score, char* cheminniveau, short difficulte, short r,
                 break;
         }
 
-        drawGrille (surface, 100, hauteur, 100, plateau.taillexy );
+        drawGrille (surface, 100, hauteur, taillecaseplateau, plateau.taillexy );
         SDL_UpdateWindowSurface (fenetre);
     }
 

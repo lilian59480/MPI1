@@ -54,7 +54,7 @@ void fenetreChoixNiveau (SDL_Window* fenetre, T_MScore* score, Mix_Chunk* gSound
 
                 if (clickMenu (helvFont, "Chat", ChatTTFW, ChatTTFH, event, ChatRect) )
                 {
-                    fenetreJeu (score, "Chat/", 0, 255, 0, 255);
+                    fenetreJeu (score, "Chat/", 1, 255, 0, 255);
                     event.type = SDL_KEYDOWN;
                     event.key.keysym.sym = SDLK_1;
                     SDL_PushEvent (&event);

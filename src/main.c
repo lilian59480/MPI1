@@ -47,9 +47,15 @@ int main (int argc, char** argv)
     short onoff = 0, musique = 3;
     Mix_Music* gMusic = NULL;
     Mix_Chunk* gSound = NULL;
+    int i;
     /* Lecture des parametres envoye par le Shell */
     lireParamShell (argc, argv);
-
+    /* Recuperation des scores */
+    if (!lireMeilleurScore (&scores) )
+    {
+        /* Pour le moment, on reinitialise, mais dans la suite, il faudra afficher un message d'erreur en cas d'erreur*/
+        resetScores (&scores);
+    }
     /* Initialisation de la SDL2 et SDL_TTF */
     if (SDL_Init (SDL_INIT_VIDEO) != 0 )
     {
@@ -73,18 +79,29 @@ int main (int argc, char** argv)
     /* SDL2 Fonctionel Recuperation d'informations utiles (?) */
     printf ("OS: %s \nRam disponible: %d \n", SDL_GetPlatform(), SDL_GetSystemRAM() );
 
-    /* Recuperation des scores */
-    if (!lireMeilleurScore (&scores) )
+    pWindow = creerFenetre (pWindow, "Chargement : "TITREJEU, LARGEUR_FENETRE/2, HAUTEUR_FENETRE/2);
+    surface = SDL_GetWindowSurface (pWindow);
+    for ( i = 0; i < LARGEUR_FENETRE/2; i+= 20)
     {
-        /* Pour le moment, on reinitialise, mais dans la suite, il faudra afficher un message d'erreur en cas d'erreur*/
-        resetScores (&scores);
+        short couleur = i % 75;
+        SDL_Rect ligneHaut;
+        ligneHaut.x = 0;
+        ligneHaut.y = HAUTEUR_FENETRE/2 - 20;
+        ligneHaut.w = i;
+        ligneHaut.h = 20;
+        SDL_FillRect (surface, &ligneHaut, SDL_MapRGB (surface->format, 75-couleur, 255-couleur, couleur) );
+        SDL_UpdateWindowSurface(pWindow);
+        SDL_Delay(150);
     }
+    SDL_Delay(550);
+    SDL_FreeSurface(surface);
+    SDL_DestroyWindow(pWindow);
+    pWindow = NULL;
 
     pWindow = creerFenetre (pWindow, TITREJEU, LARGEUR_FENETRE, HAUTEUR_FENETRE);
     helvFont = chargerPolice (helvFont, HELVFONT, 40);
     pixFont = chargerPolice (pixFont, PIXFONT, 70);
     contfuFont = chargerPolice (contfuFont, CONTFUFONT, 60);
-    playmusic (musique, gMusic);
 
     while (continuer)
     {
@@ -221,7 +238,7 @@ void lireParamShell (int argc, char** argv)
         if (strcmp (argv[i], "--help") == 0)
         {
             printf ("Liste des commandes disponibles:\n");
-            printf ("--help  \t: Affiche cette aide\n");
+            printf ("--help\t: Affiche cette aide\n");
             printf ("--delete\t: Reset les scores\n");
             exit (EXIT_SUCCESS);
         }
