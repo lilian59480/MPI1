@@ -147,6 +147,9 @@ void playmusic (short musique, Mix_Music* gMusic)
         case 5 :
             gMusic = Mix_LoadMUS ( MUSIQUERICK );
             break;
+        case 6 : //musique victoire
+            gMusic = Mix_LoadMUS ( MUSIQUEWIN );
+            break;
     }
 
     if ( gMusic == NULL )
@@ -161,7 +164,7 @@ void playmusic (short musique, Mix_Music* gMusic)
 
 void playsound (short sound, Mix_Chunk* gSound)
 {
-    //Load music
+    //Load sfx
     switch (sound)
     {
         case 1 :
@@ -174,6 +177,9 @@ void playsound (short sound, Mix_Chunk* gSound)
 
         case 3 :
             gSound = Mix_LoadWAV ( SONCLICBOUTON );
+            break;
+        case 4 : //son defaite
+            gSound = Mix_LoadWAV (SONLOOSE);
             break;
     }
 

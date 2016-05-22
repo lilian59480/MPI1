@@ -27,14 +27,16 @@
 #define SONYEP "./sound/yep.wav"
 #define SONNOP "./sound/nop.wav"
 #define SONCLICBOUTON "./sound/buttonclick.wav"
+#define SONLOOSE "./sound/loose.wav"
 
 #define MUSIQUETES "./sound/tes.mp3"
-/* TODO : CONVERTIR EN MP3!!! */
+/* TODO : CONVERTIR EN MP3!!! -> flemme*/
 #define MUSIQUECUBAN "./sound/cubanmusic2.wav"
 #define MUSIQUEGALAXY "./sound/galaxy2.mp3"
-/* TODO : CONVERTIR EN MP3!!! */
+/* TODO : CONVERTIR EN MP3!!! -> flemme */
 #define MUSIQUECHIANTE "./sound/chiant.wav"
 #define MUSIQUERICK "./sound/rick.mp3"
+#define MUSIQUEWIN "./sound/win.mp3"
 
 #define LARGEUR_FENETRE 640
 #define HAUTEUR_FENETRE 480

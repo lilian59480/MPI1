@@ -5,8 +5,11 @@ int main (int argc, char** argv)
     /* Initialisation des variables */
     SDL_Window* pWindow = NULL;
     TTF_Font* pixFont = NULL;
+    TTF_Font* pix2Font = NULL;
     TTF_Font* helvFont = NULL;
+    TTF_Font* helv2Font = NULL;
     TTF_Font* contfuFont = NULL;
+    TTF_Font* contfu2Font = NULL;
     SDL_Event event;
     SDL_Surface* surface = NULL;
     SDL_Surface* titreTTF = NULL;
@@ -81,19 +84,49 @@ int main (int argc, char** argv)
 
     pWindow = creerFenetre (pWindow, "Chargement : "TITREJEU, LARGEUR_FENETRE/2, HAUTEUR_FENETRE/2);
     surface = SDL_GetWindowSurface (pWindow);
-    for ( i = 0; i < LARGEUR_FENETRE/2; i+= 20)
+    pix2Font = chargerPolice (pix2Font, PIXFONT, 50);
+    contfu2Font = chargerPolice (contfu2Font, CONTFUFONT, 40);
+    helv2Font = chargerPolice (helv2Font, HELVFONT, 20);
+    for ( i = 0; i < LARGEUR_FENETRE; i+= 40)
     {
-        short couleur = i % 75;
+        SDL_FillRect (surface, NULL, SDL_MapRGB (surface->format, 63, 72, 204) );
+        titreTTF = creerTexte (titreTTF, METHODE_BELLE, pix2Font, TITREJEU, TitreColor);
+        titreRect.x = (LARGEUR_FENETRE / 4) - (titreTTF->w / 2)+3;
+        if (i<240) titreRect.y = -40 + i/2 +3; else titreRect.y = 83;
+        SDL_BlitSurface (titreTTF, NULL, surface, &titreRect);
+        SDL_FreeSurface (titreTTF);
+        titreTTF = creerTexte (titreTTF, METHODE_BELLE, pix2Font, TITREJEU, TitreColor2);
+        titreRect.x = (LARGEUR_FENETRE / 4) - (titreTTF->w / 2);
+        if (i<240) titreRect.y = -40 + i/2; else titreRect.y = 80;
+        if (i>280) {stitreTTF = creerTexte (stitreTTF, METHODE_BELLE, contfu2Font, "PUZZLE", TitreColors);
+        stitreRect.x = (LARGEUR_FENETRE / 4) - (stitreTTF->w / 2);
+        stitreRect.y = 80 + 40;
+        SDL_BlitSurface (stitreTTF, NULL, surface, &stitreRect);
+        SDL_FreeSurface (stitreTTF);}
+        printf (" %d - %d \n",titreRect.y,i );
+        SDL_BlitSurface (titreTTF, NULL, surface, &titreRect);
+        SDL_FreeSurface (titreTTF);
+        short couleur = (i/2) % 75;
         SDL_Rect ligneHaut;
         ligneHaut.x = 0;
         ligneHaut.y = HAUTEUR_FENETRE/2 - 20;
-        ligneHaut.w = i;
+        ligneHaut.w = i/2;
         ligneHaut.h = 20;
         SDL_FillRect (surface, &ligneHaut, SDL_MapRGB (surface->format, 75-couleur, 255-couleur, couleur) );
+        if (i>560){titreTTF = creerTexte (titreTTF, METHODE_BELLE, helv2Font, "rick", TitreColor2);
+        titreRect.x = (LARGEUR_FENETRE / 4) - (titreTTF->w / 2);
+        titreRect.y = HAUTEUR_FENETRE /2 - 20;
+        SDL_BlitSurface (titreTTF, NULL, surface, &titreRect);
+        SDL_FreeSurface (titreTTF);}
         SDL_UpdateWindowSurface(pWindow);
         SDL_Delay(150);
     }
+    playmusic (musique, gMusic);
+    libererPolice (pix2Font);
+    libererPolice (contfu2Font);
+    libererPolice (helv2Font);
     SDL_Delay(550);
+    
     SDL_FreeSurface(surface);
     SDL_DestroyWindow(pWindow);
     pWindow = NULL;
@@ -102,6 +135,7 @@ int main (int argc, char** argv)
     helvFont = chargerPolice (helvFont, HELVFONT, 40);
     pixFont = chargerPolice (pixFont, PIXFONT, 70);
     contfuFont = chargerPolice (contfuFont, CONTFUFONT, 60);
+    
 
     while (continuer)
     {
@@ -114,7 +148,7 @@ int main (int argc, char** argv)
 
                 if (clickMenu (helvFont, "Jouer", JouerTTFW, JouerTTFH, event, JouerRect) )
                 {
-                    fenetreChoixNiveau (pWindow, &scores, gSound);
+                    fenetreChoixNiveau (pWindow, &scores, gSound, gMusic, &musique, &onoff);
                     event.type = SDL_KEYDOWN;
                     event.key.keysym.sym = SDLK_1;
                     SDL_PushEvent (&event);

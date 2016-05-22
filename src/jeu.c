@@ -1,6 +1,6 @@
 #include "jeu.h"
 
-void fenetreJeu (T_MScore* score, char* cheminniveau, short difficulte, short r, short v, short b )
+void fenetreJeu (T_MScore* score, char* cheminniveau, short difficulte, short r, short v, short b, Mix_Chunk* gSound, Mix_Music* gMusic, short* musique, short* onoff )
 {
     SDL_Window* fenetre = NULL;
     SDL_Surface* surface = NULL;
@@ -20,6 +20,29 @@ void fenetreJeu (T_MScore* score, char* cheminniveau, short difficulte, short r,
     int positionsourisy = 0;
     int caseclicx = 0;
     int caseclicy = 0;
+    
+    SDL_Surface* QuitterTTF = NULL;
+    SDL_Rect QuitterRect;
+    SDL_Color QuitterColor = {0, 0, 0, 0};
+    int QuitterTTFW = 0;
+    int QuitterTTFH = 0;
+    short win;
+    SDL_Surface* cheatTTF = NULL;
+    SDL_Rect cheatRect;
+    SDL_Color cheatColor = {0, 0, 0, 0};
+    int cheatTTFW = 0;
+    int cheatTTFH = 0;
+    SDL_Surface* tempsTTF = NULL;
+    SDL_Rect tempsRect;
+    SDL_Color tempsColor = {0, 0, 0, 0};
+    SDL_Surface* coupsTTF = NULL;
+    SDL_Rect coupsRect;
+    SDL_Color coupsColor = {0, 0, 0, 0};
+    
+    
+    
+    TTF_Font* helvFont = NULL;
+    helvFont = chargerPolice (helvFont, HELVFONT, 40);
 
     switch (difficulte)
     {
@@ -45,7 +68,7 @@ void fenetreJeu (T_MScore* score, char* cheminniveau, short difficulte, short r,
     }
 
     melangercase (&plateau);
-    fenetre = creerFenetre (fenetre, TITREJEU, LARGEUR_FENETRE * 2, HAUTEUR_FENETRE * 2);
+    fenetre = creerFenetre (fenetre, TITREJEU, LARGEUR_FENETRE * 2, 3*HAUTEUR_FENETRE/2);
     surface = SDL_GetWindowSurface (fenetre);
     verifierCouleur (&r, &v, &b);
 
@@ -67,6 +90,26 @@ void fenetreJeu (T_MScore* score, char* cheminniveau, short difficulte, short r,
         SDL_BlitSurface (image, NULL, surface, &rectImage);
         rect2.w = taillecaseplateau;
         rect2.h = taillecaseplateau;
+        QuitterTTF = creerTexte (QuitterTTF, METHODE_RAPIDE, helvFont, "Abandonner", QuitterColor);
+        QuitterRect.x = (6*LARGEUR_FENETRE / 4) - (QuitterTTF->w / 2) + 20;
+        QuitterRect.y = (4 * HAUTEUR_FENETRE) / 4 +20;
+        SDL_BlitSurface (QuitterTTF, NULL, surface, &QuitterRect);
+        SDL_FreeSurface (QuitterTTF);
+        coupsTTF = creerTexte (coupsTTF, METHODE_RAPIDE, helvFont, "Nombre de coups : ", coupsColor);
+        coupsRect.x = 100;
+        coupsRect.y = (4 * HAUTEUR_FENETRE) / 4 +20;
+        SDL_BlitSurface (coupsTTF, NULL, surface, &coupsRect);
+        SDL_FreeSurface (coupsTTF);
+        tempsTTF = creerTexte (tempsTTF, METHODE_RAPIDE, helvFont, "Temps : ", tempsColor);
+        tempsRect.x = 100;
+        tempsRect.y = (4 * HAUTEUR_FENETRE) / 4 + 100;
+        SDL_BlitSurface (tempsTTF, NULL, surface, &tempsRect);
+        SDL_FreeSurface (tempsTTF);
+        cheatTTF = creerTexte (cheatTTF, METHODE_RAPIDE, helvFont, "cheat", cheatColor);
+        cheatRect.x = (6*LARGEUR_FENETRE / 4) - (cheatTTF->w / 2) + 20;
+        cheatRect.y = (4 * HAUTEUR_FENETRE) / 4 +50;
+        SDL_BlitSurface (cheatTTF, NULL, surface, &cheatRect);
+        SDL_FreeSurface (cheatTTF);
 
         for (i = 0; i < plateau.taillexy; i++)
         {
@@ -94,6 +137,7 @@ void fenetreJeu (T_MScore* score, char* cheminniveau, short difficulte, short r,
         switch (event.type)
         {
             case SDL_MOUSEBUTTONDOWN:
+            playsound (3, gSound);
                 if (event.button.x > 100 && event.button.x < (100 + (image->w) ) )
                 {
                     if (event.button.y > hauteur && event.button.y < (hauteur + (image->h) ) )
@@ -155,10 +199,21 @@ void fenetreJeu (T_MScore* score, char* cheminniveau, short difficulte, short r,
                             _debugT_Cases (&plateau);
                             if(validerCase(&plateau) && plateau.selectionne == -1)
                             {
-                                printf("C'est gagne\n");
+                                win = 1;
+                                continuer = SDL_TRUE;
                             }
                         }
                     }
+                }
+                if (clickMenu (helvFont, "Abandonner", QuitterTTFW, QuitterTTFH, event, QuitterRect) )
+                {
+                    continuer = SDL_TRUE;
+                    win = 0;
+                }
+                if (clickMenu (helvFont, "cheat", cheatTTFW, cheatTTFH, event, cheatRect) )
+                {
+                    continuer = SDL_TRUE;
+                    win = 1;
                 }
                 break;
 
@@ -181,6 +236,8 @@ void fenetreJeu (T_MScore* score, char* cheminniveau, short difficulte, short r,
             case SDL_MOUSEMOTION:
                 positionsourisx = event.motion.x;
                 positionsourisy = event.motion.y;
+                QuitterColor.r = hoverMenu (helvFont, "Abandonner", QuitterTTFW, QuitterTTFH, event, QuitterRect);
+                cheatColor.r = hoverMenu (helvFont, "cheat", cheatTTFW, cheatTTFH, event, cheatRect);
                 break;
 
             default:
@@ -190,9 +247,22 @@ void fenetreJeu (T_MScore* score, char* cheminniveau, short difficulte, short r,
         drawGrille (surface, 100, hauteur, taillecaseplateau, plateau.taillexy );
         SDL_UpdateWindowSurface (fenetre);
     }
+    
+    
 
+    libererPolice (helvFont);
     SDL_DestroyWindow (fenetre);
     fenetre = NULL;
+    if(win==1) {
+        printf("C'est gagne\n");
+        SDL_Delay(50);
+        wine(score,gSound,gMusic, musique, onoff);
+        
+    }
+    else if (win == 0) {
+        printf("C'est perdu\n");
+        loose(gSound);
+    }
     return;
 }
 
@@ -337,4 +407,38 @@ void drawGrille (SDL_Surface* surface, int posX, int posY, int taillecase, int n
         {
             drawEmptyRect (surface, i * taillecase + posX, j * taillecase + posY, taillecase);
         }
+}
+
+void wine (T_MScore* score, Mix_Chunk* gSound, Mix_Music* gMusic, short* musique, short* onoff)
+{
+    SDL_Window* fenetre = NULL;
+    SDL_Surface* surface = NULL;
+    fenetre = creerFenetre (fenetre, TITREJEU, LARGEUR_FENETRE, HAUTEUR_FENETRE);
+    surface = SDL_GetWindowSurface (fenetre);
+    SDL_FillRect (surface, NULL, SDL_MapRGB (surface->format, 75, 220, 56) );
+    SDL_UpdateWindowSurface (fenetre);
+    playmusic (6, gMusic);
+    
+    
+    SDL_Delay(3000);
+   
+   
+   if( *onoff == 1 ) Mix_HaltMusic(); else playmusic (*musique, gMusic);
+   SDL_DestroyWindow (fenetre);
+}
+
+void loose (Mix_Chunk* gSound)
+{
+    SDL_Window* fenetre = NULL;
+    SDL_Surface* surface = NULL;
+    fenetre = creerFenetre (fenetre, TITREJEU, LARGEUR_FENETRE, HAUTEUR_FENETRE);
+    surface = SDL_GetWindowSurface (fenetre);
+    SDL_FillRect (surface, NULL, SDL_MapRGB (surface->format, 255, 34, 34) );
+    SDL_UpdateWindowSurface (fenetre);
+    if( Mix_PlayingMusic() != 0 ) Mix_PauseMusic();
+    playsound (4, gSound);
+    SDL_Delay(3200);
+    if( Mix_PausedMusic() == 1 ) Mix_ResumeMusic();
+    
+    SDL_DestroyWindow (fenetre);
 }
