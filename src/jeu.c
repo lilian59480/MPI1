@@ -413,17 +413,143 @@ void wine (T_MScore* score, Mix_Chunk* gSound, Mix_Music* gMusic, short* musique
 {
     SDL_Window* fenetre = NULL;
     SDL_Surface* surface = NULL;
+    char texte[PSEUDOMAX] = {0};
+    size_t passlen = 0, l;
+    SDL_bool done = SDL_FALSE;
+    SDL_Rect rect;
+    SDL_Event ev;
+    SDL_Surface* ValiderTTF = NULL;
+    SDL_Rect ValiderRect;
+    SDL_Color ValiderColor = {0, 0, 0, 0};
+    int ValiderTTFW = 0;
+    int ValiderTTFH = 0;
+    SDL_Surface* pseudoTTF = NULL;
+    SDL_Rect pseudoRect;
+    SDL_Color pseudoColor = {0, 0, 0, 0};
+    TTF_Font* helvFont = NULL;
+    TTF_Font* pixFont = NULL;
+    TTF_Font* contfuFont = NULL;
+    helvFont = chargerPolice (helvFont, HELVFONT, 40);
+    pixFont = chargerPolice (pixFont, PIXFONT, 100);
+    contfuFont = chargerPolice (contfuFont, CONTFUFONT, 40);
+    SDL_Surface* surfaceTexte = NULL;
+    SDL_Color color2 = {255, 255, 255, 0};
+    SDL_Color color = {0, 0, 0, 0};
     fenetre = creerFenetre (fenetre, TITREJEU, LARGEUR_FENETRE, HAUTEUR_FENETRE);
-    surface = SDL_GetWindowSurface (fenetre);
-    SDL_FillRect (surface, NULL, SDL_MapRGB (surface->format, 75, 220, 56) );
     SDL_UpdateWindowSurface (fenetre);
     playmusic (6, gMusic);
     
     
-    SDL_Delay(3000);
+    SDL_StartTextInput();
+
+    while (!done)
+    {
+        SDL_WaitEvent (&ev);
+
+        switch (ev.type)
+        {
+            case SDL_QUIT : // Ne marche pas, je sais pas pourquoi
+                printf ("Good bye\n");
+                done = SDL_TRUE;
+                break;
+
+            case SDL_KEYDOWN :
+                if (ev.key.keysym.sym == SDLK_BACKSPACE && passlen > 0)
+                {
+                    texte[passlen - 1] = 0;
+                    passlen--;
+                    puts (texte);
+                }
+                else if (ev.key.keysym.sym == SDLK_ESCAPE)
+                {
+                    done = SDL_TRUE;
+                }
+                else if (ev.key.keysym.sym == SDLK_RETURN)
+                {
+                    printf ("testvalider\n");
+                }
+
+                break;
+
+            case SDL_TEXTINPUT :
+                l = strlen (ev.text.text);
+                strncpy (texte + passlen, ev.text.text, PSEUDOMAX - 1 - passlen);
+                passlen += l;
+
+                if (passlen > PSEUDOMAX - 1)
+                {
+                    passlen = PSEUDOMAX - 1;
+                }
+
+                puts (texte);
+                break;
+
+            case SDL_MOUSEBUTTONDOWN:
+                playsound (3, gSound);
+
+                if (clickMenu (helvFont, "Valider", ValiderTTFW, ValiderTTFH, ev, ValiderRect) )
+                {
+                    printf ("testvalider\n");
+                    ev.type = SDL_KEYDOWN;
+                    ev.key.keysym.sym = SDLK_1;
+                    SDL_PushEvent (&ev);
+                }
+
+
+                break;
+
+            case SDL_MOUSEMOTION:
+                ValiderColor.r = hoverMenu (helvFont, "Valider", ValiderTTFW, ValiderTTFH, ev, ValiderRect);
+                break;
+        }
+
+        surface = SDL_GetWindowSurface (fenetre);
+        SDL_FillRect (surface, NULL, SDL_MapRGB (surface->format, 75, 220, 56) );
+        surfaceTexte = creerTexte (surfaceTexte, METHODE_BELLE, pixFont, "YOU WIN", color);
+        rect.x = (LARGEUR_FENETRE / 2) - (surfaceTexte->w / 2);
+        rect.y = HAUTEUR_FENETRE / 8 -20;
+        SDL_BlitSurface (surfaceTexte, NULL, surface, &rect);
+        SDL_FreeSurface (surfaceTexte);
+        surfaceTexte = creerTexte (surfaceTexte, METHODE_BELLE, contfuFont, "Votre score : ", color);
+        rect.x = (2*LARGEUR_FENETRE / 4) - (surfaceTexte->w / 2) - 70;
+        rect.y = 2*HAUTEUR_FENETRE / 8 +10;
+        SDL_BlitSurface (surfaceTexte, NULL, surface, &rect);
+        SDL_FreeSurface (surfaceTexte);
+        surfaceTexte = creerTexte (surfaceTexte, METHODE_BELLE, contfuFont, "* score *", color);
+        rect.x = (3*LARGEUR_FENETRE / 4) - (surfaceTexte->w / 2) -45;
+        rect.y = 2*HAUTEUR_FENETRE / 8 + 10;
+        SDL_BlitSurface (surfaceTexte, NULL, surface, &rect);
+        SDL_FreeSurface (surfaceTexte);
+        pseudoTTF = creerTexte (pseudoTTF, METHODE_RAPIDE, helvFont, "Veuillez entrer votre pseudo :", pseudoColor);
+        pseudoRect.x = (LARGEUR_FENETRE / 2) - (pseudoTTF->w / 2);
+        pseudoRect.y = (HAUTEUR_FENETRE) / 2 -20;
+        SDL_BlitSurface (pseudoTTF, NULL, surface, &pseudoRect);
+        SDL_FreeSurface (pseudoTTF);
+        ValiderTTF = creerTexte (ValiderTTF, METHODE_RAPIDE, helvFont, "Valider", ValiderColor);
+        ValiderRect.x = (LARGEUR_FENETRE / 2) - (ValiderTTF->w / 2);
+        ValiderRect.y = (3 * HAUTEUR_FENETRE) / 4 +10;
+        SDL_BlitSurface (ValiderTTF, NULL, surface, &ValiderRect);
+        SDL_FreeSurface (ValiderTTF);
+        SDL_UpdateWindowSurface (fenetre);
+
+        if (passlen > 0)
+        {
+            surfaceTexte = creerTexte (surfaceTexte, METHODE_BELLE, helvFont, texte, color);
+            rect.x = (LARGEUR_FENETRE / 2) - (surfaceTexte->w / 2);
+            rect.y = 5*HAUTEUR_FENETRE / 8 -20;
+            SDL_BlitSurface (surfaceTexte, NULL, surface, &rect);
+            SDL_FreeSurface (surfaceTexte);
+            SDL_UpdateWindowSurface (fenetre);
+        }
+    }
+
+    SDL_StopTextInput();
    
    
    if( *onoff == 1 ) Mix_HaltMusic(); else playmusic (*musique, gMusic);
+   libererPolice (helvFont);
+   libererPolice (pixFont);
+   libererPolice (contfuFont);
    SDL_DestroyWindow (fenetre);
 }
 
@@ -431,14 +557,35 @@ void loose (Mix_Chunk* gSound)
 {
     SDL_Window* fenetre = NULL;
     SDL_Surface* surface = NULL;
+    SDL_Surface* titreTTF = NULL;
+    TTF_Font* pixFont = NULL;
+    TTF_Font* helvFont = NULL;
+    SDL_Rect titreRect;
+    SDL_Color TitreColor = {0, 0, 0, 0};
+    SDL_Surface* JouerTTF = NULL;
+    SDL_Rect JouerRect;
+    SDL_Color JouerColor = {0, 0, 0, 0};
+    pixFont = chargerPolice (pixFont, PIXFONT, 110);
+    helvFont = chargerPolice (helvFont, HELVFONT, 60);
     fenetre = creerFenetre (fenetre, TITREJEU, LARGEUR_FENETRE, HAUTEUR_FENETRE);
     surface = SDL_GetWindowSurface (fenetre);
     SDL_FillRect (surface, NULL, SDL_MapRGB (surface->format, 255, 34, 34) );
+    titreTTF = creerTexte (titreTTF, METHODE_BELLE, pixFont, "GAME OVER", TitreColor);
+    titreRect.x = (LARGEUR_FENETRE / 2) - (titreTTF->w / 2);
+    titreRect.y = HAUTEUR_FENETRE / 2 -80;
+    SDL_BlitSurface (titreTTF, NULL, surface, &titreRect);
+    SDL_FreeSurface (titreTTF);
+    JouerTTF = creerTexte (JouerTTF, METHODE_RAPIDE, helvFont, "You lose the game !", JouerColor);
+    JouerRect.x = (LARGEUR_FENETRE / 2) - (JouerTTF->w / 2);
+    JouerRect.y = HAUTEUR_FENETRE / 2 + 30;
+    SDL_BlitSurface (JouerTTF, NULL, surface, &JouerRect);
+    SDL_FreeSurface (JouerTTF);
     SDL_UpdateWindowSurface (fenetre);
     if( Mix_PlayingMusic() != 0 ) Mix_PauseMusic();
     playsound (4, gSound);
     SDL_Delay(3200);
     if( Mix_PausedMusic() == 1 ) Mix_ResumeMusic();
-    
+    libererPolice (helvFont);
+    libererPolice (pixFont);
     SDL_DestroyWindow (fenetre);
 }
