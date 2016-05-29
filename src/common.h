@@ -41,10 +41,12 @@
 #define LARGEUR_FENETRE 640
 #define HAUTEUR_FENETRE 480
 
+#define PSEUDOMAX 20
+
 #define METHODE_RAPIDE 0
 #define METHODE_BELLE 1
 
-typedef char T_Nom[20];
+typedef char T_Nom[PSEUDOMAX];
 typedef unsigned int T_Score;
 
 typedef struct

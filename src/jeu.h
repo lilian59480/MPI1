@@ -5,7 +5,6 @@
 #include <time.h>
 
 #define TAILLEPLATEAUMAX 10
-#define PSEUDOMAX 16
 
 typedef int T_Case;
 
