@@ -4,5 +4,6 @@
 #include "common.h"
 
 int option (SDL_Window* fenetre, short* musique, short* onoff, Mix_Music* gMusic, Mix_Chunk* gSound);
+void credits();
 
 #endif

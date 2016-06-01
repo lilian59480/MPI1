@@ -151,6 +151,16 @@ void valider (char* texte, Mix_Chunk* gSound, short* musique, Mix_Music* gMusic,
         playmusic (*musique, gMusic);
         *done = SDL_TRUE;
     }
+    else if (strcmp (texte, "love") == 0)
+    {
+        printf ("c est bien\n");
+        playsound (1, gSound);
+        SDL_Delay (1000);
+        *musique = 7;
+        *onoff = 0;
+        playmusic (*musique, gMusic);
+        *done = SDL_TRUE;
+    }
     else
     {
         printf ("c est nul\n");

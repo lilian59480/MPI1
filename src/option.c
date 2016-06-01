@@ -85,6 +85,7 @@ int option (SDL_Window* fenetreoption, short* musique, short* onoff, Mix_Music* 
                 else if (clickMenu (helvFont, "Credits", CreditsTTFW, CreditsTTFH, ev, CreditsRect) )
                 {
                     printf ("Credits\n");
+                    credits();
                 }
                 else if (clickMenu (helvFont, "Suprimer les highscores", delTTFW, delTTFH, ev, delRect) )
                 {
@@ -209,4 +210,117 @@ int option (SDL_Window* fenetreoption, short* musique, short* onoff, Mix_Music* 
     libererPolice (helvFont);
     libererPolice (contfuFont);
     return 0;
+}
+
+void credits(){
+    
+    SDL_Window* fenetre;
+    SDL_bool done = SDL_FALSE;
+    SDL_Event ev;
+    SDL_Rect rect;
+    SDL_Surface* txtTTF = NULL;
+    SDL_Rect txtRect;
+    SDL_Color blanc = {255, 255, 255, 0};
+    SDL_Color rouge = {255, 0, 0, 0};
+    TTF_Font* contfuFont = NULL;
+    TTF_Font* contfuFont2 = NULL;
+    TTF_Font* calFont = NULL;
+    SDL_Surface* surface = NULL;
+    calFont = chargerPolice (calFont, CALFONT, 20);
+    contfuFont = chargerPolice (contfuFont, CONTFUFONT, 60);
+    contfuFont2 = chargerPolice (contfuFont, CONTFUFONT, 30);
+    SDL_Surface* surfaceTexte = NULL;
+    
+    fenetre = creerFenetre (fenetre, TITREJEU, LARGEUR_FENETRE, HAUTEUR_FENETRE);
+    surface = SDL_GetWindowSurface (fenetre);
+    SDL_FillRect (surface, NULL, SDL_MapRGB (surface->format, 0, 0, 0) );
+    surfaceTexte = creerTexte (surfaceTexte, METHODE_BELLE, contfuFont, "Credits", blanc);
+    rect.x = (LARGEUR_FENETRE / 2) - (surfaceTexte->w / 2);
+    rect.y = HAUTEUR_FENETRE / 12;
+    SDL_BlitSurface (surfaceTexte, NULL, surface, &rect);
+    SDL_FreeSurface (surfaceTexte);
+    txtTTF = creerTexte (txtTTF, METHODE_BELLE, calFont, "Arcade 2i Puzzle a ete cree par PETIPAS Lilian et TERNISIEN", blanc);
+    txtRect.x = (LARGEUR_FENETRE / 2) - (txtTTF->w / 2);
+    txtRect.y = 3*HAUTEUR_FENETRE / 12 ;
+    SDL_BlitSurface (txtTTF, NULL, surface, &txtRect);
+    SDL_FreeSurface (txtTTF);
+    txtTTF = creerTexte (txtTTF, METHODE_BELLE, calFont, "Thomas dans le cadre d'un projet informatique en premiere", blanc);
+    txtRect.x = (LARGEUR_FENETRE / 2) - (txtTTF->w / 2);
+    txtRect.y = 3*HAUTEUR_FENETRE / 12 +25;
+    SDL_BlitSurface (txtTTF, NULL, surface, &txtRect);
+    SDL_FreeSurface (txtTTF);
+    txtTTF = creerTexte (txtTTF, METHODE_BELLE, calFont, "annee a Centrale Lille formation IG2I", blanc);
+    txtRect.x = (LARGEUR_FENETRE / 2) - (txtTTF->w / 2);
+    txtRect.y = 3*HAUTEUR_FENETRE / 12 +50;
+    SDL_BlitSurface (txtTTF, NULL, surface, &txtRect);
+    SDL_FreeSurface (txtTTF);
+    txtTTF = creerTexte (txtTTF, METHODE_BELLE, contfuFont2, "Musiques", blanc);
+    txtRect.x = (LARGEUR_FENETRE / 2) - (txtTTF->w / 2);
+    txtRect.y = 5*HAUTEUR_FENETRE / 12;
+    SDL_BlitSurface (txtTTF, NULL, surface, &txtRect);
+    SDL_FreeSurface (txtTTF);
+    txtTTF = creerTexte (txtTTF, METHODE_BELLE, calFont, "BO de Skyrim, Oblivion, Morrowind - Jeremy Soule", blanc);
+    txtRect.x = (LARGEUR_FENETRE / 2) - (txtTTF->w / 2);
+    txtRect.y = 6*HAUTEUR_FENETRE / 12;
+    SDL_BlitSurface (txtTTF, NULL, surface, &txtRect);
+    SDL_FreeSurface (txtTTF);
+    txtTTF = creerTexte (txtTTF, METHODE_BELLE, calFont, "Subway Harry - Poncho Sanchez", blanc);
+    txtRect.x = (LARGEUR_FENETRE / 2) - (txtTTF->w / 2);
+    txtRect.y = 6*HAUTEUR_FENETRE / 12 +25;
+    SDL_BlitSurface (txtTTF, NULL, surface, &txtRect);
+    SDL_FreeSurface (txtTTF);
+    txtTTF = creerTexte (txtTTF, METHODE_BELLE, calFont, "March for Koala, Old School Game - The Seatbelts", blanc);
+    txtRect.x = (LARGEUR_FENETRE / 2) - (txtTTF->w / 2);
+    txtRect.y = 6*HAUTEUR_FENETRE / 12 +50;
+    SDL_BlitSurface (txtTTF, NULL, surface, &txtRect);
+    SDL_FreeSurface (txtTTF);
+    txtTTF = creerTexte (txtTTF, METHODE_BELLE, calFont, "Throwback Galaxy - Mario Galaxy Orchestra", blanc);
+    txtRect.x = (LARGEUR_FENETRE / 2) - (txtTTF->w / 2);
+    txtRect.y = 6*HAUTEUR_FENETRE / 12 +75;
+    SDL_BlitSurface (txtTTF, NULL, surface, &txtRect);
+    SDL_FreeSurface (txtTTF);
+    txtTTF = creerTexte (txtTTF, METHODE_BELLE, calFont, "Final Fantasy VI Victory Franfare - Nobuo Uematsu", blanc);
+    txtRect.x = (LARGEUR_FENETRE / 2) - (txtTTF->w / 2);
+    txtRect.y = 6*HAUTEUR_FENETRE / 12 +100;
+    SDL_BlitSurface (txtTTF, NULL, surface, &txtRect);
+    SDL_FreeSurface (txtTTF);
+    txtTTF = creerTexte (txtTTF, METHODE_BELLE, calFont, "Never Gonna Give You Up - Rick Astley", blanc);
+    txtRect.x = (LARGEUR_FENETRE / 2) - (txtTTF->w / 2);
+    txtRect.y = 6*HAUTEUR_FENETRE / 12 +125;
+    SDL_BlitSurface (txtTTF, NULL, surface, &txtRect);
+    SDL_FreeSurface (txtTTF);
+    txtTTF = creerTexte (txtTTF, METHODE_BELLE, calFont,             "What is         - Haddaway", blanc);
+    txtRect.x = (LARGEUR_FENETRE / 2) - (txtTTF->w / 2);
+    txtRect.y = 6*HAUTEUR_FENETRE / 12 +150;
+    surfaceTexte = creerTexte (surfaceTexte, METHODE_BELLE, calFont, "              love", rouge);
+    rect.x = (LARGEUR_FENETRE / 2) - (txtTTF->w / 2);
+    rect.y = 6*HAUTEUR_FENETRE / 12 +150;
+    SDL_BlitSurface (surfaceTexte, NULL, surface, &rect);
+    SDL_FreeSurface (surfaceTexte);
+    SDL_BlitSurface (txtTTF, NULL, surface, &txtRect);
+    SDL_FreeSurface (txtTTF);
+    SDL_UpdateWindowSurface (fenetre);
+    
+    while(!done){
+        SDL_WaitEvent(&ev);
+        switch(ev.type){
+        case SDL_QUIT: done = SDL_TRUE;
+        break;
+        
+        case SDL_KEYDOWN : done = SDL_TRUE;
+        break;
+        
+        case SDL_MOUSEBUTTONDOWN : done = SDL_TRUE;
+        break;    
+        }
+        
+        
+    }
+    
+    
+    
+    libererPolice (calFont);
+    libererPolice (contfuFont);
+    SDL_DestroyWindow (fenetre);
+    
 }

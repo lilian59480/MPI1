@@ -18,6 +18,7 @@
 #define HELVFONT "./font/helv.ttf"
 #define CONTFUFONT "./font/contfu.ttf"
 #define PIXFONT "./font/04B.ttf"
+#define CALFONT "./font/calibri.ttf"
 
 #define SCOREFILEBINARY "./score"
 
@@ -36,6 +37,7 @@
 /* TODO : CONVERTIR EN MP3!!! -> flemme */
 #define MUSIQUECHIANTE "./sound/chiant.wav"
 #define MUSIQUERICK "./sound/rick.mp3"
+#define MUSIQUELOVE "./sound/love.mp3"
 #define MUSIQUEWIN "./sound/win.mp3"
 
 #define LARGEUR_FENETRE 640

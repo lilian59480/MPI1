@@ -150,6 +150,10 @@ void playmusic (short musique, Mix_Music* gMusic)
         case 6 : //musique victoire
             gMusic = Mix_LoadMUS ( MUSIQUEWIN );
             break;
+            
+        case 7 :
+            gMusic = Mix_LoadMUS ( MUSIQUELOVE );
+            break;
     }
 
     if ( gMusic == NULL )

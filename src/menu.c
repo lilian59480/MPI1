@@ -127,6 +127,13 @@ void fenetreChoixNiveau (SDL_Window* fenetre, T_MScore* score, Mix_Chunk* gSound
             case SDL_QUIT:
                 exit (EXIT_SUCCESS);
                 break;
+                
+            case SDL_KEYDOWN :
+                if (event.key.keysym.sym == SDLK_ESCAPE)
+                {
+                   return;
+                }
+                break;
 
             case SDL_MOUSEMOTION:
                 ChatColor.b = hoverMenu (helvFont, "Chat", ChatTTFW, ChatTTFH, event, ChatRect);
