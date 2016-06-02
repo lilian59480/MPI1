@@ -214,7 +214,7 @@ int option (SDL_Window* fenetreoption, short* musique, short* onoff, Mix_Music* 
 
 void credits(){
     
-    SDL_Window* fenetre;
+    SDL_Window* fenetre = NULL;
     SDL_bool done = SDL_FALSE;
     SDL_Event ev;
     SDL_Rect rect;
@@ -239,7 +239,7 @@ void credits(){
     rect.y = HAUTEUR_FENETRE / 12;
     SDL_BlitSurface (surfaceTexte, NULL, surface, &rect);
     SDL_FreeSurface (surfaceTexte);
-    txtTTF = creerTexte (txtTTF, METHODE_BELLE, calFont, "Arcade 2i Puzzle a ete cree par PETIPAS Lilian et TERNISIEN", blanc);
+    txtTTF = creerTexte (txtTTF, METHODE_BELLE, calFont, "Arcade 2i Puzzle a ete cree par PETITPAS Lilian et TERNISIEN", blanc);
     txtRect.x = (LARGEUR_FENETRE / 2) - (txtTTF->w / 2);
     txtRect.y = 3*HAUTEUR_FENETRE / 12 ;
     SDL_BlitSurface (txtTTF, NULL, surface, &txtRect);

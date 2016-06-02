@@ -164,7 +164,7 @@ int main (int argc, char** argv)
 
                 if (clickMenu (helvFont, "Mot de Passe", PasswordTTFW, PasswordTTFH, event, PasswordRect) )
                 {
-                    password (gSound, &musique, gMusic, &onoff);
+                    password (&scores,gSound, &musique, gMusic, &onoff);
                     event.type = SDL_KEYDOWN;
                     event.key.keysym.sym = SDLK_1;
                     SDL_PushEvent (&event);

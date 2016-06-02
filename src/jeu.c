@@ -1,6 +1,13 @@
 #include "jeu.h"
 
-void fenetreJeu (T_MScore* score, char* cheminniveau, short difficulte, short r, short v, short b, Mix_Chunk* gSound, Mix_Music* gMusic, short* musique, short* onoff )
+Uint32 supprimerpoints(Uint32 intervalle, void *param) {
+    int* score = param;
+    *score = (*score)-1;
+    return intervalle;
+}
+
+
+void fenetreJeu (T_MScore* score, char* cheminniveau, short difficulte, short r, short v, short b, Mix_Chunk* gSound, Mix_Music* gMusic, short* musique, short* onoff, unsigned long scoreactuel )
 {
     SDL_Window* fenetre = NULL;
     SDL_Surface* surface = NULL;
@@ -9,6 +16,7 @@ void fenetreJeu (T_MScore* score, char* cheminniveau, short difficulte, short r,
     T_Cases plateau;
     int i=0, j=0,iselect=0,jselect=0;
     char chemin[100];
+    char scorelitteral[100];
     SDL_Event event;
     SDL_Rect rectImage;
     SDL_Rect rect;
@@ -20,6 +28,9 @@ void fenetreJeu (T_MScore* score, char* cheminniveau, short difficulte, short r,
     int positionsourisy = 0;
     int caseclicx = 0;
     int caseclicy = 0;
+    SDL_TimerID timer;
+    int tempsActuel = 0;
+    int tempsPrecedent = 0;
     
     SDL_Surface* QuitterTTF = NULL;
     SDL_Rect QuitterRect;
@@ -35,30 +46,37 @@ void fenetreJeu (T_MScore* score, char* cheminniveau, short difficulte, short r,
     SDL_Surface* tempsTTF = NULL;
     SDL_Rect tempsRect;
     SDL_Color tempsColor = {0, 0, 0, 0};
-    SDL_Surface* coupsTTF = NULL;
-    SDL_Rect coupsRect;
-    SDL_Color coupsColor = {0, 0, 0, 0};
+    SDL_Surface* scoreTTF = NULL;
+    SDL_Rect scoreRect;
+    SDL_Color scoreColor = {0, 0, 0, 0};
     
     
     
     TTF_Font* helvFont = NULL;
     helvFont = chargerPolice (helvFont, HELVFONT, 40);
+    /*
+     * Toutes les secondes, on appelle la fonction qui retire des points du au temps écoulé.
+     */
+    timer = SDL_AddTimer(1000, supprimerpoints, &scoreactuel);
 
     switch (difficulte)
     {
         case 0:
             plateau.taillexy = 4;
             taillecaseplateau = 100;
+            scoreactuel *= 1;
             break;
 
         case 1:
             plateau.taillexy = 8;
             taillecaseplateau = 50;
+            scoreactuel *= 30;
             break;
 
         case 3:
             plateau.taillexy = 10;
             taillecaseplateau = 40;
+            scoreactuel *= 150;
             break;
 
         default:
@@ -74,67 +92,17 @@ void fenetreJeu (T_MScore* score, char* cheminniveau, short difficulte, short r,
 
     if (snprintf (chemin, 95, "%s%s0.png", IMAGEJEUDIRECTORY, cheminniveau) < 0)
     {
-        fprintf (stderr, "Erreur Inconnu!" );
+        fprintf (stderr, "Erreur Inconnue!" );
         exit (EXIT_FAILURE);
     }
 
     image = chargerImage (image, chemin);
+    hauteur = (HAUTEUR_FENETRE / 2) - (image->h / 2);
 
     while (!continuer)
     {
-        SDL_WaitEvent (&event);
-        SDL_FillRect (surface, NULL, SDL_MapRGB (surface->format, r, v, b) );
-        rectImage.x = 2 * LARGEUR_FENETRE - image->w - 100;
-        hauteur = (HAUTEUR_FENETRE / 2) - (image->h / 2);
-        rectImage.y = hauteur;
-        SDL_BlitSurface (image, NULL, surface, &rectImage);
-        rect2.w = taillecaseplateau;
-        rect2.h = taillecaseplateau;
-        QuitterTTF = creerTexte (QuitterTTF, METHODE_RAPIDE, helvFont, "Abandonner", QuitterColor);
-        QuitterRect.x = (6*LARGEUR_FENETRE / 4) - (QuitterTTF->w / 2) + 20;
-        QuitterRect.y = (4 * HAUTEUR_FENETRE) / 4 +20;
-        SDL_BlitSurface (QuitterTTF, NULL, surface, &QuitterRect);
-        SDL_FreeSurface (QuitterTTF);
-        coupsTTF = creerTexte (coupsTTF, METHODE_RAPIDE, helvFont, "Nombre de coups : ", coupsColor);
-        coupsRect.x = 100;
-        coupsRect.y = (4 * HAUTEUR_FENETRE) / 4 +20;
-        SDL_BlitSurface (coupsTTF, NULL, surface, &coupsRect);
-        SDL_FreeSurface (coupsTTF);
-        tempsTTF = creerTexte (tempsTTF, METHODE_RAPIDE, helvFont, "Temps : ", tempsColor);
-        tempsRect.x = 100;
-        tempsRect.y = (4 * HAUTEUR_FENETRE) / 4 + 100;
-        SDL_BlitSurface (tempsTTF, NULL, surface, &tempsRect);
-        SDL_FreeSurface (tempsTTF);
-        cheatTTF = creerTexte (cheatTTF, METHODE_RAPIDE, helvFont, "cheat", cheatColor);
-        cheatRect.x = (6*LARGEUR_FENETRE / 4) - (cheatTTF->w / 2) + 20;
-        cheatRect.y = (4 * HAUTEUR_FENETRE) / 4 +50;
-        SDL_BlitSurface (cheatTTF, NULL, surface, &cheatRect);
-        SDL_FreeSurface (cheatTTF);
-
-        for (i = 0; i < plateau.taillexy; i++)
-        {
-            for (j = 0; j < plateau.taillexy; j++)
-            {
-                value = plateau.plateau[i][j];
-
-                if (value == plateau.selectionne)
-                {
-                    rect.x = positionsourisx;
-                    rect.y = positionsourisy;
-                }
-                else
-                {
-                    rect.x = 100 + (taillecaseplateau * (i) );
-                    rect.y = hauteur + (taillecaseplateau * (j) );
-                }
-
-                rect2.x = 0 + (taillecaseplateau * (value / plateau.taillexy) );
-                rect2.y = 0 + (taillecaseplateau * (value % plateau.taillexy) );
-                SDL_BlitSurface (image, &rect2, surface, &rect);
-            }
-        }
-
-        switch (event.type)
+        while (SDL_PollEvent (&event)) {
+                    switch (event.type)
         {
             case SDL_MOUSEBUTTONDOWN:
             playsound (3, gSound);
@@ -196,6 +164,8 @@ void fenetreJeu (T_MScore* score, char* cheminniveau, short difficulte, short r,
                                 }
                             }
                             printf ("Depos d'une case: %d,%d\n", caseclicx, caseclicy);
+                            printf ("-2 points\n");
+                            scoreactuel -= 2;
                             _debugT_Cases (&plateau);
                             if(validerCase(&plateau) && plateau.selectionne == -1)
                             {
@@ -243,20 +213,81 @@ void fenetreJeu (T_MScore* score, char* cheminniveau, short difficulte, short r,
             default:
                 break;
         }
+        }
+        
+        tempsActuel = SDL_GetTicks();
+        if (tempsActuel - tempsPrecedent < 20)
+        {
+            SDL_Delay(20 - (tempsActuel - tempsPrecedent));
+        }
+        tempsPrecedent = SDL_GetTicks();
+        
+        SDL_FillRect (surface, NULL, SDL_MapRGB (surface->format, r, v, b) );
+        rectImage.x = 2 * LARGEUR_FENETRE - image->w - 100;
+        rectImage.y = hauteur;
+        SDL_BlitSurface (image, NULL, surface, &rectImage);
+        rect2.w = taillecaseplateau;
+        rect2.h = taillecaseplateau;
+        QuitterTTF = creerTexte (QuitterTTF, METHODE_RAPIDE, helvFont, "Abandonner", QuitterColor);
+        QuitterRect.x = (6*LARGEUR_FENETRE / 4) - (QuitterTTF->w / 2) + 20;
+        QuitterRect.y = (4 * HAUTEUR_FENETRE) / 4 +20;
+        SDL_BlitSurface (QuitterTTF, NULL, surface, &QuitterRect);
+        SDL_FreeSurface (QuitterTTF);
+        snprintf(scorelitteral,98,"Score : %lu",scoreactuel);
+        scoreTTF = creerTexte (scoreTTF, METHODE_RAPIDE, helvFont,scorelitteral , scoreColor);
+        scoreRect.x = 100;
+        scoreRect.y = (4 * HAUTEUR_FENETRE) / 4 +20;
+        SDL_BlitSurface (scoreTTF, NULL, surface, &scoreRect);
+        SDL_FreeSurface (scoreTTF);
+        tempsTTF = creerTexte (tempsTTF, METHODE_RAPIDE, helvFont, "Temps : ", tempsColor);
+        tempsRect.x = 100;
+        tempsRect.y = (4 * HAUTEUR_FENETRE) / 4 + 100;
+        SDL_BlitSurface (tempsTTF, NULL, surface, &tempsRect);
+        SDL_FreeSurface (tempsTTF);
+        cheatTTF = creerTexte (cheatTTF, METHODE_RAPIDE, helvFont, "cheat", cheatColor);
+        cheatRect.x = (6*LARGEUR_FENETRE / 4) - (cheatTTF->w / 2) + 20;
+        cheatRect.y = (4 * HAUTEUR_FENETRE) / 4 +50;
+        SDL_BlitSurface (cheatTTF, NULL, surface, &cheatRect);
+        SDL_FreeSurface (cheatTTF);
+
+        for (i = 0; i < plateau.taillexy; i++)
+        {
+            for (j = 0; j < plateau.taillexy; j++)
+            {
+                value = plateau.plateau[i][j];
+
+                if (value == plateau.selectionne)
+                {
+                    rect.x = positionsourisx;
+                    rect.y = positionsourisy;
+                }
+                else
+                {
+                    rect.x = 100 + (taillecaseplateau * (i) );
+                    rect.y = hauteur + (taillecaseplateau * (j) );
+                }
+
+                rect2.x = 0 + (taillecaseplateau * (value / plateau.taillexy) );
+                rect2.y = 0 + (taillecaseplateau * (value % plateau.taillexy) );
+                SDL_BlitSurface (image, &rect2, surface, &rect);
+            }
+        }
 
         drawGrille (surface, 100, hauteur, taillecaseplateau, plateau.taillexy );
         SDL_UpdateWindowSurface (fenetre);
     }
     
     
-
+    SDL_RemoveTimer(timer);
     libererPolice (helvFont);
     SDL_DestroyWindow (fenetre);
     fenetre = NULL;
     if(win==1) {
         printf("C'est gagne\n");
         SDL_Delay(50);
-        wine(score,gSound,gMusic, musique, onoff);
+        printf ("+2 points car depot case valide\n");
+        scoreactuel+=2;
+        wine(score,gSound,gMusic, musique, onoff,scoreactuel);
         
     }
     else if (win == 0) {
@@ -409,11 +440,13 @@ void drawGrille (SDL_Surface* surface, int posX, int posY, int taillecase, int n
         }
 }
 
-void wine (T_MScore* score, Mix_Chunk* gSound, Mix_Music* gMusic, short* musique, short* onoff)
+void wine (T_MScore* score, Mix_Chunk* gSound, Mix_Music* gMusic, short* musique, short* onoff, unsigned long scorefinal)
 {
     SDL_Window* fenetre = NULL;
     SDL_Surface* surface = NULL;
     char texte[PSEUDOMAX] = {0};
+    char scorelitteral[100];
+    snprintf(scorelitteral,98,"Votre score : %lu",scorefinal);
     size_t passlen = 0, l;
     SDL_bool done = SDL_FALSE;
     SDL_Rect rect;
@@ -433,7 +466,6 @@ void wine (T_MScore* score, Mix_Chunk* gSound, Mix_Music* gMusic, short* musique
     pixFont = chargerPolice (pixFont, PIXFONT, 100);
     contfuFont = chargerPolice (contfuFont, CONTFUFONT, 40);
     SDL_Surface* surfaceTexte = NULL;
-    SDL_Color color2 = {255, 255, 255, 0};
     SDL_Color color = {0, 0, 0, 0};
     fenetre = creerFenetre (fenetre, TITREJEU, LARGEUR_FENETRE, HAUTEUR_FENETRE);
     SDL_UpdateWindowSurface (fenetre);
@@ -510,14 +542,9 @@ void wine (T_MScore* score, Mix_Chunk* gSound, Mix_Music* gMusic, short* musique
         rect.y = HAUTEUR_FENETRE / 8 -20;
         SDL_BlitSurface (surfaceTexte, NULL, surface, &rect);
         SDL_FreeSurface (surfaceTexte);
-        surfaceTexte = creerTexte (surfaceTexte, METHODE_BELLE, contfuFont, "Votre score : ", color);
+        surfaceTexte = creerTexte (surfaceTexte, METHODE_BELLE, contfuFont, scorelitteral, color);
         rect.x = (2*LARGEUR_FENETRE / 4) - (surfaceTexte->w / 2) - 70;
         rect.y = 2*HAUTEUR_FENETRE / 8 +10;
-        SDL_BlitSurface (surfaceTexte, NULL, surface, &rect);
-        SDL_FreeSurface (surfaceTexte);
-        surfaceTexte = creerTexte (surfaceTexte, METHODE_BELLE, contfuFont, "* score *", color);
-        rect.x = (3*LARGEUR_FENETRE / 4) - (surfaceTexte->w / 2) -45;
-        rect.y = 2*HAUTEUR_FENETRE / 8 + 10;
         SDL_BlitSurface (surfaceTexte, NULL, surface, &rect);
         SDL_FreeSurface (surfaceTexte);
         pseudoTTF = creerTexte (pseudoTTF, METHODE_RAPIDE, helvFont, "Veuillez entrer votre pseudo :", pseudoColor);

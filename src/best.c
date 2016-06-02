@@ -31,7 +31,7 @@ void fenetreMScore (SDL_Window* fenetre, T_MScore* score, Mix_Chunk* gSound)
         SDL_BlitSurface (surfaceTexte, NULL, surface, &rect);
         SDL_FreeSurface (surfaceTexte);
         surfaceTexte = NULL;
-        sprintf (Nom, "%d", score->Scores[i].Score );
+        sprintf (Nom, "%lu", score->Scores[i].Score );
         surfaceTexte = creerTexte (surfaceTexte, METHODE_BELLE, helvFont, Nom , color);
         rect = rangScores (surfaceTexte, i + 3, PLACEDROITE);
         SDL_BlitSurface (surfaceTexte, NULL, surface, &rect);
@@ -122,7 +122,7 @@ void resetScores (T_MScore* score)
     score->Scores[2].Score = 100;
     score->Scores[3].Score = 10;
     score->Scores[4].Score = 1;
-    strcpy (score->Scores[0].Nom, "JeSuisUneLongueCha1");
+    strcpy (score->Scores[0].Nom, "hardcore");
     strcpy (score->Scores[1].Nom, "JeSuisUneAutreChai2");
     strcpy (score->Scores[2].Nom, "JeSuisUneChaine   3");
     strcpy (score->Scores[3].Nom, "Petite Chaine");

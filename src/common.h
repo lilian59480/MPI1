@@ -23,7 +23,6 @@
 #define SCOREFILEBINARY "./score"
 
 #define IMAGEJEUDIRECTORY "./img/puzzle/"
-#define IMAGEJEUSECRETDIRECTORY "./img/puzzle/.secret/"
 
 #define SONYEP "./sound/yep.wav"
 #define SONNOP "./sound/nop.wav"
@@ -31,11 +30,9 @@
 #define SONLOOSE "./sound/loose.wav"
 
 #define MUSIQUETES "./sound/tes.mp3"
-/* TODO : CONVERTIR EN MP3!!! -> flemme*/
-#define MUSIQUECUBAN "./sound/cubanmusic2.wav"
+#define MUSIQUECUBAN "./sound/cubanmusic2.mp3"
 #define MUSIQUEGALAXY "./sound/galaxy2.mp3"
-/* TODO : CONVERTIR EN MP3!!! -> flemme */
-#define MUSIQUECHIANTE "./sound/chiant.wav"
+#define MUSIQUECHIANTE "./sound/chiant.mp3"
 #define MUSIQUERICK "./sound/rick.mp3"
 #define MUSIQUELOVE "./sound/love.mp3"
 #define MUSIQUEWIN "./sound/win.mp3"
@@ -49,7 +46,7 @@
 #define METHODE_BELLE 1
 
 typedef char T_Nom[PSEUDOMAX];
-typedef unsigned int T_Score;
+typedef unsigned long T_Score;
 
 typedef struct
 {

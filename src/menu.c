@@ -72,7 +72,7 @@ void fenetreChoixNiveau (SDL_Window* fenetre, T_MScore* score, Mix_Chunk* gSound
 
                 if (clickMenu (helvFont, "Chat", ChatTTFW, ChatTTFH, event, ChatRect) )
                 {
-                    fenetreJeu (score, "Chat/", dificulte, 255, 0, 255, gSound, gMusic, musique, onoff);
+                    fenetreJeu (score, "Chat/", dificulte, 255, 0, 255, gSound, gMusic, musique, onoff,1500);
                     event.type = SDL_KEYDOWN;
                     event.key.keysym.sym = SDLK_1;
                     SDL_PushEvent (&event);
@@ -81,7 +81,7 @@ void fenetreChoixNiveau (SDL_Window* fenetre, T_MScore* score, Mix_Chunk* gSound
 
                 else if (clickMenu (helvFont, "Chien", ChienTTFW, ChienTTFH, event, ChienRect) )
                 {
-                    fenetreJeu (score, "Chien/", dificulte, 255, 0, 255, gSound, gMusic, musique, onoff);
+                    fenetreJeu (score, "Chien/", dificulte, 255, 0, 255, gSound, gMusic, musique, onoff,1500);
                     event.type = SDL_KEYDOWN;
                     event.key.keysym.sym = SDLK_1;
                     SDL_PushEvent (&event);
@@ -90,7 +90,7 @@ void fenetreChoixNiveau (SDL_Window* fenetre, T_MScore* score, Mix_Chunk* gSound
 
                 else if (clickMenu (helvFont, "Paysage", PaysageTTFW, PaysageTTFH, event, PaysageRect) )
                 {
-                    fenetreJeu (score, "Paysage/", dificulte, 255, 0, 255, gSound, gMusic, musique, onoff);
+                    fenetreJeu (score, "Paysage/", dificulte, 255, 0, 255, gSound, gMusic, musique, onoff,1500);
                     event.type = SDL_KEYDOWN;
                     event.key.keysym.sym = SDLK_1;
                     SDL_PushEvent (&event);
@@ -99,7 +99,7 @@ void fenetreChoixNiveau (SDL_Window* fenetre, T_MScore* score, Mix_Chunk* gSound
 
                 else if (clickMenu (helvFont, "IG2I", IG2ITTFW, IG2ITTFH, event, IG2IRect) )
                 {
-                    fenetreJeu (score, "IG2I/", dificulte, 255, 0, 255, gSound, gMusic, musique, onoff);
+                    fenetreJeu (score, "IG2I/", dificulte, 255, 0, 255, gSound, gMusic, musique, onoff,1500);
                     event.type = SDL_KEYDOWN;
                     event.key.keysym.sym = SDLK_1;
                     SDL_PushEvent (&event);
