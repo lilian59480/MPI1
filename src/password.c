@@ -166,7 +166,18 @@ void valider (char* texte,T_MScore* score, Mix_Chunk* gSound, short* musique, Mi
         printf ("c est bien\n");
         playsound (1, gSound);
         SDL_Delay (1000);
-        fenetreJeu (score, "Hardcore/", 3, 255, 255, 255, gSound, gMusic, musique, onoff,	14316556);
+        fenetreJeu (score, "Hardcore/", 3, 255, 255, 255, gSound, gMusic, musique, onoff,	14316556, 0);
+        *done = SDL_TRUE;
+    }
+    else if (strcmp (texte, "kubiak") == 0)
+    {
+        printf ("c est bien\n");
+        playsound (1, gSound);
+        SDL_Delay (1000);
+        *musique = 7;
+        *onoff = 0;
+        playmusic (*musique, gMusic);
+        fenetreJeu (score, "secret/", 0, 255,105,180, gSound, gMusic, musique, onoff,	2000, 1);
         *done = SDL_TRUE;
     }
     else

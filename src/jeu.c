@@ -7,7 +7,7 @@ Uint32 supprimerpoints(Uint32 intervalle, void *param) {
 }
 
 
-void fenetreJeu (T_MScore* score, char* cheminniveau, short difficulte, short r, short v, short b, Mix_Chunk* gSound, Mix_Music* gMusic, short* musique, short* onoff, unsigned long scoreactuel )
+void fenetreJeu (T_MScore* score, char* cheminniveau, short difficulte, short r, short v, short b, Mix_Chunk* gSound, Mix_Music* gMusic, short* musique, short* onoff, unsigned long scoreactuel, short mdp)
 {
     SDL_Window* fenetre = NULL;
     SDL_Surface* surface = NULL;
@@ -223,6 +223,7 @@ void fenetreJeu (T_MScore* score, char* cheminniveau, short difficulte, short r,
         tempsPrecedent = SDL_GetTicks();
         
         SDL_FillRect (surface, NULL, SDL_MapRGB (surface->format, r, v, b) );
+        if (mdp == 1) coeurcoeur(surface);
         rectImage.x = 2 * LARGEUR_FENETRE - image->w - 100;
         rectImage.y = hauteur;
         SDL_BlitSurface (image, NULL, surface, &rectImage);
@@ -272,7 +273,8 @@ void fenetreJeu (T_MScore* score, char* cheminniveau, short difficulte, short r,
                 SDL_BlitSurface (image, &rect2, surface, &rect);
             }
         }
-
+        
+        
         drawGrille (surface, 100, hauteur, taillecaseplateau, plateau.taillexy );
         SDL_UpdateWindowSurface (fenetre);
     }
@@ -439,6 +441,187 @@ void drawGrille (SDL_Surface* surface, int posX, int posY, int taillecase, int n
             drawEmptyRect (surface, i * taillecase + posX, j * taillecase + posY, taillecase);
         }
 }
+
+
+/*         POUR LES COEURS       http://anomaly.developpez.com/tutoriel/sdl/partie2/   */
+
+void setPixel(SDL_Surface* surf,int x, int y, Uint32 coul)
+{
+  *((Uint32*)(surf->pixels) + x + y * surf->w) = coul;
+}
+
+void setPixelVerif(SDL_Surface* surf,int x, int y, Uint32 coul)
+{
+  if (x >= 0 && x < surf->w &&
+      y >= 0 && y < surf->h)
+    setPixel(surf, x, y, coul);
+}
+
+
+void echangerEntiers(int* x, int* y)
+{
+  int t = *x;
+  *x = *y;
+  *y = t;
+}
+ 
+void ligne(SDL_Surface* surf, int x1, int y1, int x2, int y2, Uint32 coul)
+{
+  int d, dx, dy, aincr, bincr, xincr, yincr, x, y;
+ 
+  if (abs(x2 - x1) < abs(y2 - y1)) {
+    /* parcours par l'axe vertical */
+ 
+    if (y1 > y2) {
+      echangerEntiers(&x1, &x2);
+      echangerEntiers(&y1, &y2);
+    }
+ 
+    xincr = x2 > x1 ? 1 : -1;
+    dy = y2 - y1;
+    dx = abs(x2 - x1);
+    d = 2 * dx - dy;
+    aincr = 2 * (dx - dy);
+    bincr = 2 * dx;
+    x = x1;
+    y = y1;
+ 
+    setPixelVerif(surf, x, y, coul);
+ 
+    for (y = y1+1; y <= y2; ++y) {
+      if (d >= 0) {
+	x += xincr;
+	d += aincr;
+      } else
+	d += bincr;
+ 
+      setPixelVerif(surf, x, y, coul);
+    }
+ 
+  } else {
+    /* parcours par l'axe horizontal */
+    
+    if (x1 > x2) {
+      echangerEntiers(&x1, &x2);
+      echangerEntiers(&y1, &y2);
+    }
+ 
+    yincr = y2 > y1 ? 1 : -1;
+    dx = x2 - x1;
+    dy = abs(y2 - y1);
+    d = 2 * dy - dx;
+    aincr = 2 * (dy - dx);
+    bincr = 2 * dy;
+    x = x1;
+    y = y1;
+ 
+    setPixelVerif(surf, x, y, coul);
+ 
+    for (x = x1+1; x <= x2; ++x) {
+      if (d >= 0) {
+	y += yincr;
+	d += aincr;
+      } else
+	d += bincr;
+ 
+      setPixelVerif(surf, x, y, coul);
+    }
+  }    
+}
+
+void ligneHorizontale(SDL_Surface* surf,int x, int y, int w, Uint32 coul)
+{
+  SDL_Rect r;
+ 
+  r.x = x;
+  r.y = y;
+  r.w = w;
+  r.h = 1;
+ 
+  SDL_FillRect(surf, &r, coul);
+}
+ 
+void ligneVerticale(SDL_Surface* surf,int x, int y, int h, Uint32 coul)
+{
+  SDL_Rect r;
+ 
+  r.x = x;
+  r.y = y;
+  r.w = 1;
+  r.h = h;
+ 
+  SDL_FillRect(surf, &r, coul);
+}
+
+
+void disque(SDL_Surface* surf,int cx, int cy, int rayon, int coul)
+{
+  int d, y, x;
+ 
+  d = 3 - (2 * rayon);
+  x = 0;
+  y = rayon;
+ 
+  while (y >= x) {
+    ligneHorizontale(surf, cx - x, cy - y, 2 * x + 1, coul);
+    ligneHorizontale(surf, cx - x, cy + y, 2 * x + 1, coul);
+    ligneHorizontale(surf, cx - y, cy - x, 2 * y + 1, coul);
+    ligneHorizontale(surf, cx - y, cy + x, 2 * y + 1, coul);
+ 
+    if (d < 0)
+      d = d + (4 * x) + 6;
+    else {
+      d = d + 4 * (x - y) + 10;
+      y--;
+    }
+ 
+    x++;
+  }
+}
+
+void heart(SDL_Surface* surface, short x, short y)
+{
+        disque(surface ,x, y, 50, SDL_MapRGB (surface->format, 255, 0, 0));
+        disque(surface ,x+100, y, 50, SDL_MapRGB (surface->format, 255, 0, 0));
+        disque(surface ,x + 50, y + 50, 45, SDL_MapRGB (surface->format, 255, 0, 0));
+        short xc = x - 40, xc2 = x + 50, yc=y+30, yc2=y+150;
+        for(xc = x-40; xc <= xc2; xc++)
+        {
+            ligne(surface, xc, yc, xc2, yc2,SDL_MapRGB (surface->format, 255, 0, 0));
+            
+            yc2--;
+        }
+        
+        xc = x +140; yc2=y+150;
+        for(xc = x +140; xc >= xc2; xc--)
+        {
+            ligne(surface, xc, yc, xc2, yc2,SDL_MapRGB (surface->format, 255, 0, 0));
+            yc2--;
+        }
+}
+
+
+void coeurcoeur(SDL_Surface* surface)
+{
+    short i,j;
+    for (i=0; i<= (3*HAUTEUR_FENETRE/2); i=i+200)
+    {
+        for(j=0; j<= (LARGEUR_FENETRE*2); j=j+200)
+        {
+            heart(surface, j, i);
+        }
+    }
+}
+
+
+
+
+
+
+
+
+
+/*                       ECRAN FIN                 */
 
 void wine (T_MScore* score, Mix_Chunk* gSound, Mix_Music* gMusic, short* musique, short* onoff, unsigned long scorefinal)
 {
