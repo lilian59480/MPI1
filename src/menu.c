@@ -41,7 +41,6 @@ void fenetreChoixNiveau (SDL_Window* fenetre, T_MScore* score, Mix_Chunk* gSound
     SDL_Color RetourColor = {0, 0, 0, 0};
     int RetourTTFW = 0;
     int RetourTTFH = 0;
-    
     SDL_Surface* easyTTF = NULL;
     SDL_Rect easyRect;
     int easyTTFW = 0;
@@ -54,9 +53,7 @@ void fenetreChoixNiveau (SDL_Window* fenetre, T_MScore* score, Mix_Chunk* gSound
     SDL_Rect durRect;
     int durTTFW = 0;
     int durTTFH = 0;
-    
     short dificulte = 0;
-    
     event.type = SDL_KEYDOWN;
     event.key.keysym.sym = SDLK_1;
     SDL_PushEvent (&event);
@@ -72,40 +69,36 @@ void fenetreChoixNiveau (SDL_Window* fenetre, T_MScore* score, Mix_Chunk* gSound
 
                 if (clickMenu (helvFont, "Chat", ChatTTFW, ChatTTFH, event, ChatRect) )
                 {
-                    fenetreJeu (score, "Chat/", dificulte, 255, 0, 255, gSound, gMusic, musique, onoff,1500, 0);
+                    fenetreJeu (score, "Chat/", dificulte, 255, 0, 255, gSound, gMusic, musique, onoff, 1500, 0);
                     event.type = SDL_KEYDOWN;
                     event.key.keysym.sym = SDLK_1;
                     SDL_PushEvent (&event);
                     return;
                 }
-
                 else if (clickMenu (helvFont, "Chien", ChienTTFW, ChienTTFH, event, ChienRect) )
                 {
-                    fenetreJeu (score, "Chien/", dificulte, 255, 0, 255, gSound, gMusic, musique, onoff,1500, 0);
+                    fenetreJeu (score, "Chien/", dificulte, 255, 0, 255, gSound, gMusic, musique, onoff, 1500, 0);
                     event.type = SDL_KEYDOWN;
                     event.key.keysym.sym = SDLK_1;
                     SDL_PushEvent (&event);
                     return;
                 }
-
                 else if (clickMenu (helvFont, "Paysage", PaysageTTFW, PaysageTTFH, event, PaysageRect) )
                 {
-                    fenetreJeu (score, "Paysage/", dificulte, 255, 0, 255, gSound, gMusic, musique, onoff,1500, 0);
+                    fenetreJeu (score, "Paysage/", dificulte, 255, 0, 255, gSound, gMusic, musique, onoff, 1500, 0);
                     event.type = SDL_KEYDOWN;
                     event.key.keysym.sym = SDLK_1;
                     SDL_PushEvent (&event);
                     return;
                 }
-
                 else if (clickMenu (helvFont, "IG2I", IG2ITTFW, IG2ITTFH, event, IG2IRect) )
                 {
-                    fenetreJeu (score, "IG2I/", dificulte, 255, 0, 255, gSound, gMusic, musique, onoff,1500, 0);
+                    fenetreJeu (score, "IG2I/", dificulte, 255, 0, 255, gSound, gMusic, musique, onoff, 1500, 0);
                     event.type = SDL_KEYDOWN;
                     event.key.keysym.sym = SDLK_1;
                     SDL_PushEvent (&event);
                     return;
                 }
-
                 else if (clickMenu (helvFont, "Retour", RetourTTFW, RetourTTFH, event, RetourRect) )
                 {
                     return;
@@ -120,19 +113,21 @@ void fenetreChoixNiveau (SDL_Window* fenetre, T_MScore* score, Mix_Chunk* gSound
                 }
                 else if (clickMenu (helvFont, "Difficile", durTTFW, durTTFH, event, durRect) && (dificulte != 3) )
                 {
-                   dificulte = 3;
+                    dificulte = 3;
                 }
+
                 break;
 
             case SDL_QUIT:
                 exit (EXIT_SUCCESS);
                 break;
-                
+
             case SDL_KEYDOWN :
                 if (event.key.keysym.sym == SDLK_ESCAPE)
                 {
-                   return;
+                    return;
                 }
+
                 break;
 
             case SDL_MOUSEMOTION:
@@ -161,12 +156,12 @@ void fenetreChoixNiveau (SDL_Window* fenetre, T_MScore* score, Mix_Chunk* gSound
         SDL_FreeSurface (easyTTF);
         moyTTF = creerTexte (moyTTF, METHODE_RAPIDE, helvFont, "Moyen", (dificulte == 1) ? rouge : noir);
         moyRect = rangMenu (moyTTF, 2);
-        moyRect.x = (2*LARGEUR_FENETRE / 4) - (moyTTF->w / 2);
+        moyRect.x = (2 * LARGEUR_FENETRE / 4) - (moyTTF->w / 2);
         SDL_BlitSurface (moyTTF, NULL, surface, &moyRect);
         SDL_FreeSurface (moyTTF);
         durTTF = creerTexte (durTTF, METHODE_RAPIDE, helvFont, "Difficile", (dificulte == 3) ? rouge : noir);
         durRect = rangMenu (durTTF, 2);
-        durRect.x = (3*LARGEUR_FENETRE/4) - (durTTF->w / 2);
+        durRect.x = (3 * LARGEUR_FENETRE / 4) - (durTTF->w / 2);
         SDL_BlitSurface (durTTF, NULL, surface, &durRect);
         SDL_FreeSurface (durTTF);
         ChatTTF = creerTexte (ChatTTF, METHODE_RAPIDE, helvFont, "Chat", ChatColor);

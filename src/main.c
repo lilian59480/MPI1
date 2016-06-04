@@ -53,12 +53,14 @@ int main (int argc, char** argv)
     int i;
     /* Lecture des parametres envoye par le Shell */
     lireParamShell (argc, argv);
+
     /* Recuperation des scores */
     if (!lireMeilleurScore (&scores) )
     {
         /* Pour le moment, on reinitialise, mais dans la suite, il faudra afficher un message d'erreur en cas d'erreur*/
         resetScores (&scores);
     }
+
     /* Initialisation de la SDL2 et SDL_TTF */
     if (SDL_Init (SDL_INIT_VIDEO) != 0 )
     {
@@ -81,61 +83,86 @@ int main (int argc, char** argv)
 
     /* SDL2 Fonctionel Recuperation d'informations utiles (?) */
     printf ("OS: %s \nRam disponible: %d \n", SDL_GetPlatform(), SDL_GetSystemRAM() );
-
-    pWindow = creerFenetre (pWindow, "Chargement : "TITREJEU, LARGEUR_FENETRE/2, HAUTEUR_FENETRE/2);
+    pWindow = creerFenetre (pWindow, "Chargement : "TITREJEU, LARGEUR_FENETRE / 2, HAUTEUR_FENETRE / 2);
     surface = SDL_GetWindowSurface (pWindow);
     pix2Font = chargerPolice (pix2Font, PIXFONT, 50);
     contfu2Font = chargerPolice (contfu2Font, CONTFUFONT, 40);
     helv2Font = chargerPolice (helv2Font, HELVFONT, 20);
-    for ( i = 0; i < LARGEUR_FENETRE; i+= 40)
+
+    for ( i = 0; i < LARGEUR_FENETRE; i += 40)
     {
         SDL_FillRect (surface, NULL, SDL_MapRGB (surface->format, 63, 72, 204) );
         titreTTF = creerTexte (titreTTF, METHODE_BELLE, pix2Font, TITREJEU, TitreColor);
-        titreRect.x = (LARGEUR_FENETRE / 4) - (titreTTF->w / 2)+3;
-        if (i<240) titreRect.y = -40 + i/2 +3; else titreRect.y = 83;
+        titreRect.x = (LARGEUR_FENETRE / 4) - (titreTTF->w / 2) + 3;
+
+        if (i < 240)
+        {
+            titreRect.y = -40 + i / 2 + 3;
+        }
+        else
+        {
+            titreRect.y = 83;
+        }
+
         SDL_BlitSurface (titreTTF, NULL, surface, &titreRect);
         SDL_FreeSurface (titreTTF);
         titreTTF = creerTexte (titreTTF, METHODE_BELLE, pix2Font, TITREJEU, TitreColor2);
         titreRect.x = (LARGEUR_FENETRE / 4) - (titreTTF->w / 2);
-        if (i<240) titreRect.y = -40 + i/2; else titreRect.y = 80;
-        if (i>280) {stitreTTF = creerTexte (stitreTTF, METHODE_BELLE, contfu2Font, "PUZZLE", TitreColors);
-        stitreRect.x = (LARGEUR_FENETRE / 4) - (stitreTTF->w / 2);
-        stitreRect.y = 80 + 40;
-        SDL_BlitSurface (stitreTTF, NULL, surface, &stitreRect);
-        SDL_FreeSurface (stitreTTF);}
-        printf (" %d - %d \n",titreRect.y,i );
+
+        if (i < 240)
+        {
+            titreRect.y = -40 + i / 2;
+        }
+        else
+        {
+            titreRect.y = 80;
+        }
+
+        if (i > 280)
+        {
+            stitreTTF = creerTexte (stitreTTF, METHODE_BELLE, contfu2Font, "PUZZLE", TitreColors);
+            stitreRect.x = (LARGEUR_FENETRE / 4) - (stitreTTF->w / 2);
+            stitreRect.y = 80 + 40;
+            SDL_BlitSurface (stitreTTF, NULL, surface, &stitreRect);
+            SDL_FreeSurface (stitreTTF);
+        }
+
+        printf (" %d - %d \n", titreRect.y, i );
         SDL_BlitSurface (titreTTF, NULL, surface, &titreRect);
         SDL_FreeSurface (titreTTF);
-        short couleur = (i/2) % 75;
+        short couleur = (i / 2) % 75;
         SDL_Rect ligneHaut;
         ligneHaut.x = 0;
-        ligneHaut.y = HAUTEUR_FENETRE/2 - 20;
-        ligneHaut.w = i/2;
+        ligneHaut.y = HAUTEUR_FENETRE / 2 - 20;
+        ligneHaut.w = i / 2;
         ligneHaut.h = 20;
-        SDL_FillRect (surface, &ligneHaut, SDL_MapRGB (surface->format, 75-couleur, 255-couleur, couleur) );
-        if (i>560){titreTTF = creerTexte (titreTTF, METHODE_BELLE, helv2Font, "rick", TitreColor2);
-        titreRect.x = (LARGEUR_FENETRE / 4) - (titreTTF->w / 2);
-        titreRect.y = HAUTEUR_FENETRE /2 - 20;
-        SDL_BlitSurface (titreTTF, NULL, surface, &titreRect);
-        SDL_FreeSurface (titreTTF);}
-        SDL_UpdateWindowSurface(pWindow);
-        SDL_Delay(150);
+        SDL_FillRect (surface, &ligneHaut, SDL_MapRGB (surface->format, 75 - couleur, 255 - couleur, couleur) );
+
+        if (i > 560)
+        {
+            titreTTF = creerTexte (titreTTF, METHODE_BELLE, helv2Font, "rick", TitreColor2);
+            titreRect.x = (LARGEUR_FENETRE / 4) - (titreTTF->w / 2);
+            titreRect.y = HAUTEUR_FENETRE / 2 - 20;
+            SDL_BlitSurface (titreTTF, NULL, surface, &titreRect);
+            SDL_FreeSurface (titreTTF);
+        }
+
+        SDL_UpdateWindowSurface (pWindow);
+        SDL_Delay (150);
     }
+
     playmusic (musique, gMusic);
     libererPolice (pix2Font);
     libererPolice (contfu2Font);
     libererPolice (helv2Font);
-    SDL_Delay(550);
-    
-    SDL_FreeSurface(surface);
-    SDL_DestroyWindow(pWindow);
+    SDL_Delay (550);
+    SDL_FreeSurface (surface);
+    SDL_DestroyWindow (pWindow);
     pWindow = NULL;
-
     pWindow = creerFenetre (pWindow, TITREJEU, LARGEUR_FENETRE, HAUTEUR_FENETRE);
     helvFont = chargerPolice (helvFont, HELVFONT, 40);
     pixFont = chargerPolice (pixFont, PIXFONT, 70);
     contfuFont = chargerPolice (contfuFont, CONTFUFONT, 60);
-    
 
     while (continuer)
     {
@@ -164,7 +191,7 @@ int main (int argc, char** argv)
 
                 if (clickMenu (helvFont, "Mot de Passe", PasswordTTFW, PasswordTTFH, event, PasswordRect) )
                 {
-                    password (&scores,gSound, &musique, gMusic, &onoff);
+                    password (&scores, gSound, &musique, gMusic, &onoff);
                     event.type = SDL_KEYDOWN;
                     event.key.keysym.sym = SDLK_1;
                     SDL_PushEvent (&event);

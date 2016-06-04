@@ -1,6 +1,6 @@
 #include "password.h"
 
-int password (T_MScore* score,Mix_Chunk* gSound, short* musique, Mix_Music* gMusic, short* onoff)
+int password (T_MScore* score, Mix_Chunk* gSound, short* musique, Mix_Music* gMusic, short* onoff)
 {
     SDL_Window* fenetrepass = NULL;
     char texte[PASSMAX] = {0};
@@ -54,7 +54,7 @@ int password (T_MScore* score,Mix_Chunk* gSound, short* musique, Mix_Music* gMus
                 else if (ev.key.keysym.sym == SDLK_RETURN)
                 {
                     printf ("testvalider\n");
-                    valider (texte, score,gSound, musique, gMusic, onoff, &done);
+                    valider (texte, score, gSound, musique, gMusic, onoff, &done);
                 }
 
                 break;
@@ -78,7 +78,7 @@ int password (T_MScore* score,Mix_Chunk* gSound, short* musique, Mix_Music* gMus
                 if (clickMenu (helvFont, "Valider", ValiderTTFW, ValiderTTFH, ev, ValiderRect) )
                 {
                     printf ("testvalider\n");
-                    valider (texte, score,gSound, musique, gMusic, onoff, &done);
+                    valider (texte, score, gSound, musique, gMusic, onoff, &done);
                     ev.type = SDL_KEYDOWN;
                     ev.key.keysym.sym = SDLK_1;
                     SDL_PushEvent (&ev);
@@ -134,7 +134,7 @@ int password (T_MScore* score,Mix_Chunk* gSound, short* musique, Mix_Music* gMus
     return 0;
 }
 
-void valider (char* texte,T_MScore* score, Mix_Chunk* gSound, short* musique, Mix_Music* gMusic, short* onoff, SDL_bool* done)
+void valider (char* texte, T_MScore* score, Mix_Chunk* gSound, short* musique, Mix_Music* gMusic, short* onoff, SDL_bool* done)
 {
     if (strcmp (texte, "yolo") == 0)
     {
@@ -166,7 +166,7 @@ void valider (char* texte,T_MScore* score, Mix_Chunk* gSound, short* musique, Mi
         printf ("c est bien\n");
         playsound (1, gSound);
         SDL_Delay (1000);
-        fenetreJeu (score, "Hardcore/", 3, 255, 255, 255, gSound, gMusic, musique, onoff,	14316556, 0);
+        fenetreJeu (score, "Hardcore/", 3, 255, 255, 255, gSound, gMusic, musique, onoff,   14316556, 0);
         *done = SDL_TRUE;
     }
     else if (strcmp (texte, "kubiak") == 0)
@@ -177,7 +177,7 @@ void valider (char* texte,T_MScore* score, Mix_Chunk* gSound, short* musique, Mi
         *musique = 7;
         *onoff = 0;
         playmusic (*musique, gMusic);
-        fenetreJeu (score, "secret/", 0, 255,105,180, gSound, gMusic, musique, onoff,	2000, 1);
+        fenetreJeu (score, "secret/", 0, 255, 105, 180, gSound, gMusic, musique, onoff,   2000, 1);
         *done = SDL_TRUE;
     }
     else
