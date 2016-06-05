@@ -39,6 +39,7 @@
 #define MUSIQUELOVE "./sound/love.mp3"
 #define MUSIQUEWIN "./sound/win.mp3"
 #define MUSIQUENYANCAT "./sound/cat.mp3"
+#define MUSIQUEHEY "./sound/hey.mp3"
 
 #define LARGEUR_FENETRE 640
 #define HAUTEUR_FENETRE 480

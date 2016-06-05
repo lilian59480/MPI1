@@ -174,9 +174,8 @@ void valider (char* texte, Mix_Chunk* gSound, short* musique, Mix_Music* gMusic,
         printf ("c est bien\n");
         playsound (1, gSound);
         SDL_Delay (1000);
-        *musique = 8;
         *onoff = 0;
-        playmusic (*musique, gMusic);
+        playmusic (8, gMusic);
         fenetreJeu ("Cat/", 0, 255, 255, 255, gSound, gMusic, musique, onoff, 1450, 2);
         *done = SDL_TRUE;
     }
@@ -185,15 +184,24 @@ void valider (char* texte, Mix_Chunk* gSound, short* musique, Mix_Music* gMusic,
         printf ("c est bien\n");
         playsound (1, gSound);
         SDL_Delay (1000);
-        *musique = 7;
         *onoff = 0;
-        playmusic (*musique, gMusic);
+        playmusic (7, gMusic);
         fenetreJeu ( "secret/", 0, 255, 105, 180, gSound, gMusic, musique, onoff,   2000, 1);
+        *done = SDL_TRUE;
+    }
+    else if (strcmp (texte, "heyayayay") == 0)
+    {
+        printf ("c est bien\n");
+        playsound (1, gSound);
+        SDL_Delay (1000);
+        *onoff = 0;
+        playmusic (9, gMusic);
+        fenetreJeu ( "Hey/", 0, 255, 105, 180, gSound, gMusic, musique, onoff,   1450, 2);
         *done = SDL_TRUE;
     }
     else
     {
-        printf ("c est nul\n");
+        printf ("c est rate\n");
         playsound (2, gSound);
     }
 

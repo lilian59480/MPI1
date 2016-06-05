@@ -343,7 +343,7 @@ void fenetreJeu (char* cheminniveau, short difficulte, short r, short v, short b
     else if (win == 0)
     {
         printf ("C'est perdu\n");
-        loose (gSound);
+        loose (gSound, gMusic, musique);
     }
 
     return;
@@ -707,10 +707,13 @@ void wine (Mix_Chunk* gSound, Mix_Music* gMusic, short* musique, short* onoff, u
     SDL_Surface* pseudoTTF = NULL;
     SDL_Rect pseudoRect;
     SDL_Color pseudoColor = {0, 0, 0, 0};
+    SDL_Color col = {95, 240, 76, 0};
     TTF_Font* helvFont = NULL;
+    TTF_Font* helvFont2 = NULL;
     TTF_Font* pixFont = NULL;
     TTF_Font* contfuFont = NULL;
     helvFont = chargerPolice (helvFont, HELVFONT, 40);
+    helvFont2 = chargerPolice (helvFont2, HELVFONT, 30);
     pixFont = chargerPolice (pixFont, PIXFONT, 100);
     contfuFont = chargerPolice (contfuFont, CONTFUFONT, 40);
     SDL_Surface* surfaceTexte = NULL;
@@ -801,6 +804,11 @@ void wine (Mix_Chunk* gSound, Mix_Music* gMusic, short* musique, short* onoff, u
         ValiderRect.y = (3 * HAUTEUR_FENETRE) / 4 + 10;
         SDL_BlitSurface (ValiderTTF, NULL, surface, &ValiderRect);
         SDL_FreeSurface (ValiderTTF);
+        surfaceTexte = creerTexte (surfaceTexte, METHODE_BELLE, helvFont2, "heyayayay", col);
+        rect.x = (LARGEUR_FENETRE / 2) - (surfaceTexte->w / 2);
+        rect.y = (3 * HAUTEUR_FENETRE) / 4 + 50;
+        SDL_BlitSurface (surfaceTexte, NULL, surface, &rect);
+        SDL_FreeSurface (surfaceTexte);
         SDL_UpdateWindowSurface (fenetre);
 
         if (passlen > 0)
@@ -831,7 +839,7 @@ void wine (Mix_Chunk* gSound, Mix_Music* gMusic, short* musique, short* onoff, u
     SDL_DestroyWindow (fenetre);
 }
 
-void loose (Mix_Chunk* gSound)
+void loose (Mix_Chunk* gSound, Mix_Music* gMusic, short* musique)
 {
     SDL_Window* fenetre = NULL;
     SDL_Surface* surface = NULL;
@@ -870,7 +878,7 @@ void loose (Mix_Chunk* gSound)
 
     if ( Mix_PausedMusic() == 1 )
     {
-        Mix_ResumeMusic();
+        playmusic (*musique, gMusic);
     }
 
     libererPolice (helvFont);
