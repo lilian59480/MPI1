@@ -2,11 +2,24 @@
 
 Uint32 supprimerpoints (Uint32 intervalle, void* param)
 {
-    int* score = param;
-    *score = (*score) - 1;
+    T_TempsScore* score = param;
+    score->score -= 1;
+    score->s += 1;
+
+    if (score->s >= 60)
+    {
+        score->s = 0;
+        score->m += 1;
+
+        if (score->m >= 60)
+        {
+            score->m = 0;
+            score->h += 1;
+        }
+    }
+
     return intervalle;
 }
-
 
 void fenetreJeu (char* cheminniveau, short difficulte, short r, short v, short b, Mix_Chunk* gSound, Mix_Music* gMusic, short* musique, short* onoff, unsigned long scoreactuel, short mdp)
 {
@@ -15,10 +28,16 @@ void fenetreJeu (char* cheminniveau, short difficulte, short r, short v, short b
     SDL_Surface* image = NULL;
     SDL_bool continuer = SDL_FALSE;
     T_Cases plateau;
+    T_TempsScore tempsScore;
+    tempsScore.s = 0;
+    tempsScore.m = 0;
+    tempsScore.h = 0;
+    tempsScore.score = 0;
     float h = 0;
     int i = 0, j = 0, iselect = 0, jselect = 0;
     char chemin[100];
     char scorelitteral[100];
+    char tempslitteral[100];
     SDL_Event event;
     SDL_Rect rectImage;
     SDL_Rect rect;
@@ -55,26 +74,27 @@ void fenetreJeu (char* cheminniveau, short difficulte, short r, short v, short b
     /*
      * Toutes les secondes, on appelle la fonction qui retire des points du au temps écoulé.
      */
-    timer = SDL_AddTimer (1000, supprimerpoints, &scoreactuel);
+    timer = SDL_AddTimer (1000, supprimerpoints, &tempsScore);
+    tempsScore.score = scoreactuel;
 
     switch (difficulte)
     {
         case 0:
             plateau.taillexy = 4;
             taillecaseplateau = 100;
-            scoreactuel *= 1;
+            tempsScore.score *= 1;
             break;
 
         case 1:
             plateau.taillexy = 8;
             taillecaseplateau = 50;
-            scoreactuel *= 30;
+            tempsScore.score *= 30;
             break;
 
         case 3:
             plateau.taillexy = 10;
             taillecaseplateau = 40;
-            scoreactuel *= 150;
+            tempsScore.score *= 150;
             break;
 
         default:
@@ -168,7 +188,7 @@ void fenetreJeu (char* cheminniveau, short difficulte, short r, short v, short b
 
                                 printf ("Depos d'une case: %d,%d\n", caseclicx, caseclicy);
                                 printf ("-2 points\n");
-                                scoreactuel -= 2;
+                                tempsScore.score -= 2;
                                 _debugT_Cases (&plateau);
 
                                 if (validerCase (&plateau) && plateau.selectionne == -1)
@@ -260,13 +280,14 @@ void fenetreJeu (char* cheminniveau, short difficulte, short r, short v, short b
         QuitterRect.y = (4 * HAUTEUR_FENETRE) / 4 + 20;
         SDL_BlitSurface (QuitterTTF, NULL, surface, &QuitterRect);
         SDL_FreeSurface (QuitterTTF);
-        snprintf (scorelitteral, 98, "Score : %lu", scoreactuel);
+        snprintf (scorelitteral, 98, "Score : %lu", tempsScore.score);
         scoreTTF = creerTexte (scoreTTF, METHODE_RAPIDE, helvFont, scorelitteral , scoreColor);
         scoreRect.x = 100;
         scoreRect.y = (4 * HAUTEUR_FENETRE) / 4 + 20;
         SDL_BlitSurface (scoreTTF, NULL, surface, &scoreRect);
         SDL_FreeSurface (scoreTTF);
-        tempsTTF = creerTexte (tempsTTF, METHODE_RAPIDE, helvFont, "Temps : ", tempsColor);
+        snprintf (tempslitteral, 98, "Temps : %02d : %02d : %02d", tempsScore.h, tempsScore.m, tempsScore.s);
+        tempsTTF = creerTexte (tempsTTF, METHODE_RAPIDE, helvFont, tempslitteral, tempsColor);
         tempsRect.x = 100;
         tempsRect.y = (4 * HAUTEUR_FENETRE) / 4 + 100;
         SDL_BlitSurface (tempsTTF, NULL, surface, &tempsRect);
@@ -314,8 +335,8 @@ void fenetreJeu (char* cheminniveau, short difficulte, short r, short v, short b
         printf ("C'est gagne\n");
         SDL_Delay (50);
         printf ("+2 points car depot case valide\n");
-        scoreactuel += 2;
-        wine (gSound, gMusic, musique, onoff, scoreactuel);
+        tempsScore.score += 2;
+        wine (gSound, gMusic, musique, onoff, tempsScore.score);
     }
     else if (win == 0)
     {
