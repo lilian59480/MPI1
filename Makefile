@@ -1,10 +1,10 @@
 ifeq ($(OS),Windows_NT)
 	GCC=gcc -Wall -Wextra -ggdb -Og -g -L./lib -I./include
-	PARAM= -lmingw32 -lSDL2main -lSDL2 -lSDL2_image -lSDL2_mixer -lSDL2_ttf
+	PARAM= -lmingw32 -lSDL2main -lSDL2 -lSDL2_image -lSDL2_mixer -lSDL2_ttf -lm
 	OUTPUT= ./Output/MPI.exe
 else
 	GCC=gcc -Wall -Wextra -ggdb -Og -g
-	PARAM= -lSDL2main -lSDL2 -lSDL2_image -lSDL2_mixer -lSDL2_ttf
+	PARAM= -lSDL2main -lSDL2 -lSDL2_image -lSDL2_mixer -lSDL2_ttf -lm
 	OUTPUT= ./Output/MPI
 endif
 

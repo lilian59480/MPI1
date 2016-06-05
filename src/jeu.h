@@ -36,5 +36,7 @@ void coeurcoeur (SDL_Surface* surface);
 void wine (Mix_Chunk* gSound, Mix_Music* gMusic, short* musique, short* onoff, unsigned long scorefinal);
 void loose (Mix_Chunk* gSound);
 Uint32 supprimerpoints (Uint32 intervalle, void* param) ;
+float hue2rgb (float p, float q, float t);
+void hslToRgb (float h, float s, float l, short* r, short* g, short* b);
 
 #endif

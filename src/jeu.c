@@ -15,6 +15,7 @@ void fenetreJeu (char* cheminniveau, short difficulte, short r, short v, short b
     SDL_Surface* image = NULL;
     SDL_bool continuer = SDL_FALSE;
     T_Cases plateau;
+    float h = 0;
     int i = 0, j = 0, iselect = 0, jselect = 0;
     char chemin[100];
     char scorelitteral[100];
@@ -229,6 +230,19 @@ void fenetreJeu (char* cheminniveau, short difficulte, short r, short v, short b
         }
 
         tempsPrecedent = SDL_GetTicks();
+
+        if (mdp == 2)
+        {
+            if (h > 1)
+            {
+                h = 0.0;
+            }
+
+            h += 0.01;
+            hslToRgb (h, 1, 0.5, &r, &v, &b);
+            verifierCouleur (&r, &v, &b);
+        }
+
         SDL_FillRect (surface, NULL, SDL_MapRGB (surface->format, r, v, b) );
 
         if (mdp == 1)
@@ -839,4 +853,54 @@ void loose (Mix_Chunk* gSound)
     libererPolice (helvFont);
     libererPolice (pixFont);
     SDL_DestroyWindow (fenetre);
+}
+
+
+float hue2rgb (float p, float q, float t)
+{
+    if (t < 0)
+    {
+        t += 1;
+    }
+
+    if (t > 1)
+    {
+        t -= 1;
+    }
+
+    if (t < 0.16666667)
+    {
+        return p + (q - p) * 6 * t;
+    }
+
+    if (t < 0.5)
+    {
+        return q;
+    }
+
+    if (t < 0.66666667)
+    {
+        return p + (q - p) * (0.66666667 - t) * 6;
+    }
+
+    return p;
+}
+
+
+void hslToRgb (float h, float s, float l, short* r, short* g, short* b)
+{
+    float q, p;
+
+    if (s == 0)
+    {
+        * (r) = * (g) = * (b) = l;
+    }
+    else
+    {
+        q = l < 0.5 ? l * (1 + s) : l + s - l * s;
+        p = 2 * l - q;
+        * (r) = round (hue2rgb (p, q, h + 0.16666667) * 255.0);
+        * (g) = round (hue2rgb (p, q, h) * 255.0);
+        * (b) = round (hue2rgb (p, q, h - 0.16666667) * 255.0);
+    }
 }

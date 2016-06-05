@@ -169,6 +169,14 @@ void valider (char* texte, Mix_Chunk* gSound, short* musique, Mix_Music* gMusic,
         fenetreJeu ("Hardcore/", 3, 255, 255, 255, gSound, gMusic, musique, onoff,   14316556, 0);
         *done = SDL_TRUE;
     }
+    else if (strcmp (texte, "nyan cat") == 0)
+    {
+        printf ("c est bien\n");
+        playsound (1, gSound);
+        SDL_Delay (1000);
+        fenetreJeu ("Cat/", 0, 255, 255, 255, gSound, gMusic, musique, onoff, 1450, 2);
+        *done = SDL_TRUE;
+    }
     else if (strcmp (texte, "kubiak") == 0)
     {
         printf ("c est bien\n");
