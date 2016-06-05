@@ -155,6 +155,10 @@ void playmusic (short musique, Mix_Music* gMusic)
         case 7 :
             gMusic = Mix_LoadMUS ( MUSIQUELOVE );
             break;
+
+        case 8 :
+            gMusic = Mix_LoadMUS ( MUSIQUENYANCAT );
+            break;
     }
 
     if ( gMusic == NULL )

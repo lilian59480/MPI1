@@ -174,6 +174,9 @@ void valider (char* texte, Mix_Chunk* gSound, short* musique, Mix_Music* gMusic,
         printf ("c est bien\n");
         playsound (1, gSound);
         SDL_Delay (1000);
+        *musique = 8;
+        *onoff = 0;
+        playmusic (*musique, gMusic);
         fenetreJeu ("Cat/", 0, 255, 255, 255, gSound, gMusic, musique, onoff, 1450, 2);
         *done = SDL_TRUE;
     }
