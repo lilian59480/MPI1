@@ -8,7 +8,7 @@ Uint32 supprimerpoints (Uint32 intervalle, void* param)
 }
 
 
-void fenetreJeu (T_MScore* score, char* cheminniveau, short difficulte, short r, short v, short b, Mix_Chunk* gSound, Mix_Music* gMusic, short* musique, short* onoff, unsigned long scoreactuel, short mdp)
+void fenetreJeu (char* cheminniveau, short difficulte, short r, short v, short b, Mix_Chunk* gSound, Mix_Music* gMusic, short* musique, short* onoff, unsigned long scoreactuel, short mdp)
 {
     SDL_Window* fenetre = NULL;
     SDL_Surface* surface = NULL;
@@ -301,7 +301,7 @@ void fenetreJeu (T_MScore* score, char* cheminniveau, short difficulte, short r,
         SDL_Delay (50);
         printf ("+2 points car depot case valide\n");
         scoreactuel += 2;
-        wine (score, gSound, gMusic, musique, onoff, scoreactuel);
+        wine (gSound, gMusic, musique, onoff, scoreactuel);
     }
     else if (win == 0)
     {
@@ -651,7 +651,7 @@ void coeurcoeur (SDL_Surface* surface)
 
 /*                       ECRAN FIN                 */
 
-void wine (T_MScore* score, Mix_Chunk* gSound, Mix_Music* gMusic, short* musique, short* onoff, unsigned long scorefinal)
+void wine (Mix_Chunk* gSound, Mix_Music* gMusic, short* musique, short* onoff, unsigned long scorefinal)
 {
     SDL_Window* fenetre = NULL;
     SDL_Surface* surface = NULL;
@@ -707,7 +707,8 @@ void wine (T_MScore* score, Mix_Chunk* gSound, Mix_Music* gMusic, short* musique
                 }
                 else if (ev.key.keysym.sym == SDLK_RETURN)
                 {
-                    printf ("testvalider\n");
+                    ajouterScore (scorefinal, texte);
+                    done = SDL_TRUE;
                 }
 
                 break;
@@ -730,10 +731,8 @@ void wine (T_MScore* score, Mix_Chunk* gSound, Mix_Music* gMusic, short* musique
 
                 if (clickMenu (helvFont, "Valider", ValiderTTFW, ValiderTTFH, ev, ValiderRect) )
                 {
-                    printf ("testvalider\n");
-                    ev.type = SDL_KEYDOWN;
-                    ev.key.keysym.sym = SDLK_1;
-                    SDL_PushEvent (&ev);
+                    ajouterScore (scorefinal, texte);
+                    done = SDL_TRUE;
                 }
 
                 break;

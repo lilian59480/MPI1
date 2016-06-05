@@ -89,7 +89,8 @@ int option (SDL_Window* fenetreoption, short* musique, short* onoff, Mix_Music* 
                 }
                 else if (clickMenu (helvFont, "Suprimer les highscores", delTTFW, delTTFH, ev, delRect) )
                 {
-                    printf ("Score supprime\n");
+                    T_MScore score;
+                    resetScores (&score);
                 }
                 else if (clickMenu (helvFont, "Epic", Mus1TTFW, Mus1TTFH, ev, Mus1Rect) && (*musique != 1) )
                 {

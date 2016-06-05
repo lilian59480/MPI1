@@ -1,6 +1,6 @@
 #include "best.h"
 
-void fenetreMScore (SDL_Window* fenetre, T_MScore* score, Mix_Chunk* gSound)
+void fenetreMScore (SDL_Window* fenetre, Mix_Chunk* gSound)
 {
     /* On n'ouvre pas de nouvelle fenetre, on remplace la fenetre affiché (Pour une belle IHM) */
     SDL_Color color = {0, 0, 0, 0};
@@ -12,6 +12,14 @@ void fenetreMScore (SDL_Window* fenetre, T_MScore* score, Mix_Chunk* gSound)
     SDL_Event event;
     char Nom[10];
     short i = 0;
+    T_MScore score;
+
+    if (lireMeilleurScore (&score) == 0)
+    {
+        SDL_ShowSimpleMessageBox (SDL_MESSAGEBOX_ERROR, "Impossible de lire les scores", "Veuiller supprimer le fichier scores ou reinstaller le jeu", NULL);
+        exit (EXIT_FAILURE);
+    }
+
     TTF_Font* contfuFont = NULL;
     TTF_Font* helvFont = NULL;
     helvFont = chargerPolice (helvFont, HELVFONT, 35);
@@ -26,12 +34,12 @@ void fenetreMScore (SDL_Window* fenetre, T_MScore* score, Mix_Chunk* gSound)
 
     for (i = 0; i < 5; i++)
     {
-        surfaceTexte = creerTexte (surfaceTexte, METHODE_BELLE, helvFont, score->Scores[i].Nom , color);
+        surfaceTexte = creerTexte (surfaceTexte, METHODE_BELLE, helvFont, score.Scores[i].Nom , color);
         rect = rangScores (surfaceTexte, i + 3, PLACEGAUCHE);
         SDL_BlitSurface (surfaceTexte, NULL, surface, &rect);
         SDL_FreeSurface (surfaceTexte);
         surfaceTexte = NULL;
-        sprintf (Nom, "%lu", score->Scores[i].Score );
+        sprintf (Nom, "%lu", score.Scores[i].Score );
         surfaceTexte = creerTexte (surfaceTexte, METHODE_BELLE, helvFont, Nom , color);
         rect = rangScores (surfaceTexte, i + 3, PLACEDROITE);
         SDL_BlitSurface (surfaceTexte, NULL, surface, &rect);
@@ -87,6 +95,55 @@ short ecrireMeilleurScore (T_MScore* scores)
     printf ("Les scores ont bien ete enregistre\n");
     return 1;
 }
+
+short ajouterScore (unsigned long score, char* pseudo)
+{
+    if (strcmp (pseudo, "") == 0)
+    {
+        strcpy (pseudo, "nyan cat");
+    }
+
+    T_MScore scores;
+
+    if (lireMeilleurScore (&scores) == 0)
+    {
+        SDL_ShowSimpleMessageBox (SDL_MESSAGEBOX_ERROR, "Impossible de lire les scores", "Veuiller supprimer le fichier scores ou reinstaller le jeu", NULL);
+        exit (EXIT_FAILURE);
+    }
+
+    /*
+     * Recherche de la place de ce nouveau score
+     */
+    int i;
+    int index = -1;
+
+    for (i = 0; i < 5 && index == -1; i++)
+    {
+        if (scores.Scores[i].Score < score)
+        {
+            index = i;
+        }
+    }
+
+    if (index == -1)
+    {
+        return 0;
+    }
+
+    printf ("Ajout d'un score en %d e place\n", index + 1);
+
+    for (i = 3; i >= index; i--)
+    {
+        scores.Scores[i + 1].Score = scores.Scores[i].Score;
+        strcpy (scores.Scores[i + 1].Nom, scores.Scores[i].Nom);
+    }
+
+    scores.Scores[index].Score = score;
+    strcpy (scores.Scores[index].Nom, pseudo);
+    ecrireMeilleurScore (&scores);
+    return 1;
+}
+
 
 short lireMeilleurScore (T_MScore* scores)
 {

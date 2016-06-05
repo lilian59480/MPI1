@@ -1,6 +1,6 @@
 #include "menu.h"
 
-void fenetreChoixNiveau (SDL_Window* fenetre, T_MScore* score, Mix_Chunk* gSound, Mix_Music* gMusic, short* musique, short* onoff)
+void fenetreChoixNiveau (SDL_Window* fenetre, Mix_Chunk* gSound, Mix_Music* gMusic, short* musique, short* onoff)
 {
     /* On n'ouvre pas de nouvelle fenetre, on remplace la fenetre affiché (Pour une belle IHM) */
     short continuer = 1;
@@ -69,39 +69,39 @@ void fenetreChoixNiveau (SDL_Window* fenetre, T_MScore* score, Mix_Chunk* gSound
 
                 if (clickMenu (helvFont, "Chat", ChatTTFW, ChatTTFH, event, ChatRect) )
                 {
-                    fenetreJeu (score, "Chat/", dificulte, 255, 0, 255, gSound, gMusic, musique, onoff, 1500, 0);
+                    fenetreJeu ( "Chat/", dificulte, 255, 0, 255, gSound, gMusic, musique, onoff, 1500, 0);
                     event.type = SDL_KEYDOWN;
                     event.key.keysym.sym = SDLK_1;
                     SDL_PushEvent (&event);
-                    return;
+                    continuer = 0;
                 }
                 else if (clickMenu (helvFont, "Chien", ChienTTFW, ChienTTFH, event, ChienRect) )
                 {
-                    fenetreJeu (score, "Chien/", dificulte, 255, 0, 255, gSound, gMusic, musique, onoff, 1500, 0);
+                    fenetreJeu ( "Chien/", dificulte, 255, 0, 255, gSound, gMusic, musique, onoff, 1500, 0);
                     event.type = SDL_KEYDOWN;
                     event.key.keysym.sym = SDLK_1;
                     SDL_PushEvent (&event);
-                    return;
+                    continuer = 0;
                 }
                 else if (clickMenu (helvFont, "Paysage", PaysageTTFW, PaysageTTFH, event, PaysageRect) )
                 {
-                    fenetreJeu (score, "Paysage/", dificulte, 255, 0, 255, gSound, gMusic, musique, onoff, 1500, 0);
+                    fenetreJeu ("Paysage/", dificulte, 255, 0, 255, gSound, gMusic, musique, onoff, 1500, 0);
                     event.type = SDL_KEYDOWN;
                     event.key.keysym.sym = SDLK_1;
                     SDL_PushEvent (&event);
-                    return;
+                    continuer = 0;
                 }
                 else if (clickMenu (helvFont, "IG2I", IG2ITTFW, IG2ITTFH, event, IG2IRect) )
                 {
-                    fenetreJeu (score, "IG2I/", dificulte, 255, 0, 255, gSound, gMusic, musique, onoff, 1500, 0);
+                    fenetreJeu ("IG2I/", dificulte, 255, 0, 255, gSound, gMusic, musique, onoff, 1500, 0);
                     event.type = SDL_KEYDOWN;
                     event.key.keysym.sym = SDLK_1;
                     SDL_PushEvent (&event);
-                    return;
+                    continuer = 0;
                 }
                 else if (clickMenu (helvFont, "Retour", RetourTTFW, RetourTTFH, event, RetourRect) )
                 {
-                    return;
+                    continuer = 0;
                 }
                 else if (clickMenu (helvFont, "Facile", easyTTFW, easyTTFH, event, easyRect) && (dificulte != 0) )
                 {
@@ -125,7 +125,7 @@ void fenetreChoixNiveau (SDL_Window* fenetre, T_MScore* score, Mix_Chunk* gSound
             case SDL_KEYDOWN :
                 if (event.key.keysym.sym == SDLK_ESCAPE)
                 {
-                    return;
+                    continuer = 0;
                 }
 
                 break;

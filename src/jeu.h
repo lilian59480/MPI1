@@ -2,7 +2,7 @@
 #define H_JEU
 
 #include "common.h"
-#include <time.h>
+#include "best.h"
 
 #define TAILLEPLATEAUMAX 10
 
@@ -15,7 +15,7 @@ typedef struct
     T_Case selectionne;
 } T_Cases;
 
-void fenetreJeu (T_MScore* score, char* cheminniveau, short difficulte, short r, short v, short b, Mix_Chunk* gSound, Mix_Music* gMusic, short* musique, short* onoff , unsigned long scoreactuel, short mdp);
+void fenetreJeu (char* cheminniveau, short difficulte, short r, short v, short b, Mix_Chunk* gSound, Mix_Music* gMusic, short* musique, short* onoff , unsigned long scoreactuel, short mdp);
 void melangercase (T_Cases* plateau);
 void _debugT_Cases (T_Cases* plateau);
 short validerCase (T_Cases* plateau);
@@ -33,7 +33,7 @@ void disque (SDL_Surface* surf, int cx, int cy, int rayon, int coul);
 void heart (SDL_Surface* surface, short x, short y);
 void coeurcoeur (SDL_Surface* surface);
 
-void wine (T_MScore* score, Mix_Chunk* gSound, Mix_Music* gMusic, short* musique, short* onoff, unsigned long scorefinal);
+void wine (Mix_Chunk* gSound, Mix_Music* gMusic, short* musique, short* onoff, unsigned long scorefinal);
 void loose (Mix_Chunk* gSound);
 Uint32 supprimerpoints (Uint32 intervalle, void* param) ;
 

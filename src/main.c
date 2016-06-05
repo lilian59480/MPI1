@@ -177,15 +177,15 @@ int main (int argc, char** argv)
 
                 if (clickMenu (helvFont, "Jouer", JouerTTFW, JouerTTFH, event, JouerRect) )
                 {
-                    fenetreChoixNiveau (pWindow, &scores, gSound, gMusic, &musique, &onoff);
+                    fenetreChoixNiveau (pWindow, gSound, gMusic, &musique, &onoff);
                     event.type = SDL_KEYDOWN;
                     event.key.keysym.sym = SDLK_1;
                     SDL_PushEvent (&event);
                 }
 
-                if (clickMenu (helvFont, "Meilleur Score", BestTTFW, BestTTFH, event, BestRect) )
+                if (clickMenu (helvFont, "Meilleurs Scores", BestTTFW, BestTTFH, event, BestRect) )
                 {
-                    fenetreMScore (pWindow, &scores, gSound );
+                    fenetreMScore (pWindow, gSound );
                     event.type = SDL_KEYDOWN;
                     event.key.keysym.sym = SDLK_1;
                     SDL_PushEvent (&event);
@@ -193,7 +193,7 @@ int main (int argc, char** argv)
 
                 if (clickMenu (helvFont, "Mot de Passe", PasswordTTFW, PasswordTTFH, event, PasswordRect) )
                 {
-                    password (&scores, gSound, &musique, gMusic, &onoff);
+                    password ( gSound, &musique, gMusic, &onoff);
                     event.type = SDL_KEYDOWN;
                     event.key.keysym.sym = SDLK_1;
                     SDL_PushEvent (&event);
@@ -222,7 +222,7 @@ int main (int argc, char** argv)
 
             case SDL_MOUSEMOTION:
                 JouerColor.r = hoverMenu (helvFont, "Jouer", JouerTTFW, JouerTTFH, event, JouerRect);
-                BestColor.r = hoverMenu (helvFont, "Meilleur Score", BestTTFW, BestTTFH, event, BestRect);
+                BestColor.r = hoverMenu (helvFont, "Meilleurs Scores", BestTTFW, BestTTFH, event, BestRect);
                 PasswordColor.r = hoverMenu (helvFont, "Mot de Passe", PasswordTTFW, PasswordTTFH, event, PasswordRect);
                 OptionColor.r = hoverMenu (helvFont, "Options", OptionTTFW, OptionTTFH, event, OptionRect);
                 QuitterColor.r = hoverMenu (helvFont, "Quitter", QuitterTTFW, QuitterTTFH, event, QuitterRect);
@@ -254,7 +254,7 @@ int main (int argc, char** argv)
         JouerRect = rangMenu (JouerTTF, 3);
         SDL_BlitSurface (JouerTTF, NULL, surface, &JouerRect);
         SDL_FreeSurface (JouerTTF);
-        BestTTF = creerTexte (BestTTF, METHODE_RAPIDE, helvFont, "Meilleur Score", BestColor);
+        BestTTF = creerTexte (BestTTF, METHODE_RAPIDE, helvFont, "Meilleurs Scores", BestColor);
         BestRect = rangMenu (BestTTF, 4);
         SDL_BlitSurface (BestTTF, NULL, surface, &BestRect);
         SDL_FreeSurface (BestTTF);
