@@ -77,7 +77,7 @@ void fenetreJeu (T_MScore* score, char* cheminniveau, short difficulte, short r,
             break;
 
         default:
-            fprintf (stderr, "Difficulte inconnue : %d\n", difficulte );
+            SDL_ShowSimpleMessageBox (SDL_MESSAGEBOX_ERROR, "Erreur interne", "Difficulte inconnu" , NULL);
             exit (EXIT_FAILURE);
             break;
     }
@@ -89,7 +89,7 @@ void fenetreJeu (T_MScore* score, char* cheminniveau, short difficulte, short r,
 
     if (snprintf (chemin, 95, "%s%s0.png", IMAGEJEUDIRECTORY, cheminniveau) < 0)
     {
-        fprintf (stderr, "Erreur Inconnue!" );
+        SDL_ShowSimpleMessageBox (SDL_MESSAGEBOX_ERROR, "Erreur interne", "Chemin introuvable" , NULL);
         exit (EXIT_FAILURE);
     }
 
@@ -321,7 +321,7 @@ void melangercase (T_Cases* plateau )
 
     if (n > (TAILLEPLATEAUMAX * TAILLEPLATEAUMAX) )
     {
-        fprintf (stderr, "N est trop grand! :\n %d>%d \n", n, TAILLEPLATEAUMAX );
+        SDL_ShowSimpleMessageBox (SDL_MESSAGEBOX_ERROR, "Erreur interne", "n est trop grand" , NULL);
         exit (EXIT_FAILURE);
     }
 

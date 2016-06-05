@@ -78,7 +78,7 @@ short ecrireMeilleurScore (T_MScore* scores)
 
     if (fichier == NULL)
     {
-        perror ("Une erreur est survenue : ");
+        SDL_ShowSimpleMessageBox (SDL_MESSAGEBOX_ERROR, "Erreur interne", strerror (errno), NULL);
         return 0;
     }
 
@@ -95,7 +95,7 @@ short lireMeilleurScore (T_MScore* scores)
 
     if (fichier == NULL)
     {
-        perror ("Une erreur est survenue lors du chargement des scores: ");
+        SDL_ShowSimpleMessageBox (SDL_MESSAGEBOX_ERROR, "Lecture des scores", strerror (errno), NULL);
         return 0;
     }
 
@@ -103,7 +103,7 @@ short lireMeilleurScore (T_MScore* scores)
 
     if (ferror (fichier) )
     {
-        perror ("Une erreur est survenue lors du chargement des scores: ");
+        SDL_ShowSimpleMessageBox (SDL_MESSAGEBOX_ERROR, "Lecture des scores", strerror (errno), NULL);
         fclose (fichier);
         return 0;
     }

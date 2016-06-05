@@ -57,27 +57,29 @@ int main (int argc, char** argv)
     /* Recuperation des scores */
     if (!lireMeilleurScore (&scores) )
     {
-        /* Pour le moment, on reinitialise, mais dans la suite, il faudra afficher un message d'erreur en cas d'erreur*/
+        SDL_ShowSimpleMessageBox (SDL_MESSAGEBOX_ERROR, "Erreur lecture score", "Les scores vont etre remis a zero" , NULL);
         resetScores (&scores);
     }
 
     /* Initialisation de la SDL2 et SDL_TTF */
     if (SDL_Init (SDL_INIT_VIDEO) != 0 )
     {
+        // On garde ce fprintf dans le cas ou on lance le jeu sans serveur X (Linux)
         fprintf (stderr, "Echec de l'initialisation de la SDL :\n %s \n", SDL_GetError() );
+        SDL_ShowSimpleMessageBox (SDL_MESSAGEBOX_ERROR, "Echec initialisation SDL", SDL_GetError() , NULL);
         return EXIT_FAILURE;
     }
 
     if (TTF_Init() != 0)
     {
-        fprintf (stderr, "Erreur de l'initialisation de la SDL_TTF :\n %s \n", TTF_GetError() );
+        SDL_ShowSimpleMessageBox (SDL_MESSAGEBOX_ERROR, "Erreur initialisation SDL_TTF", TTF_GetError() , NULL);
         return EXIT_FAILURE;
     }
 
     /* Initialisation du sdl_mixer*/
     if ( Mix_OpenAudio ( 44100, MIX_DEFAULT_FORMAT, 2, 2048 ) < 0 )
     {
-        fprintf (stderr, "Echec de l'initialisation de la SDL_mixer :\n %s \n", Mix_GetError() );
+        SDL_ShowSimpleMessageBox (SDL_MESSAGEBOX_ERROR, "Erreur initialisation SDL_Mixer", Mix_GetError() , NULL);
         return EXIT_FAILURE;
     }
 

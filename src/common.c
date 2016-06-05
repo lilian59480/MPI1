@@ -7,7 +7,7 @@ SDL_Window* creerFenetre (SDL_Window* fenetre, char* titre, unsigned int tailleX
 
     if ( !fenetre )
     {
-        fprintf (stderr, "Erreur de creation de la fenetre: %s\n", SDL_GetError() );
+        SDL_ShowSimpleMessageBox (SDL_MESSAGEBOX_ERROR, "Erreur de creation de la fenetre", SDL_GetError() , NULL);
         exit (EXIT_FAILURE);
     }
 
@@ -23,7 +23,7 @@ SDL_Surface* chargerImage (SDL_Surface* image, char* chemin)
 
     if (!image)
     {
-        fprintf (stderr, "Erreur sur l'image %s: %s\n", chemin, IMG_GetError() );
+        SDL_ShowSimpleMessageBox (SDL_MESSAGEBOX_ERROR, "Erreur sur l'image", IMG_GetError() , NULL);
         exit (EXIT_FAILURE);
     }
 
@@ -37,7 +37,7 @@ TTF_Font* chargerPolice (TTF_Font* font, char* chemin, int taille)
 
     if (!font)
     {
-        fprintf (stderr, "Erreur sur la police %s: %s\n", chemin, TTF_GetError() );
+        SDL_ShowSimpleMessageBox (SDL_MESSAGEBOX_ERROR, "Erreur sur la police", TTF_GetError() , NULL);
         exit (EXIT_FAILURE);
     }
 
@@ -66,7 +66,7 @@ SDL_Surface* creerTexte (SDL_Surface* surface, short methode, TTF_Font* font, ch
 
     if (!surface)
     {
-        fprintf (stderr, "Erreur lors de l'ecriture du texte: %s\n", TTF_GetError() );
+        SDL_ShowSimpleMessageBox (SDL_MESSAGEBOX_ERROR, "Erreur de creation du texte", TTF_GetError() , NULL);
         exit (EXIT_FAILURE);
     }
 
@@ -159,7 +159,7 @@ void playmusic (short musique, Mix_Music* gMusic)
 
     if ( gMusic == NULL )
     {
-        fprintf (stderr, "Echec de l'initialisation de la SDL_mixer :\n %s \n", Mix_GetError() );
+        SDL_ShowSimpleMessageBox (SDL_MESSAGEBOX_ERROR, "Erreur du gestionnaire de son", Mix_GetError() , NULL);
         exit (EXIT_FAILURE);
     }
 
@@ -191,7 +191,7 @@ void playsound (short sound, Mix_Chunk* gSound)
 
     if ( gSound == NULL )
     {
-        fprintf (stderr, "Echec de l'initialisation de la SDL_mixer :\n %s \n", Mix_GetError() );
+        SDL_ShowSimpleMessageBox (SDL_MESSAGEBOX_ERROR, "Erreur du gestionnaire de son", Mix_GetError() , NULL);
         exit (EXIT_FAILURE);
     }
 
