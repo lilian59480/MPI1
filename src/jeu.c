@@ -219,6 +219,7 @@ void fenetreJeu (char* cheminniveau, short difficulte, short r, short v, short b
                     {
                         case SDLK_ESCAPE:
                             continuer = SDL_TRUE;
+                            win = 0;
 
                         default:
                             break;
@@ -228,6 +229,7 @@ void fenetreJeu (char* cheminniveau, short difficulte, short r, short v, short b
 
                 case SDL_QUIT:
                     continuer = SDL_TRUE;
+                    win = 0;
                     break;
 
                 case SDL_MOUSEMOTION:

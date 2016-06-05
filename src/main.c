@@ -220,6 +220,14 @@ int main (int argc, char** argv)
                 continuer = 0;
                 break;
 
+            case SDL_KEYDOWN :
+                if (event.key.keysym.sym == SDLK_ESCAPE)
+                {
+                    continuer = 0;
+                }
+
+                break;
+
             case SDL_MOUSEMOTION:
                 JouerColor.r = hoverMenu (helvFont, "Jouer", JouerTTFW, JouerTTFH, event, JouerRect);
                 BestColor.r = hoverMenu (helvFont, "Meilleurs Scores", BestTTFW, BestTTFH, event, BestRect);
