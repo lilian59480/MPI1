@@ -180,10 +180,10 @@ void resetScores (T_MScore* score)
     score->Scores[3].Score = 10;
     score->Scores[4].Score = 1;
     strcpy (score->Scores[0].Nom, "hardcore");
-    strcpy (score->Scores[1].Nom, "JeSuisUneAutreChai2");
-    strcpy (score->Scores[2].Nom, "JeSuisUneChaine   3");
-    strcpy (score->Scores[3].Nom, "Petite Chaine");
-    strcpy (score->Scores[4].Nom, "Aa?");
+    strcpy (score->Scores[1].Nom, "Bien");
+    strcpy (score->Scores[2].Nom, "Pas trop mal");
+    strcpy (score->Scores[3].Nom, "Bof");
+    strcpy (score->Scores[4].Nom, "Nul");
 
     if (ecrireMeilleurScore (score) )
     {

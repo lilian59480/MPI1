@@ -58,11 +58,11 @@ void fenetreJeu (char* cheminniveau, short difficulte, short r, short v, short b
     int QuitterTTFW = 0;
     int QuitterTTFH = 0;
     short win;
-    SDL_Surface* cheatTTF = NULL;
+    /*SDL_Surface* cheatTTF = NULL; //Pour tricher mais tricher c'est mal !
     SDL_Rect cheatRect;
     SDL_Color cheatColor = {0, 0, 0, 0};
     int cheatTTFW = 0;
-    int cheatTTFH = 0;
+    int cheatTTFH = 0;*/
     SDL_Surface* tempsTTF = NULL;
     SDL_Rect tempsRect;
     SDL_Color tempsColor = {0, 0, 0, 0};
@@ -206,11 +206,11 @@ void fenetreJeu (char* cheminniveau, short difficulte, short r, short v, short b
                         win = 0;
                     }
 
-                    if (clickMenu (helvFont, "cheat", cheatTTFW, cheatTTFH, event, cheatRect) )
+                   /* if (clickMenu (helvFont, "cheat", cheatTTFW, cheatTTFH, event, cheatRect) ) //Pour tricher mais tricher c'est mal !
                     {
                         continuer = SDL_TRUE;
                         win = 1;
-                    }
+                    }*/
 
                     break;
 
@@ -236,7 +236,7 @@ void fenetreJeu (char* cheminniveau, short difficulte, short r, short v, short b
                     positionsourisx = event.motion.x;
                     positionsourisy = event.motion.y;
                     QuitterColor.r = hoverMenu (helvFont, "Abandonner", QuitterTTFW, QuitterTTFH, event, QuitterRect);
-                    cheatColor.r = hoverMenu (helvFont, "cheat", cheatTTFW, cheatTTFH, event, cheatRect);
+                    //cheatColor.r = hoverMenu (helvFont, "cheat", cheatTTFW, cheatTTFH, event, cheatRect); //Pour tricher mais tricher c'est mal !
                     break;
 
                 default:
@@ -294,11 +294,11 @@ void fenetreJeu (char* cheminniveau, short difficulte, short r, short v, short b
         tempsRect.y = (4 * HAUTEUR_FENETRE) / 4 + 100;
         SDL_BlitSurface (tempsTTF, NULL, surface, &tempsRect);
         SDL_FreeSurface (tempsTTF);
-        cheatTTF = creerTexte (cheatTTF, METHODE_RAPIDE, helvFont, "cheat", cheatColor);
+        /*cheatTTF = creerTexte (cheatTTF, METHODE_RAPIDE, helvFont, "cheat", cheatColor); //Pour tricher mais tricher c'est mal !
         cheatRect.x = (6 * LARGEUR_FENETRE / 4) - (cheatTTF->w / 2) + 20;
         cheatRect.y = (4 * HAUTEUR_FENETRE) / 4 + 50;
         SDL_BlitSurface (cheatTTF, NULL, surface, &cheatRect);
-        SDL_FreeSurface (cheatTTF);
+        SDL_FreeSurface (cheatTTF);*/
 
         for (i = 0; i < plateau.taillexy; i++)
         {
