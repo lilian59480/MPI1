@@ -11,6 +11,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include <dirent.h>
+#include <math.h>
 
 #define TITREJEU "Arcade 2i"
 
