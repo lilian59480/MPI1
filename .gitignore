@@ -13,3 +13,9 @@ $RECYCLE.BIN/
 
 # Compiled directory
 Output/
+
+# Gcc Files
+*.o
+
+# VsCode Fichiers temporaires
+.vscode/
