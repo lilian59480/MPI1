@@ -1,4 +1,0 @@
-effacer highscore
-desactiver musique/effet sonore
-credits
-changer musique
